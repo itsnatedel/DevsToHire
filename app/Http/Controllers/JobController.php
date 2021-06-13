@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -9,21 +12,20 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
+        return view('job.index');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Shows Dashboard form to create a job
+     * @return Application|Factory|View
      */
     public function create()
     {
-        //
+        return view('dashboard.post-job');
     }
 
     /**
@@ -80,5 +82,10 @@ class JobController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /* Manage Job -> Dashboard */
+    public function manage() {
+        return view('dashboard.manage-jobs');
     }
 }

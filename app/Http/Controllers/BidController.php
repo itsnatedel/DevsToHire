@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
-class CheckoutController extends Controller
+class BidController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('checkout.index');
+        //
     }
 
     /**
@@ -83,5 +80,37 @@ class CheckoutController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Dashboard Manage Bidders
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     */
+    public function manage($id)
+    {
+        return view('dashboard.manage-bidders');
+    }
+
+    /**
+     * Dashboard Manage My Bids
+     *
+     * @param  int  $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     */
+    public function activeBids($id)
+    {
+        return view('dashboard.my-bids');
+    }
+
+    /**
+     * Handles bid's placement
+     * @param $id Task's id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function placeBid($id)
+    {
+        // Goes to db and inserts a bid
     }
 }

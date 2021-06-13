@@ -1,11 +1,9 @@
-@include('layouts.app')
+@extends('layouts.app')
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
 
-    @include('layouts.header')
-    <!-- Titlebar
-================================================== -->
+    <!-- Titlebar -->
         <div id="titlebar" class="gradient">
             <div class="container">
                 <div class="row">
@@ -28,8 +26,7 @@
         </div>
 
 
-        <!-- Page Content
-        ================================================== -->
+        <!-- Page Content -->
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">

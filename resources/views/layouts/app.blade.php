@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -17,19 +18,22 @@
     <script src="https://kit.fontawesome.com/2d332e0009.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/colors/blue.css') }}">
-    <!-- Placeholder for Stripe's security script checkout@index.black.php-->
+
 
     <!-- Styles -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-@include('../layouts/header')
-@yield('content')
-@include('../layouts/footer')
+<div id="app">
+    <main class="py-4">
+        @include('layouts.header')
+        @yield('content')
+        @include('layouts.footer')
+    </main>
+</div>
 
 <!-- Scripts
-    ================================================== -->
+        ================================================== -->
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('js/jquery-migrate-3.3.2.min.js') }}"></script>
 <script src="{{ asset('js/mmenu.min.js') }}"></script>
@@ -43,12 +47,5 @@
 <script src="{{ asset('js/magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/slick.min.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
-
-<!-- Google API & Maps -->
-<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
-<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
-<script src="js/infobox.min.js"></script>
-<script src="js/markerclusterer.js"></script>
-<script src="js/maps.js"></script>
 </body>
 </html>

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -9,11 +12,11 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        //
+        return view('dashboard.index');
     }
 
     /**
@@ -80,5 +83,62 @@ class DashboardController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function settings($id)
+    {
+        return view('dashboard.settings');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function reviews($id)
+    {
+        return view('dashboard.reviews');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function messages($id)
+    {
+        return view('dashboard.messages');
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function bookmarks($id)
+    {
+        return view('dashboard.bookmarks');
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Application|Factory|View
+     */
+    public function candidates($id)
+    {
+        return view('dashboard.manage-candidates');
     }
 }

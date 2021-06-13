@@ -11,125 +11,85 @@
 
                 <!-- Logo -->
                 <div id="logo">
-                    <a href="index.html"><img src="images/logo.png" alt=""></a>
+                    <a href="{{ route('homepage') }}"><img src="images/logo.png" alt=""></a>
                 </div>
 
                 <!-- Main Navigation -->
                 <nav id="navigation">
                     <ul id="responsive">
-
-                        <li><a href="#" class="current">Home</a>
-                            <ul class="dropdown-nav">
-                                <li><a href="index.html">Home 1</a></li>
-                                <li><a href="index-2.html">Home 2</a></li>
-                                <li><a href="index-3.html">Home 3</a></li>
-                            </ul>
-                        </li>
-
                         <li><a href="#">Find Work</a>
                             <ul class="dropdown-nav">
-                                <li><a href="#">Browse Jobs</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="jobs-list-layout-full-page-map.html">Full Page List +
-                                                Map</a>
-                                        </li>
-                                        <li><a href="jobs-grid-layout-full-page-map.html">Full Page Grid +
-                                                Map</a>
-                                        </li>
-                                        <li><a href="jobs-grid-layout-full-page.html">Full Page Grid</a></li>
-                                        <li><a href="jobs-list-layout-1.html">List Layout 1</a></li>
-                                        <li><a href="jobs-list-layout-2.html">List Layout 2</a></li>
-                                        <li><a href="jobs-grid-layout.html">Grid Layout</a></li>
-                                    </ul>
+                                <li>
+                                    <a href="{{ route('job.index') }}">Browse Jobs</a>
                                 </li>
-                                <li><a href="#">Browse Tasks</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="tasks-list-layout-1.html">List Layout 1</a></li>
-                                        <li><a href="tasks-list-layout-2.html">List Layout 2</a></li>
-                                        <li><a href="tasks-grid-layout.html">Grid Layout</a></li>
-                                        <li><a href="tasks-grid-layout-full-page.html">Full Page Grid</a></li>
-                                    </ul>
+                                <li>
+                                    <a href="{{ route('task.index') }}">Browse Tasks</a>
                                 </li>
-                                <li><a href="browse-companies.html">Browse Companies</a></li>
-                                <li><a href="single-job-page.html">Job Page</a></li>
-                                <li><a href="single-task-page.html">Task Page</a></li>
-                                <li><a href="single-company-profile.html">Company Profile</a></li>
+                                <li>
+                                    <a href="{{ route('company.index') }}">Browse Companies</a>
+                                </li>
                             </ul>
                         </li>
 
+                        <!-- Auth check for employer status -->
                         <li><a href="#">For Employers</a>
                             <ul class="dropdown-nav">
-                                <li><a href="#">Find a Freelancer</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="freelancers-grid-layout-full-page.html">Full Page Grid</a>
-                                        </li>
-                                        <li><a href="freelancers-grid-layout.html">Grid Layout</a></li>
-                                        <li><a href="freelancers-list-layout-1.html">List Layout 1</a></li>
-                                        <li><a href="freelancers-list-layout-2.html">List Layout 2</a></li>
-                                    </ul>
+                                <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
                                 </li>
-                                <li><a href="single-freelancer-profile.html">Freelancer Profile</a></li>
-                                <li><a href="dashboard-post-a-job.html">Post a Job</a></li>
-                                <li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+                                <li>
+                                    <a href="{{ route('company.show', 4) }}">Your Company Profile</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('dashboard.task.create') }}">Post a Task</a>
+                                </li>
                             </ul>
                         </li>
 
+                        <!-- Auth::check() -->
                         <li><a href="#">Dashboard</a>
                             <ul class="dropdown-nav">
-                                <li><a href="dashboard.html">Dashboard</a></li>
-                                <li><a href="dashboard-messages.html">Messages</a></li>
-                                <li><a href="dashboard-bookmarks.html">Bookmarks</a></li>
-                                <li><a href="dashboard-reviews.html">Reviews</a></li>
-                                <li><a href="dashboard-manage-jobs.html">Jobs</a>
+                                <li><a href="{{ route('dashboard.index') }}">Overview</a></li>
+                                <li><a href="{{ route('dashboard.messages') }}">My messages</a></li>
+                                <li><a href="{{ route('dashboard.bookmarks') }}">My bookmarks</a></li>
+                                <li><a href="{{ route('dashboard.reviews') }}">My reviews</a></li>
+                                <li><a href="{{ route('dashboard.job.manage') }}">Jobs</a>
                                     <ul class="dropdown-nav">
-                                        <li><a href="dashboard-manage-jobs.html">Manage Jobs</a></li>
-                                        <li><a href="dashboard-manage-candidates.html">Manage Candidates</a>
+                                        <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs</a></li>
+                                        <!-- If user === employer-->
+                                        <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a>
                                         </li>
-                                        <li><a href="dashboard-post-a-job.html">Post a Job</a></li>
+                                        <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="dashboard-manage-tasks.html">Tasks</a>
+                                <li><a href="{{ route('dashboard.task.manage') }}">Tasks</a>
                                     <ul class="dropdown-nav">
-                                        <li><a href="dashboard-manage-tasks.html">Manage Tasks</a></li>
-                                        <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
-                                        <li><a href="dashboard-my-active-bids.html">My Active Bids</a></li>
-                                        <li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+                                        <li><a href="{{ route('dashboard.task.manage') }}">Manage Tasks</a></li>
+                                        <!-- If user === employer -->
+                                        <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
+                                        <!-- If user === freelancer -->
+                                        <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
+                                        <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="dashboard-settings.html">Settings</a></li>
+                                <li><a href="{{ route('dashboard.settings') }}">Settings</a></li>
                             </ul>
                         </li>
 
                         <li><a href="#">Pages</a>
                             <ul class="dropdown-nav">
-                                <li>
-                                    <a href="#">Open Street Map</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="jobs-list-layout-full-page-map-OpenStreetMap.html">Full
-                                                Page
-                                                List + Map</a></li>
-                                        <li><a href="jobs-grid-layout-full-page-map-OpenStreetMap.html">Full
-                                                Page
-                                                Grid + Map</a></li>
-                                        <li><a href="single-job-page-OpenStreetMap.html">Job Page</a></li>
-                                        <li><a href="single-company-profile-OpenStreetMap.html">Company
-                                                Profile</a>
-                                        </li>
-                                        <li><a href="pages-contact-OpenStreetMap.html">Contact</a></li>
-                                        <li><a href="jobs-list-layout-1-OpenStreetMap.html">Location
-                                                Autocomplete</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="pages-blog.html">Blog</a></li>
-                                <li><a href="pages-pricing-plans.html">Pricing Plans</a></li>
-                                <li><a href="pages-checkout-page.html">Checkout Page</a></li>
-                                <li><a href="pages-invoice-template.html">Invoice Template</a></li>
+                                <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                                <li><a href="{{ route('premium.index') }}">Pricing Plans</a></li>
+                                <li><a href="{{ route('checkout.index') }}">Checkout Page</a></li>
+                                <li><a href="{{ route('invoice.show', 4) }}">Invoice Template</a></li>
                                 <li><a href="pages-user-interface-elements.html">User Interface Elements</a>
                                 </li>
                                 <li><a href="pages-icons-cheatsheet.html">Icons Cheatsheet</a></li>
                                 <li><a href="pages-login.html">Login & Register</a></li>
-                                <li><a href="pages-404.html">404 Page</a></li>
-                                <li><a href="pages-contact.html">Contact</a></li>
+                                <li><a href="{{ route('error-404') }}">404 Page</a></li>
+                                <li><a href="{{ route('contact') }}">Contact</a></li>
                             </ul>
                         </li>
 

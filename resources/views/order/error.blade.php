@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-
+    <h1>ERROR PAGE MODIFY</h1>
     <!-- Wrapper -->
     <div id="wrapper">
         <!-- Content

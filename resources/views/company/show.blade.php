@@ -1,4 +1,4 @@
-@include('layouts.app')
+@extends('layouts.app')
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
