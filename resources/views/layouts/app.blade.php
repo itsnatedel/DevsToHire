@@ -43,5 +43,12 @@
 <script src="{{ asset('js/magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/slick.min.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
+
+<!-- Google API & Maps -->
+<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
+<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
+<script src="js/infobox.min.js"></script>
+<script src="js/markerclusterer.js"></script>
+<script src="js/maps.js"></script>
 </body>
 </html>
