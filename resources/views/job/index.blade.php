@@ -428,16 +428,20 @@
 		</div>
 	</div>
 </div>
-<!-- Google Autocomplete -->
-<script>
-	function initAutocomplete() {
-		 var options = {
-		  types: ['(cities)'],
-		  // componentRestrictions: {country: "us"}
-		 };
+    <!-- Google Autocomplete -->
+    <script>
+        function initAutocomplete() {
+            var options = {
+                types: ['(cities)'],
+                // componentRestrictions: {country: "us"}
+            };
 
-		 var input = document.getElementById('autocomplete-input');
-		 var autocomplete = new google.maps.places.Autocomplete(input, options);
-	}
-</script>
+            var input = document.getElementById('autocomplete-input');
+            var autocomplete = new google.maps.places.Autocomplete(input, options);
+        }
+    </script>
+
+    <!-- Google API & Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_MAPS_KEY') }}&libraries=places"></script>
+
 @endsection

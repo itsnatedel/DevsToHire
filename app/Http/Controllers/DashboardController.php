@@ -91,7 +91,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return Application|Factory|View
      */
-    public function settings($id)
+    public function settings()
     {
         return view('dashboard.settings');
     }
@@ -102,7 +102,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return Application|Factory|View
      */
-    public function reviews($id)
+    public function reviews()
     {
         return view('dashboard.reviews');
     }
@@ -113,7 +113,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return Application|Factory|View
      */
-    public function messages($id)
+    public function messages()
     {
         return view('dashboard.messages');
 
@@ -125,7 +125,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return Application|Factory|View
      */
-    public function bookmarks($id)
+    public function bookmarks()
     {
         return view('dashboard.bookmarks');
 
@@ -137,7 +137,7 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return Application|Factory|View
      */
-    public function candidates($id)
+    public function candidates()
     {
         return view('dashboard.manage-candidates');
     }

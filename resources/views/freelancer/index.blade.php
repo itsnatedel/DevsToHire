@@ -463,7 +463,6 @@
         </div>
     </div>
     <!-- Wrapper / End -->
-
     <!-- Google Autocomplete -->
     <script>
         function initAutocomplete() {
@@ -476,4 +475,7 @@
             var autocomplete = new google.maps.places.Autocomplete(input, options);
         }
     </script>
+    <!-- Google API & Maps -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_MAPS_KEY') }}&libraries=places"></script>
+
 @endsection

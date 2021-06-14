@@ -256,21 +256,26 @@
     </div>
     <!-- Wrapper / End -->
     @include('layouts.popups.reviewToCompany')
-    <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
     <script>
         // Snackbar for "place a bid" button
-        $('#snackbar-place-bid').click(function () {
+        $('#snackbar-place-bid').click(function() {
             Snackbar.show({
                 text: 'Your bid has been placed!',
             });
         });
 
-
         // Snackbar for copy to clipboard button
-        $('.copy-url-button').click(function () {
+        $('.copy-url-button').click(function() {
             Snackbar.show({
                 text: 'Copied to clipboard!',
             });
         });
     </script>
+
+    <!-- Google API & Maps -->
+    <!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_MAPS_KEY') }}&libraries=places"></script>
+    <script src="{{ asset('js/infobox.min.js') }}"></script>
+    <script src="{{ asset('js/markerclusterer.js') }}"></script>
+    <script src="{{ asset('js/maps.js') }}"></script>
 @endsection

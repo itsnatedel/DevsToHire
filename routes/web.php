@@ -14,7 +14,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -101,7 +101,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function(
     /* Task */
     Route::get('/manage/task', [TaskController::class, 'manage'])->name('dashboard.task.manage');
     Route::get('/manage/bidders', [TaskController::class, 'manage'])->name('dashboard.task.manage');
-    Route::post('/task/create', [TaskController::class, 'create'])->name('dashboard.task.create');
+    Route::get('/task/create', [TaskController::class, 'create'])->name('dashboard.task.create');
 
     /* Bids */
     Route::get('/manage/bidders', [BidController::class, 'manage'])->name('dashboard.bid.manage');
@@ -109,14 +109,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function(
 
     /* Job */
     Route::get('/manage/job', [JobController::class, 'manage'])->name('dashboard.job.manage');
-    Route::post('/job/create', [JobController::class, 'create'])->name('dashboard.job.create');
+    Route::get('/job/create', [JobController::class, 'create'])->name('dashboard.job.create');
 });
-
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

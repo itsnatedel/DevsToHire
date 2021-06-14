@@ -1,24 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <!doctype html>
-<html lang="en">
-<head>
-
-    <!-- Basic Page Needs
-    ================================================== -->
-    <title>Hireo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!-- CSS
-    ================================================== -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/colors/blue.css">
-
-</head>
-<body>
-
 <!-- Wrapper -->
 <div id="wrapper">
     <!-- Titlebar
@@ -27,9 +9,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-
                     <h2>Log In</h2>
-
                     <!-- Breadcrumbs -->
                     <nav id="breadcrumbs" class="dark">
                         <ul>
@@ -37,20 +17,15 @@
                             <li>Log In</li>
                         </ul>
                     </nav>
-
                 </div>
             </div>
         </div>
     </div>
-
-
     <!-- Page Content
     ================================================== -->
     <div class="container">
         <div class="row">
             <div class="col-xl-5 offset-xl-3">
-
-
                 <div class="login-register-page">
                     <!-- Welcome Text -->
                     <div class="welcome-text">
@@ -59,21 +34,23 @@
                     </div>
 
                     <!-- Form -->
-                    <form method="post" id="login-form">
+                    <form method="post" id="login-main-form" action="{{ route('login') }}">
+                        @csrf
                         <div class="input-with-icon-left">
                             <i class="icon-material-baseline-mail-outline"></i>
-                            <input type="text" class="input-text with-border" name="emailaddress" id="emailaddress" placeholder="Email Address" required/>
+                            <input type="text" class="input-text with-border" name="email" id="email_form" placeholder="Email Address" required/>
                         </div>
 
                         <div class="input-with-icon-left">
                             <i class="icon-material-outline-lock"></i>
                             <input type="password" class="input-text with-border" name="password" id="password" placeholder="Password" required/>
                         </div>
-                        <a href="#" class="forgot-password">Forgot Password?</a>
+
+                        <!-- Button -->
+                        <button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit" form="login-main-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
                     </form>
 
-                    <!-- Button -->
-                    <button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit" form="login-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
 
                     <!-- Social Login -->
                     <div class="social-login-separator"><span>or</span></div>

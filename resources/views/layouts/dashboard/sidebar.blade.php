@@ -19,43 +19,41 @@
                 <div class="dashboard-nav-inner">
 
                     <ul data-submenu-title="Start">
-                        <li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i>
+                        <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                 Dashboard</a></li>
-                        <li><a href="dashboard-messages.html"><i
+                        <li><a href="{{ route('dashboard.messages') }}"><i
                                     class="icon-material-outline-question-answer"></i> Messages <span
                                     class="nav-tag">2</span></a></li>
-                        <li><a href="dashboard-bookmarks.html"><i
+                        <li><a href="{{ route('dashboard.bookmarks') }}"><i
                                     class="icon-material-outline-star-border"></i> Bookmarks</a></li>
-                        <li><a href="dashboard-reviews.html"><i
+                        <li><a href="{{ route('dashboard.reviews') }}"><i
                                     class="icon-material-outline-rate-review"></i> Reviews</a></li>
                     </ul>
 
                     <ul data-submenu-title="Organize and Manage">
                         <li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
                             <ul>
-                                <li><a href="dashboard-manage-jobs.html">Manage Jobs <span
+                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs <span
                                             class="nav-tag">3</span></a></li>
-                                <li><a href="dashboard-manage-candidates.html">Manage Candidates</a></li>
-                                <li><a href="dashboard-post-a-job.html">Post a Job</a></li>
+                                <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a></li>
+                                <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
                             </ul>
                         </li>
                         <li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
                             <ul>
-                                <li><a href="dashboard-manage-tasks.html">Manage Tasks <span
+                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks <span
                                             class="nav-tag">2</span></a></li>
-                                <li><a href="dashboard-manage-bidders.html">Manage Bidders</a></li>
-                                <li><a href="dashboard-my-active-bids.html">My Active Bids <span
+                                <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
+                                <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids <span
                                             class="nav-tag">4</span></a></li>
-                                <li><a href="dashboard-post-a-task.html">Post a Task</a></li>
+                                <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
                             </ul>
                         </li>
                     </ul>
 
                     <ul data-submenu-title="Account">
-                        <li class="active"><a href="dashboard-settings.html"><i
+                        <li class="active"><a href="{{ route('dashboard.settings') }}"><i
                                     class="icon-material-outline-settings"></i> Settings</a></li>
-                        <li><a href="index-logged-out.html"><i
-                                    class="icon-material-outline-power-settings-new"></i> Logout</a></li>
                     </ul>
 
                 </div>

@@ -87,7 +87,8 @@
                                 <li><a href="pages-user-interface-elements.html">User Interface Elements</a>
                                 </li>
                                 <li><a href="pages-icons-cheatsheet.html">Icons Cheatsheet</a></li>
-                                <li><a href="pages-login.html">Login & Register</a></li>
+                                <li><a href="{{ route('login') }}">Login</a></li>
+                                <li><a href="{{ route('register') }}">Register</a></li>
                                 <li><a href="{{ route('error-404') }}">404 Page</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                             </ul>
@@ -307,8 +308,12 @@
                                     <li><a href="dashboard-settings.html"><i
                                                 class="icon-material-outline-settings"></i>
                                             Settings</a></li>
-                                    <li><a href="index-logged-out.html"><i
-                                                class="icon-material-outline-power-settings-new"></i> Logout</a>
+                                    <li>
+                                        <form action="{{ route('logout') }}" method="post">
+                                            @csrf
+                                            <i class="icon-material-outline-power-settings-new"></i>
+                                            <button type="submit">Logout</button>
+                                        </form>
                                     </li>
                                 </ul>
 
@@ -340,6 +345,6 @@
 </header>
 <div class="clearfix"></div>
 <!-- Header Container / End -->
-@if (!Auth::check())
+@if (!Auth::check() && Route::currentRouteName() !== 'register')
     @include('layouts.popups.signIn')
 @endif
