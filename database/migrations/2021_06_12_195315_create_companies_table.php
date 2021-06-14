@@ -15,7 +15,10 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name', 90);
+            $table->longText('description');
+            $table->boolean('verified')->default(0);
+            $table->string('pic_url', 255)->nullable();
         });
     }
 

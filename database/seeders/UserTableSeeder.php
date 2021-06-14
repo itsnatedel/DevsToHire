@@ -20,16 +20,20 @@ class UserTableSeeder extends Seeder
 
         $users = [
             [
-                'name' => 'Bob',
+                'firstname' => 'Bob',
+                'lastname' => 'Sull',
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
                 'email' => 'bob@gmail.com',
-                'role_id' => 2
+                'role_id' => 2,
+                'location_id' => 1
             ],
             [
-                'name' => 'John',
+                'firstname' => 'John',
+                'lastname' => 'McCain',
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => 'nathan@gmail.com',
-                'role_id' => 3
+                'role_id' => 3,
+                'location_id' => 1
             ],
         ];
 

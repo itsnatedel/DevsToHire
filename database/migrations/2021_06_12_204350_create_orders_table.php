@@ -14,6 +14,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
+            // Order = user buys a membership plan, date + userId + plan_id ?
             $table->id();
             $table->timestamps();
         });

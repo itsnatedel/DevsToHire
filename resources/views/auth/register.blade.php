@@ -25,7 +25,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-5 offset-xl-3">
-
                     <div class="login-register-page">
                         <!-- Welcome Text -->
                         <div class="welcome-text">
@@ -34,34 +33,50 @@
                         </div>
 
 
-
                         <!-- Form -->
                         <form method="post" id="register-account-form-main" action="{{ route('register') }}">
                         @csrf
 
                         <!-- Account Type -->
-                        <div class="account-type">
-                            <div>
-                                <input type="radio" name="account-type-radio" id="freelancer-radio" class="account-type-radio" checked/>
-                                <label for="freelancer-radio" class="ripple-effect-dark"><i class="icon-material-outline-account-circle"></i> Freelancer</label>
+                            <div class="account-type">
+                                <div>
+                                    <input type="radio" name="account-type-radio" id="freelancer-radio"
+                                           class="account-type-radio" checked/>
+                                    <label for="freelancer-radio" class="ripple-effect-dark"><i
+                                            class="icon-material-outline-account-circle"></i> Freelancer</label>
+                                </div>
+
+                                <div>
+                                    <input type="radio" name="account-type-radio" id="employer-radio"
+                                           class="account-type-radio"/>
+                                    <label for="employer-radio" class="ripple-effect-dark"><i
+                                            class="icon-material-outline-business-center"></i> Employer</label>
+                                </div>
                             </div>
 
-                            <div>
-                                <input type="radio" name="account-type-radio" id="employer-radio" class="account-type-radio"/>
-                                <label for="employer-radio" class="ripple-effect-dark"><i class="icon-material-outline-business-center"></i> Employer</label>
-                            </div>
-                        </div>
+                            <div class="row">
+                                <div class="input-with-icon-left col-6">
+                                    <i class="icon-feather-user"></i>
+                                    <input type="text" id="firstname" name="first" class="input-text with-border"
+                                           placeholder="Firstname">
+                                </div>
 
-                            <div class="input-with-icon-left">
-                                <i class="icon-feather-user"></i>
-                                <input type="text" id="name" name="name" class="input-text with-border"
-                                       placeholder="Your name">
+                                <div class="input-with-icon-left col-6">
+                                    <i class="icon-feather-user"></i>
+                                    <input type="text" id="lastname" name="lastname" class="input-text with-border"
+                                           placeholder="Lastname">
+                                </div>
                             </div>
-
                             <div class="input-with-icon-left">
                                 <i class="icon-material-baseline-mail-outline"></i>
                                 <input type="text" class="input-text with-border" name="email"
                                        id="email-register" placeholder="Email Address" required/>
+                            </div>
+
+                            <div class="input-with-icon-left">
+                                <i class="icon-feather-phone-call"></i>
+                                <input type="text" class="input-text with-border" name="phone"
+                                       id="phone-register" placeholder="Phone Number" required/>
                             </div>
 
                             <div class="input-with-icon-left" title="Should be at least 8 characters long"
@@ -76,6 +91,16 @@
                                 <input type="password" class="input-text with-border" name="password-repeat"
                                        id="password-repeat-register-form" placeholder="Repeat Password"/>
                             </div>
+
+                            <div class="bootstrap-select">
+                                <select class="form-control selectpicker with-border" id="select-country" data-live-search="true">
+                                    <option data-tokens="china" disabled selected>Country</option>
+                                    <option data-tokens="china">China</option>
+                                    <option data-tokens="malayasia">Malayasia</option>
+                                    <option data-tokens="singapore">Singapore</option>
+                                </select>
+                            </div>
+
                             <!-- Button -->
                             <button class="button full-width button-sliding-icon ripple-effect margin-top-10"
                                     type="submit"
@@ -106,4 +131,9 @@
         <!-- Spacer / End-->
     </div>
     <!-- Wrapper / End -->
+    <script>
+        $(function() {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
 @endsection

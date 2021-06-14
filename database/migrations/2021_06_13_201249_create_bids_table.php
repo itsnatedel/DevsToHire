@@ -15,7 +15,13 @@ class CreateBidsTable extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('minimal_rate');
+            $table->integer('delivery');
+            $table->enum('time_period', [
+                'Days',
+                'Hours',
+                'Weeks'
+            ])->default('Days');
         });
     }
 

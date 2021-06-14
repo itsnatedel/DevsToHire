@@ -15,7 +15,15 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name', 255);
+            $table->longText('description');
+            $table->integer('budget_min');
+            $table->integer('budget_high');
+            $table->enum('type', [
+                'Fixed',
+                'Hourly'
+            ])->default('Fixed');
+            $table->date('due_date');
         });
     }
 
