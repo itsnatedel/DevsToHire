@@ -34,6 +34,7 @@ class JobsTableSeeder extends Seeder
                 'salary_high'   => $faker->numberBetween(31000, 60000),
                 'company_id'    => $faker->numberBetween(1, 50),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
+                'category_id'   => $faker->numberBetween(1, 8),
             ];
         }
 
