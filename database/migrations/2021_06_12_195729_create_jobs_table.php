@@ -27,6 +27,7 @@ class CreateJobsTable extends Migration
                 'Internship',
                 'Temporary'
             ])->default('Freelance');
+            $table->boolean('featured')->default(0);
 
             $table->foreignId('company_id');
 
