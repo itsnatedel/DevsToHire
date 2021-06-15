@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             CandidatesTableSeeder::class,
             TasksTableSeeder::class,
             BidsTableSeeder::class,
-
+            PremiumUsersTable::class
         ]);
     }
 }

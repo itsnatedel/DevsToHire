@@ -11,7 +11,6 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-
     protected $fillable = [
         'icon',
         'name',
@@ -19,14 +18,6 @@ class Category extends Model
     ];
 
     public $timestamps = false;
-
-    /**
-     * Relation Category -> Task
-     * @return HasMany
-     */
-    public function tasks() {
-        return $this->hasMany(Task::class);
-    }
 
     /**
      * Relation Category -> Job

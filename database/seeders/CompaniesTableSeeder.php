@@ -26,10 +26,12 @@ class CompaniesTableSeeder extends Seeder
 
         for ($i = 0; $i < 50; $i++) {
             $companies[$i] = [
-                'name' => $faker->company,
-                'description' => $faker->paragraph(3, true),
-                'verified' => 0,
-                'user_id' => $faker->numberBetween(2, 5),
+                'name'          => $faker->company,
+                'description'   => $faker->paragraph(3, true),
+                'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
+                'verified'      => $faker->boolean(60),
+                'user_id'       => $faker->numberBetween(2, 5),
+                'location_id'   => $faker->numberBetween(1, 248)
             ];
         }
 

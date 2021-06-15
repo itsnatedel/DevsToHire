@@ -29,12 +29,14 @@ class JobsTableSeeder extends Seeder
         for ($i = 0; $i < 70; $i++) {
             $jobs[$i] = [
                 'title'         => $company->catchPhrase(),
+                'created_at'    => $faker->dateTimeBetween('-4 weeks', '-1 day'),
                 'description'   => $text->realText(200),
                 'salary_low'    => $faker->numberBetween(15000, 30000),
                 'salary_high'   => $faker->numberBetween(31000, 60000),
                 'company_id'    => $faker->numberBetween(1, 50),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
+                'featured'      => $faker->boolean(60),
             ];
         }
 
