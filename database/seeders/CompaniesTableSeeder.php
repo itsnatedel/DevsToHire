@@ -2,13 +2,9 @@
 namespace Database\Seeders;
 require_once 'vendor/autoload.php';
 
-use Faker\Provider\Company;
-use Faker\Provider\en_US\Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Faker\Factory as Faker;
-use Illuminate\Support\Str;
 
 class CompaniesTableSeeder extends Seeder
 {
@@ -32,7 +28,8 @@ class CompaniesTableSeeder extends Seeder
             $companies[$i] = [
                 'name' => $faker->company,
                 'description' => $faker->paragraph(3, true),
-                'verified' => 0
+                'verified' => 0,
+                'user_id' => $faker->numberBetween(2, 5),
             ];
         }
 

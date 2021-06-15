@@ -15,8 +15,8 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('country', 30);
-            $table->string('country_flag_url', 255);
+            $table->string('country_code', 2);
+            $table->string('country_name', 80);
         });
     }
 

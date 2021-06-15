@@ -16,12 +16,19 @@ class CreateBidsTable extends Migration
         Schema::create('bids', function (Blueprint $table) {
             $table->id();
             $table->integer('minimal_rate');
-            $table->integer('delivery');
+            $table->integer('delivery_time');
             $table->enum('time_period', [
                 'Days',
                 'Hours',
-                'Weeks'
             ])->default('Days');
+
+            $table->foreignId('bidder_id');
+            $table->foreign('bidder_id')->references('id')->on('freelancers')
+                ->onDelete('restrict')->onUpdate('cascade');
+
+            $table->foreignId('task_id');
+            $table->foreign('task_id')->references('id')->on('tasks')
+                ->onDelete('restrict')->onUpdate('cascade');
         });
     }
 

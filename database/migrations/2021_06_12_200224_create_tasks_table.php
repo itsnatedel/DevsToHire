@@ -18,12 +18,16 @@ class CreateTasksTable extends Migration
             $table->string('name', 255);
             $table->longText('description');
             $table->integer('budget_min');
-            $table->integer('budget_high');
+            $table->integer('budget_max');
             $table->enum('type', [
                 'Fixed',
                 'Hourly'
             ])->default('Fixed');
             $table->date('due_date');
+            $table->foreignId('employer_id');
+
+            $table->foreign('employer_id')->references('id')->on('companies')
+                ->onDelete('restrict')->onUpdate('cascade');
         });
     }
 

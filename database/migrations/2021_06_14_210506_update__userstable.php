@@ -16,7 +16,7 @@ class UpdateUserstable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id');
             $table->foreignId('location_id');
-
+            $table->boolean('can_be_rated')->default(0);
             $table->foreign('role_id')->references('id')->on('roles')
                 ->onDelete('restrict')->onUpdate('cascade');
 

@@ -15,13 +15,15 @@ class CreateFreelancersTable extends Migration
     {
         Schema::create('freelancers', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname', 25);
-            $table->string('lastname', 40);
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('pic_url', 255)->nullable();
             $table->integer('hourly_rate');
-            $table->string('CV_url')->nullable();
             $table->boolean('verified')->default(0);
+            $table->string('CV_url')->nullable();
+
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('restrict')->onUpdate('cascade');
         });
     }
 

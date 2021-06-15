@@ -16,9 +16,13 @@ class CreateCompaniesTable extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name', 90);
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->boolean('verified')->default(0);
             $table->string('pic_url', 255)->nullable();
+
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('restrict')->onUpdate('cascade');
         });
     }
 

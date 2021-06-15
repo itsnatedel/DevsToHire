@@ -19,6 +19,15 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             CategoryTableSeeder::class,
             CompaniesTableSeeder::class,
+            TasksTableSeeder::class,
+            PremiumTableSeeder::class,
+            FreelancersTableSeeder::class,
+            RatingsTableSeeder::class,
+            JobsTableSeeder::class,
+            CandidatesTableSeeder::class,
+            TasksTableSeeder::class,
+            BidsTableSeeder::class,
+
         ]);
     }
 }
