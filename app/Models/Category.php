@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
     use HasFactory;
 
     protected $table = 'categories';
+
     protected $fillable = [
         'icon',
         'name',
@@ -17,4 +19,20 @@ class Category extends Model
     ];
 
     public $timestamps = false;
+
+    /**
+     * Relation Category -> Task
+     * @return HasMany
+     */
+    public function tasks() {
+        return $this->hasMany(Task::class);
+    }
+
+    /**
+     * Relation Category -> Job
+     * @return HasMany
+     */
+    public function jobs() {
+        return $this->hasMany(Job::class);
+    }
 }

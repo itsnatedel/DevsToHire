@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateTasksTable extends Migration
+class UpdateJobsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class UpdateTasksTable extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('jobs', function (Blueprint $table) {
             $table->foreignId('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onDelete('restrict')->onUpdate('cascade');
