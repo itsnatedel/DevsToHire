@@ -20,7 +20,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Search Bar -->
                 <div class="row">
                     <div class="col-md-12">

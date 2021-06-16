@@ -32,7 +32,15 @@
                             <span>Already have an account? <a href="{{ route('login') }}">Log In!</a></span>
                         </div>
 
-
+                        @if(count($errors) > 0)
+                            <div style="color:red">
+                                @foreach ($errors->all() as $message)
+                                    <ul>
+                                        <li>{{$message}}</li>
+                                    </ul>
+                                @endforeach
+                            </div>
+                        @endif
                         <!-- Form -->
                         <form method="post" id="register-account-form-main" action="{{ route('register') }}">
                         @csrf
@@ -40,15 +48,15 @@
                         <!-- Account Type -->
                             <div class="account-type">
                                 <div>
-                                    <input type="radio" name="account-type-radio" id="freelancer-radio"
-                                           class="account-type-radio" checked/>
+                                    <input type="radio" name="account-type" id="freelancer-radio"
+                                           class="account-type-radio" value="freelancer" checked/>
                                     <label for="freelancer-radio" class="ripple-effect-dark"><i
                                             class="icon-material-outline-account-circle"></i> Freelancer</label>
                                 </div>
 
                                 <div>
-                                    <input type="radio" name="account-type-radio" id="employer-radio"
-                                           class="account-type-radio"/>
+                                    <input type="radio" name="account-type" id="employer-radio"
+                                           class="account-type-radio" value="employer"/>
                                     <label for="employer-radio" class="ripple-effect-dark"><i
                                             class="icon-material-outline-business-center"></i> Employer</label>
                                 </div>
@@ -57,7 +65,7 @@
                             <div class="row">
                                 <div class="input-with-icon-left col-6">
                                     <i class="icon-feather-user"></i>
-                                    <input type="text" id="firstname" name="first" class="input-text with-border"
+                                    <input type="text" id="firstname" name="firstname" class="input-text with-border"
                                            placeholder="Firstname">
                                 </div>
 
@@ -73,10 +81,15 @@
                                        id="email-register" placeholder="Email Address" required/>
                             </div>
 
-                            <div class="input-with-icon-left">
-                                <i class="icon-feather-phone-call"></i>
-                                <input type="text" class="input-text with-border" name="phone"
-                                       id="phone-register" placeholder="Phone Number" required/>
+                            <div class="bootstrap-select" style="margin-bottom: 15px">
+                                <select class="form-control selectpicker with-border" id="select-country"
+                                        data-live-search="true" name="country" data-size="10">
+                                    <option disabled selected>Your Country</option>
+                                    @foreach($countries as $country)
+                                        <option data-tokens="{{ $country->name }}"
+                                                value="{{ $country->code }}">{{ $country->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="input-with-icon-left" title="Should be at least 8 characters long"
@@ -88,17 +101,8 @@
 
                             <div class="input-with-icon-left">
                                 <i class="icon-material-outline-lock"></i>
-                                <input type="password" class="input-text with-border" name="password-repeat"
+                                <input type="password" class="input-text with-border" name="password_confirmation"
                                        id="password-repeat-register-form" placeholder="Repeat Password"/>
-                            </div>
-
-                            <div class="bootstrap-select">
-                                <select class="form-control selectpicker with-border" id="select-country" data-live-search="true">
-                                    <option data-tokens="china" disabled selected>Country</option>
-                                    <option data-tokens="china">China</option>
-                                    <option data-tokens="malayasia">Malayasia</option>
-                                    <option data-tokens="singapore">Singapore</option>
-                                </select>
                             </div>
 
                             <!-- Button -->
@@ -132,7 +136,7 @@
     </div>
     <!-- Wrapper / End -->
     <script>
-        $(function() {
+        $(function () {
             $('.selectpicker').selectpicker();
         });
     </script>

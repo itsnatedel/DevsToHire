@@ -33,6 +33,16 @@
                         <span>Don't have an account? <a href="{{ route('register') }}">Sign Up!</a></span>
                     </div>
 
+                    @if(count($errors) > 0)
+                        <div style="color:red">
+                            @foreach ($errors->all() as $message)
+                                <ul>
+                                    <li>{{$message}}</li>
+                                </ul>
+                            @endforeach
+                        </div>
+                    @endif
+
                     <!-- Form -->
                     <form method="post" id="login-main-form" action="{{ route('login') }}">
                         @csrf

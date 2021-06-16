@@ -28,7 +28,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
                 'email' => 'bob@gmail.com',
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => 'John',
@@ -36,7 +36,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => 'nathan@gmail.com',
                 'role_id' => 3,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -44,7 +44,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 3,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -52,7 +52,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 3,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -60,7 +60,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 3,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -68,7 +68,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -76,7 +76,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -84,7 +84,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -92,7 +92,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -100,7 +100,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -108,7 +108,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -116,7 +116,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -124,7 +124,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -132,7 +132,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -140,7 +140,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -148,7 +148,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -156,7 +156,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -164,7 +164,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -172,7 +172,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -180,7 +180,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
             [
                 'firstname' => $faker->firstName,
@@ -188,7 +188,7 @@ class UserTableSeeder extends Seeder
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2',
                 'email' => $faker->email,
                 'role_id' => 2,
-                'location_id' => $faker->numberBetween(1, 248),
+                'location_id' => $faker->numberBetween(1, 208),
             ],
         ];
 

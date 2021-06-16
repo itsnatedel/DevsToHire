@@ -24,11 +24,10 @@
 <body>
 <div id="app">
     <main class="py-4">
-        @if(Route::currentRouteName() !== 'register')
-            @include('layouts.header')
-        @endif
+        @include('layouts.header')
 
         @yield('content')
+
         @include('layouts.footer')
     </main>
 </div>

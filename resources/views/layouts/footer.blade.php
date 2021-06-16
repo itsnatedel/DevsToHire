@@ -28,25 +28,25 @@
                                 <div class="footer-row-inner">
                                     <ul class="footer-social-links">
                                         <li>
-                                            <a href="#" title="Facebook" data-tippy-placement="bottom"
+                                            <a href="https://www.facebook.com/" title="Facebook" target="_blank" data-tippy-placement="bottom"
                                                data-tippy-theme="light">
                                                 <i class="icon-brand-facebook-f"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" title="Twitter" data-tippy-placement="bottom"
+                                            <a href="https://www.twitter.com/" title="Twitter" target="_blank" data-tippy-placement="bottom"
                                                data-tippy-theme="light">
                                                 <i class="icon-brand-twitter"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" title="Google Plus" data-tippy-placement="bottom"
+                                            <a href="https://www.instagram.com/" title="Instagram" target="_blank" data-tippy-placement="bottom"
                                                data-tippy-theme="light">
-                                                <i class="icon-brand-google-plus-g"></i>
+                                                <i class="icon-brand-instagram"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#" title="LinkedIn" data-tippy-placement="bottom"
+                                            <a href="https://www.linkedin.com/" title="LinkedIn" target="_blank" data-tippy-placement="bottom"
                                                data-tippy-theme="light">
                                                 <i class="icon-brand-linkedin-in"></i>
                                             </a>
@@ -89,10 +89,9 @@
                     <div class="footer-links">
                         <h3>For Candidates</h3>
                         <ul>
-                            <li><a href="#"><span>Browse Jobs</span></a></li>
-                            <li><a href="#"><span>Add Resume</span></a></li>
-                            <li><a href="#"><span>Job Alerts</span></a></li>
-                            <li><a href="#"><span>My Bookmarks</span></a></li>
+                            <li><a href="{{ route('job.index') }}"><span>Browse Jobs</span></a></li>
+                            <li><a href="{{ route('task.index') }}"><span>Brows Tasks</span></a></li>
+                            <li><a href="{{ route('dashboard.bookmarks') }}"><span>My Bookmarks</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -102,10 +101,10 @@
                     <div class="footer-links">
                         <h3>For Employers</h3>
                         <ul>
-                            <li><a href="#"><span>Browse Candidates</span></a></li>
-                            <li><a href="#"><span>Post a Job</span></a></li>
-                            <li><a href="#"><span>Post a Task</span></a></li>
-                            <li><a href="#"><span>Plans & Pricing</span></a></li>
+                            <li><a href="{{ route('dashboard.candidates') }}"><span>Browse Candidates</span></a></li>
+                            <li><a href="{{ route('dashboard.job.create') }}"><span>Post a Job</span></a></li>
+                            <li><a href="{{ route('dashboard.task.create') }}"><span>Post a Task</span></a></li>
+                            <li><a href="{{ route('premium.index') }}"><span>Plans & Pricing</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -115,7 +114,7 @@
                     <div class="footer-links">
                         <h3>Helpful Links</h3>
                         <ul>
-                            <li><a href="#"><span>Contact</span></a></li>
+                            <li><a href="{{ route('contact') }}"><span>Contact</span></a></li>
                             <li><a href="#"><span>Privacy Policy</span></a></li>
                             <li><a href="#"><span>Terms of Use</span></a></li>
                         </ul>
@@ -127,8 +126,8 @@
                     <div class="footer-links">
                         <h3>Account</h3>
                         <ul>
-                            <li><a href="#"><span>Log In</span></a></li>
-                            <li><a href="#"><span>My Account</span></a></li>
+                            <li><a href="{{ route('login') }}"><span>Log In</span></a></li>
+                            <li><a href="{{ route('dashboard.index') }}"><span>My Account</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -152,7 +151,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
-                    © 2019 <strong>Hireo</strong>. All Rights Reserved.
+                    © 2019 <strong>DevsToHire</strong>. All Rights Reserved.
                 </div>
             </div>
         </div>
@@ -160,5 +159,3 @@
     <!-- Footer Copyrights / End -->
 </div>
 <!-- Footer / End -->
-<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
-
