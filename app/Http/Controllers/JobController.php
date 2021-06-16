@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Job;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -16,7 +18,47 @@ class JobController extends Controller
      */
     public function index()
     {
-        return view('job.index');
+        $jobs = Job::getAllShowsAndCompanyInfo();
+        $countries = Job::getCountries();
+        $categories = Category::all();
+
+        return view('job.index', [
+            'jobs' => $jobs,
+            'countries' => $countries,
+            'categories' => $categories
+        ]);
+    }
+
+    /**
+     * Handles the search criterias and fetches the corresponding jobs.
+     * @param Request $request
+     * @return Application|Factory|View
+     */
+    public function search(Request $request)
+    {
+        // User selected a sort method
+        if (isset($request->sortBy) && in_array($request->sortBy, ['newest', 'oldest', 'random'])) {
+            $jobs = Job::getAllShowsAndCompanyInfo(null, $request->sortBy, false);
+        } elseif (isset($request->title)) {
+            $jobs = Job::getAllShowsAndCompanyInfo($request, null, false);
+        } else {
+            $jobs = Job::getAllShowsAndCompanyInfo();
+        }
+
+        // User searched with sidebar's inputs
+        if (isset($request->search) && $request->search === 'refined') {
+            $jobs = Job::getAllShowsAndCompanyInfo($request, null, true);
+        }
+
+        // To populate select inputs in sidebar
+        $countries = Job::getCountries();
+        $categories = Category::all();
+
+        return view('job.index', [
+            'jobs' => $jobs,
+            'countries' => $countries,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -31,7 +73,7 @@ class JobController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -42,7 +84,7 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -53,7 +95,7 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -64,8 +106,8 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,7 +118,7 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -85,7 +127,8 @@ class JobController extends Controller
     }
 
     /* Manage Job -> Dashboard */
-    public function manage() {
+    public function manage()
+    {
         return view('dashboard.manage-jobs');
     }
 }

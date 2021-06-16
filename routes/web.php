@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,12 +31,12 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 
 /* 404 */
-Route::get('/404', function() {
+Route::get('/404', function () {
     return view('404');
 })->name('error-404');
 
 /* 404 */
-Route::get('/contact-us', function() {
+Route::get('/contact-us', function () {
     return view('contact');
 })->name('contact');
 
@@ -60,6 +61,7 @@ Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->where('id', '[0
 /* Job Routes */
 Route::get('/jobs', [JobController::class, 'index'])->name('job.index');
 Route::get('/job/{id}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
+Route::get('/jobs/search', [JobController::class, 'search'])->name('job.search');
 
 /* Bid Routes */
 Route::get('/bid/place/{id}', [BidController::class, 'placeBid'])->where('id', '[0-9]+')->name('bid.place');
@@ -79,7 +81,7 @@ Route::get('/tasks', [TaskController::class, 'index'])->name('task.index');
 Route::get('/task/{id}', [TaskController::class, 'show'])->where('id', '[0-9]+')->name('task.show');
 
 /* Dashboard Routes */
-Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function() {
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function () {
     /* Dashboard Home page */
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 

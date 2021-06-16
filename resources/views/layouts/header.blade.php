@@ -11,7 +11,7 @@
 
                 <!-- Logo -->
                 <div id="logo">
-                    <a href="{{ route('homepage') }}"><img src="images/logo.png" alt=""></a>
+                    <a href="{{ route('homepage') }}"><img src="{{ asset('images/logo.png') }}" alt=""></a>
                 </div>
 
                 <!-- Main Navigation -->
@@ -323,7 +323,7 @@
                 <!-- User Menu / End -->
                 @else
                     <div class="header-widget">
-                        <a href="#sign-in-dialog" class="popup-with-zoom-anim log-in-button"><i
+                        <a href="{{ route('login') }}" class="log-in-button"><i
                                 class="icon-feather-log-in"></i> <span>Log In / Register</span></a>
                     </div>
                 @endif
@@ -345,6 +345,3 @@
 </header>
 <div class="clearfix"></div>
 <!-- Header Container / End -->
-@if (!Auth::check() && Route::currentRouteName() !== 'register')
-    @include('layouts.popups.signIn')
-@endif
