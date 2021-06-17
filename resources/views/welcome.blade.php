@@ -86,8 +86,7 @@
                         <!-- Category Boxes Container -->
                         <div class="categories-container">
                         @foreach($categories as $category)
-                            <!-- >Add id or w/e to search w/ category -->
-                                <a href="{{ route('job.index') }}" class="category-box">
+                                <a href="{{ route('job.category', $category->id) }}" class="category-box">
                                     <div class="category-box-icon">
                                         <i class="{{ $category->icon }}"></i>
                                     </div>
