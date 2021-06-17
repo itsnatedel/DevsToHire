@@ -12,8 +12,8 @@
                 <div class="col-xl-3 col-lg-4">
                     <div class="sidebar-container">
                         <form action="{{ route('job.search') }}" method="get">
-                        <!-- Keywords -->
-                            <div class="sidebar-widget">
+                            <!-- Keywords -->
+                            <div class="sidebar-widget" style="margin-top: 5px">
                                 <h3>Title Search</h3>
                                 <div class="keywords-container">
                                     <div class="keyword-input-container" title="Look for a specific job title"
@@ -37,7 +37,9 @@
                                         <option disabled>Countries</option>
                                         @foreach($countries as $country)
                                             <option data-tokens="{{ $country->name }}"
-                                                    value="{{ $country->id }}">{{ $country->name }}</option>
+                                                    value="{{ $country->id }}">
+                                                {{ $country->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -108,10 +110,10 @@
                     <h3 class="page-title">Search Results</h3>
 
                     <div class="notify-box margin-top-15">
-                        <div class="switch-container">
-                            <label class="switch"><input type="checkbox"><span class="switch-button"></span><span
-                                    class="switch-text">Turn on email alerts for this search</span></label>
-                        </div>
+                        <a href="{{ route('job.index') }}" class="button gray ripple-effect button-sliding-icon" style="margin: -10px 0; padding: 5px; transform: translateY(3px)">
+                            Reset Search
+                            <i class="icon-material-outline-autorenew"></i>
+                        </a>
 
                         <div class="sort-by">
                             <span>Sort by:</span>
@@ -144,10 +146,13 @@
                                         <div class="job-listing-description">
                                             <h4 class="job-listing-company">
                                                 {{ $job->name }}
-                                                <span class="verified-badge"
-                                                      title="Verified Employer"
-                                                      data-tippy-placement="top">
-                                            </span>
+
+                                                @if($job->verified)
+                                                    <span class="verified-badge"
+                                                          title="Verified Employer"
+                                                          data-tippy-placement="top">
+                                                    </span>
+                                                @endif
 
                                             </h4>
                                             <h3 class="job-listing-title">{{ $job->title }}</h3>
@@ -209,5 +214,6 @@
             </div>
         </div>
     </div>
+    <div class="margin-bottom-25"></div>
     <!-- Wrapper / End -->
 @endsection

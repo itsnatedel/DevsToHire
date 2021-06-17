@@ -6,7 +6,7 @@
     <div class="sign-in-form">
 
         <ul class="popup-tabs-nav">
-            <li><a href="#tab">Add Note</a></li>
+            <li><a href="#tab">Apply Now</a></li>
         </ul>
 
         <div class="popup-tabs-container">
@@ -16,24 +16,32 @@
 
                 <!-- Welcome Text -->
                 <div class="welcome-text">
-                    <h3>Do Not Forget 😎</h3>
+                    <h3>Send your CV to get a chance of being selected for this job!</h3>
                 </div>
 
                 <!-- Form -->
-                <form method="post" id="add-note">
+                <form method="post" id="apply-now-form">
 
-                    <select class="selectpicker with-border default margin-bottom-20" data-size="7" title="Priority">
-                        <option>Low Priority</option>
-                        <option>Medium Priority</option>
-                        <option>High Priority</option>
-                    </select>
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-outline-account-circle"></i>
+                        <input type="text" class="input-text with-border" name="name" id="name" placeholder="First and Last Name" required/>
+                    </div>
 
-                    <textarea name="textarea" cols="10" placeholder="Note" class="with-border"></textarea>
+                    <div class="input-with-icon-left">
+                        <i class="icon-material-baseline-mail-outline"></i>
+                        <input type="text" class="input-text with-border" name="emailaddress" id="emailaddress" placeholder="Email Address" required/>
+                    </div>
+
+                    <div class="uploadButton">
+                        <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload-cv" />
+                        <label class="uploadButton-button ripple-effect" for="upload-cv">Select File</label>
+                        <span class="uploadButton-file-name">Upload your CV / resume relevant file. <br> Max. file size: 50 MB.</span>
+                    </div>
 
                 </form>
 
                 <!-- Button -->
-                <button class="button full-width button-sliding-icon ripple-effect" type="submit" form="add-note">Add Note <i class="icon-material-outline-arrow-right-alt"></i></button>
+                <button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit" form="apply-now-form">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></button>
 
             </div>
 

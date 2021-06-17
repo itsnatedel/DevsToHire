@@ -48,13 +48,35 @@ class Job extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public static function getAllDataOfJob(int $id)
+    {
+        $job = DB::table('jobs as jo')
+            ->join('companies as co', 'co.id', '=', 'jo.company_id')
+            ->join('locations as lo', 'lo.id', '=', 'co.location_id')
+            ->select('jo.*',
+                DB::raw('DATEDIFF(jo.created_at, NOW()) as date_posted'),
+                'co.location_id',
+                'co.name',
+                'co.description',
+                'co.verified',
+                'co.pic_url',
+                'lo.country_name',
+                'lo.country_code')
+            ->where('jo.id', '=', $id)
+            ->first();
+
+        self::removeDashesFromDates($job);
+        self::getSalaryInThousands($job);
+
+        return $job;
+    }
+
     /**
      * getAllShowsAndCompanyInfo method.
      * Retrieves all shows & the employer's info
      */
-    public static function getAllShowsAndCompanyInfo(Request $request = null, $sortMethod = null, $refined = false): LengthAwarePaginator
+    public static function getAllJobsAndCompanyInfo($request = null, bool $sort = false, bool $refined = false): LengthAwarePaginator
     {
-        DB::enableQueryLog();
         $query = DB::table('jobs as jo')
             ->join('companies as co', 'co.id', '=', 'jo.company_id')
             ->join('locations as lo', 'lo.id', '=', 'co.location_id')
@@ -67,19 +89,16 @@ class Job extends Model
                 'co.pic_url',
                 'lo.country_name');
 
-        if (!is_null($sortMethod)) {
-            if ($sortMethod === 'random') {
-                $query->inRandomOrder();
-            }
-
-            if ($sortMethod === 'newest') {
-                $query->orderBy('jo.created_at', 'desc');
-            } else {
-                // orderBy($column, $direction = 'asc')
-                $query->orderBy('jo.created_at');
-            }
+        if (is_int($request)) {
+            $query = self::getJobsByCategoryId($query, $request);
         }
 
+        // User requests a sort method
+        if (isset($request->sortBy) && $sort) {
+            $query = self::sortQuery($query, $request->sortBy);
+        }
+
+        // User searches for a job title
         if (isset($request->title) && !is_null($request->title)) {
             $query = self::getJobsWithTitle($query, $request);
         }
@@ -92,6 +111,50 @@ class Job extends Model
         $jobs = $query->paginate(4);
 
         return self::removeDashesFromDates($jobs);
+    }
+
+    /**
+     * getJobsByCategoryId method.
+     * Searches jobs from a specific category
+     * @param $query
+     * @param int $request Category's id
+     * @return mixed
+     */
+    public static function getJobsByCategoryId($query, int $request)
+    {
+        // Make sure the category exists
+        $category = Category::where('id', '=', $request)->first();
+
+        if (!is_null($category)) {
+            return $query->where('jo.category_id', '=', $request);
+        }
+
+        // If category doesn't exist
+        return $query;
+    }
+
+    /**
+     * sortQuery method.
+     * Sorts the list of jobs depending on user's request
+     * @param $query
+     * @param $sortByMethod
+     * @return mixed
+     */
+    public static function sortQuery($query, $sortByMethod)
+    {
+        if (!is_null($sortByMethod)) {
+            if ($sortByMethod === 'random') {
+                $query->inRandomOrder();
+            }
+
+            if ($sortByMethod === 'newest') {
+                $query->orderBy('jo.created_at', 'desc');
+            } else {
+                $query->orderBy('jo.created_at');
+            }
+        }
+
+        return $query;
     }
 
     /**
@@ -173,15 +236,77 @@ class Job extends Model
     }
 
     /**
+     * getRelatedJobs method.
+     * Fetches related jobs
+     * Fetches on :
+     *  - Job Type
+     *  Or
+     *  - Job Category
+     * @param mixed $job Reference job.
+     * @return mixed
+     */
+    public static function getRelatedJobs($job) {
+        $relatedJobs = DB::table('jobs as jo')
+            ->join('companies as co', 'co.id', '=', 'jo.company_id')
+            ->join('locations as lo', 'lo.id', '=', 'co.location_id')
+            ->join('categories as cat', 'cat.id', '=', 'jo.category_id')
+            ->select('jo.id',
+                'jo.title',
+                'jo.type',
+                'jo.salary_low',
+                'jo.salary_high',
+                'cat.name',
+                DB::raw('DATEDIFF(jo.created_at, NOW()) as date_posted'),
+                'co.name',
+                'co.verified',
+                'co.pic_url',
+                'lo.country_name')
+            ->where('jo.type', '=', $job->type)
+            ->orWhere('jo.category_id', '=', $job->category_id)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        self::removeDashesFromDates($relatedJobs);
+
+        return self::getSalaryInThousands($relatedJobs);
+    }
+
+    /**
      * removeDashesFromDates method.
      * Removes the dash from the date generated by the DATEDIFF() func. from MYSQL.
      * @param $jobs
      * @return mixed
      */
-    public static function removeDashesFromDates($jobs): LengthAwarePaginator
+    public static function removeDashesFromDates($jobs)
     {
-        foreach ($jobs as $job) {
-            $job->created_at = str_replace('-', '', $job->date_posted);
+        // If $jobs is a single entity (result of method : getAllDataOfJob())
+        if (!is_countable($jobs)) {
+            $jobs->created_at = str_replace('-', '', $jobs->date_posted);
+        } else {
+            foreach ($jobs as $job) {
+                $job->created_at = str_replace('-', '', $job->date_posted);
+            }
+        }
+
+        return $jobs;
+    }
+
+    /**
+     * getSalaryInThousands method.
+     * Formats salaries values in thousands.
+     * @param $jobs
+     * @return mixed
+     */
+    public static function getSalaryInThousands($jobs) {
+        if (!is_countable($jobs)) {
+            $jobs->salary_low = floor($jobs->salary_low / 1000) * 1000;
+            $jobs->salary_high = ceil($jobs->salary_high / 1000) * 1000;
+        } else {
+            foreach ($jobs as $job) {
+                $job->salary_low = floor($job->salary_low / 1000) * 1000;
+                $job->salary_high = ceil($job->salary_high / 1000) * 1000;
+            }
         }
 
         return $jobs;

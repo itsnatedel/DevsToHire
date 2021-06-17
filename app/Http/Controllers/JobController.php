@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -18,7 +19,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::getAllShowsAndCompanyInfo();
+        $jobs = Job::getAllJobsAndCompanyInfo();
         $countries = Job::getCountries();
         $categories = Category::all();
 
@@ -38,16 +39,16 @@ class JobController extends Controller
     {
         // User selected a sort method
         if (isset($request->sortBy) && in_array($request->sortBy, ['newest', 'oldest', 'random'])) {
-            $jobs = Job::getAllShowsAndCompanyInfo(null, $request->sortBy, false);
+            $jobs = Job::getAllJobsAndCompanyInfo($request, true, false);
         } elseif (isset($request->title)) {
-            $jobs = Job::getAllShowsAndCompanyInfo($request, null, false);
+            $jobs = Job::getAllJobsAndCompanyInfo($request, false, false);
         } else {
-            $jobs = Job::getAllShowsAndCompanyInfo();
+            $jobs = Job::getAllJobsAndCompanyInfo();
         }
 
         // User searched with sidebar's inputs
         if (isset($request->search) && $request->search === 'refined') {
-            $jobs = Job::getAllShowsAndCompanyInfo($request, null, true);
+            $jobs = Job::getAllJobsAndCompanyInfo($request, false, true);
         }
 
         // To populate select inputs in sidebar
@@ -82,14 +83,41 @@ class JobController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Displays a single job
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param int $id job_id
+     * @return Application|Factory|View
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        $job = Job::getAllDataOfJob($id);
+        $relatedJobs = Job::getRelatedJobs($job);
+
+        return view('job.show', [
+            'job' => $job,
+            'relatedJobs' => $relatedJobs
+        ]);
+    }
+
+    /**
+     * Retrieves all jobs from a specific category
+     *
+     * @param int $id category_id
+     * @return Application|Factory|View
+     */
+    public function category(int $id)
+    {
+        $jobs = Job::getAllJobsAndCompanyInfo($id);
+
+        // To populate select inputs in sidebar
+        $countries = Job::getCountries();
+        $categories = Category::all();
+
+        return view('job.index', [
+            'jobs' => $jobs,
+            'countries' => $countries,
+            'categories' => $categories
+        ]);
     }
 
     /**
