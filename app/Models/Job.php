@@ -268,6 +268,7 @@ class Job extends Model
             ->get();
 
         self::removeDashesFromDates($relatedJobs);
+
         return self::getSalaryInThousands($relatedJobs);
     }
 
