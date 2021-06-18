@@ -6,6 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,12 @@ class Job extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public static function getAllDataOfJob(int $id)
+    /**
+     * @param int $id
+     * @param string $slug
+     * @return Model|Builder|object|null
+     */
+    public static function getAllDataOfJob(int $id, string $slug)
     {
         $job = DB::table('jobs as jo')
             ->join('companies as co', 'co.id', '=', 'jo.company_id')
@@ -62,6 +68,7 @@ class Job extends Model
                 'co.pic_url',
                 'lo.country_name',
                 'lo.country_code')
+            ->where('jo.slug', 'like', '%' . $slug . '%')
             ->where('jo.id', '=', $id)
             ->first();
 
@@ -110,7 +117,10 @@ class Job extends Model
 
         $jobs = $query->paginate(4);
 
-        return self::removeDashesFromDates($jobs);
+        self::removeDashesFromDates($jobs);
+        self::getSalaryInThousands($jobs);
+
+        return $jobs;
     }
 
     /**
@@ -168,6 +178,16 @@ class Job extends Model
     }
 
     /**
+     * Fetches the category for a job listing.
+     * Needed to output the job's category name in job@show
+     * @param $category_id
+     * @return mixed
+     */
+    public static function getCategoryName($category_id) {
+        return Category::where('id', '=', $category_id)->first();
+    }
+
+    /**
      * getJobsWithTitle method.
      * Searches any match with a given title
      * @param $query
@@ -198,7 +218,7 @@ class Job extends Model
         }
 
         if (isset($request->category) && !is_null($request->category)) {
-            $query->join('categories as ca', 'ca.id', '=', 'jo.category_id')
+            $query
                 ->where('jo.category_id', '=', $request->category);
         }
 
@@ -245,12 +265,14 @@ class Job extends Model
      * @param mixed $job Reference job.
      * @return mixed
      */
-    public static function getRelatedJobs($job) {
+    public static function getRelatedJobs($job)
+    {
         $relatedJobs = DB::table('jobs as jo')
             ->join('companies as co', 'co.id', '=', 'jo.company_id')
             ->join('locations as lo', 'lo.id', '=', 'co.location_id')
             ->join('categories as cat', 'cat.id', '=', 'jo.category_id')
             ->select('jo.id',
+                'jo.slug',
                 'jo.title',
                 'jo.type',
                 'jo.salary_low',
@@ -268,8 +290,9 @@ class Job extends Model
             ->get();
 
         self::removeDashesFromDates($relatedJobs);
+        self::getSalaryInThousands($relatedJobs);
 
-        return self::getSalaryInThousands($relatedJobs);
+        return $relatedJobs;
     }
 
     /**
@@ -282,10 +305,10 @@ class Job extends Model
     {
         // If $jobs is a single entity (result of method : getAllDataOfJob())
         if (!is_countable($jobs)) {
-            $jobs->created_at = str_replace('-', '', $jobs->date_posted);
+            $jobs->date_posted = str_replace('-', '', $jobs->date_posted);
         } else {
             foreach ($jobs as $job) {
-                $job->created_at = str_replace('-', '', $job->date_posted);
+                $job->date_posted = str_replace('-', '', $job->date_posted);
             }
         }
 
@@ -298,7 +321,8 @@ class Job extends Model
      * @param $jobs
      * @return mixed
      */
-    public static function getSalaryInThousands($jobs) {
+    public static function getSalaryInThousands($jobs)
+    {
         if (!is_countable($jobs)) {
             $jobs->salary_low = floor($jobs->salary_low / 1000) * 1000;
             $jobs->salary_high = ceil($jobs->salary_high / 1000) * 1000;

@@ -61,8 +61,9 @@ Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->where('id', '[0
 /* Job Routes */
 Route::get('/jobs', [JobController::class, 'index'])->name('job.index');
 Route::get('/jobs/category/{id}', [JobController::class, 'category'])->where('id', '[0-9]+')->name('job.category');
-Route::get('/job/{id}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
+Route::get('/job/{id}/{slug}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
 Route::get('/jobs/search', [JobController::class, 'search'])->name('job.search');
+
 /* Bid Routes */
 Route::get('/bid/place/{id}', [BidController::class, 'placeBid'])->where('id', '[0-9]+')->name('bid.place');
 

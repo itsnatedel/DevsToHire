@@ -7,6 +7,7 @@ use Faker\Provider\en_US\Company;
 use Faker\Provider\en_US\Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class JobsTableSeeder extends Seeder
 {
@@ -26,14 +27,17 @@ class JobsTableSeeder extends Seeder
         $company = new Company($faker);
         $text = new Text($faker);
 
-        for ($i = 0; $i < 70; $i++) {
+        for ($i = 0; $i < 400; $i++) {
+            $title = $company->catchPhrase();
             $jobs[$i] = [
-                'title'         => $company->catchPhrase(),
+                'title'         => $title,
+                'slug'          => Str::slug($title),
                 'created_at'    => $faker->dateTimeBetween('-4 weeks', '-1 day'),
-                'description'   => $text->realText(200),
+                'description'   => $faker->text(800),
                 'salary_low'    => $faker->numberBetween(15000, 30000),
                 'salary_high'   => $faker->numberBetween(31000, 60000),
                 'company_id'    => $faker->numberBetween(1, 50),
+                'remote'        => $faker->randomElement(['Work At Home', 'Temporarily', 'No']),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
                 'featured'      => $faker->boolean(60),

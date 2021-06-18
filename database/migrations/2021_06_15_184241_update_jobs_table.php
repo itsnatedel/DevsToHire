@@ -17,6 +17,8 @@ class UpdateJobsTable extends Migration
             $table->foreignId('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onDelete('restrict')->onUpdate('cascade');
+
+            $table->string('slug', 255);
         });
     }
 

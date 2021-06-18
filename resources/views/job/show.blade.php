@@ -79,13 +79,14 @@
                         <div class="listings-container grid-layout">
                         @foreach($relatedJobs as $related)
                             <!-- Job Listing -->
-                                <a href="{{ route('job.show', $related->id) }}" class="job-listing">
+                                <a href="{{ route('job.show', [$related->id, $related->slug]) }}" class="job-listing">
 
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">
                                         <!-- Logo -->
                                         <div class="job-listing-company-logo">
-                                            <img src="{{ asset('images/companies/' . $related->pic_url) }}" alt="Related Job Employer">
+                                            <img src="{{ asset('images/companies/' . $related->pic_url) }}"
+                                                 alt="Related Job Employer">
                                         </div>
 
                                         <!-- Details -->
@@ -98,12 +99,19 @@
                                     <!-- Job Listing Footer -->
                                     <div class="job-listing-footer">
                                         <ul>
-                                            <li><i class="icon-material-outline-location-on"></i>{{ $related->country_name }}</li>
-                                            <li><i class="icon-material-outline-business-center"></i>{{ $related->type }}</li>
+                                            <li>
+                                                <i class="icon-material-outline-location-on"></i>{{ $related->country_name }}
+                                            </li>
+                                            <li>
+                                                <i class="icon-material-outline-business-center"></i>{{ $related->type }}
+                                            </li>
                                             <li><i class="icon-material-outline-account-balance-wallet"></i>
                                                 {{ $related->salary_low . '€ - ' . $related->salary_high . ' €' }}
                                             </li>
-                                            <li><i class="icon-material-outline-access-time"></i>{{ $related->created_at }} days ago</li>
+                                            <li>
+                                                <i class="icon-material-outline-access-time"></i>{{ $related->date_posted }}
+                                                days ago
+                                            </li>
                                         </ul>
                                     </div>
                                 </a>
@@ -137,6 +145,11 @@
                                             <h5>{{ $job->type }}</h5>
                                         </li>
                                         <li>
+                                            <i class="icon-material-outline-home"></i>
+                                            <span>Remote</span>
+                                            <h5>{{ $job->remote }}</h5>
+                                        </li>
+                                        <li>
                                             <i class="icon-material-outline-local-atm"></i>
                                             <span>Salary</span>
                                             <h5>{{ $job->salary_low . '€ - ' . $job->salary_high . '€' }}</h5>
@@ -144,7 +157,12 @@
                                         <li>
                                             <i class="icon-material-outline-access-time"></i>
                                             <span>Date Posted</span>
-                                            <h5>{{ $job->created_at }} days ago</h5>
+                                            <h5>{{ $job->date_posted }} days ago</h5>
+                                        </li>
+                                        <li>
+                                            <i class="icon-line-awesome-certificate"></i>
+                                            <span>Field</span>
+                                            <h5>{{ $category->name }}</h5>
                                         </li>
                                     </ul>
                                 </div>

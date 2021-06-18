@@ -21,6 +21,7 @@ class Welcome extends Model
         $featuredJobs = DB::table('jobs as jo')
             ->select('jo.id',
                 'jo.title',
+                'jo.slug',
                 DB::raw('DATEDIFF(jo.created_at, NOW()) as date_posted'),
                 'jo.type',
                 'co.name as company',

@@ -119,7 +119,7 @@
                         <div class="listings-container compact-list-layout margin-top-35">
                         @foreach($featuredJobs as $fJob)
                             <!-- Job Listing -->
-                                <a href="{{ route('job.show', $fJob->id) }}" class="job-listing with-apply-button">
+                                <a href="{{ route('job.show', [$fJob->id, $fJob->slug]) }}" class="job-listing with-apply-button">
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">
                                         <!-- Logo -->

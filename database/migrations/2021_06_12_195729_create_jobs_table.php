@@ -20,6 +20,11 @@ class CreateJobsTable extends Migration
             $table->longText('description');
             $table->integer('salary_low');
             $table->integer('salary_high');
+            $table->enum('remote', [
+                'Work At Home',
+                'Temporarily',
+                'No'
+            ])->default('Work At Home');
             $table->enum('type', [
                 'Full Time',
                 'Freelance',

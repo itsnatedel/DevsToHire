@@ -85,18 +85,17 @@ class JobController extends Controller
     /**
      * Displays a single job
      *
-     * @param int $id job_id
+     * @param int $id
+     * @param string $slug
      * @return Application|Factory|View
      */
-    public function show(int $id)
+    public function show(int $id, string $slug)
     {
-        $job = Job::getAllDataOfJob($id);
+        $job = Job::getAllDataOfJob($id, $slug);
         $relatedJobs = Job::getRelatedJobs($job);
+        $category = Job::getCategoryName($job->category_id);
 
-        return view('job.show', [
-            'job' => $job,
-            'relatedJobs' => $relatedJobs
-        ]);
+        return view('job.show')->with(compact('job', 'relatedJobs', 'category'));
     }
 
     /**

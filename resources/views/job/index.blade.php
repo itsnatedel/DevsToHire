@@ -33,7 +33,7 @@
                                 <h3>Location</h3>
                                 <div class="bootstrap-select" style="margin-bottom: 15px">
                                     <select class="form-control selectpicker with-border" id="select-country"
-                                            data-live-search="true" title="Search for a country" name="country">
+                                            data-live-search="true" title="Search for a country" name="country" aria-expanded="false">
                                         <option disabled>Countries</option>
                                         @foreach($countries as $country)
                                             <option data-tokens="{{ $country->name }}"
@@ -132,7 +132,7 @@
                     @if(sizeof($jobs) >= 1)
                         @foreach($jobs as $job)
                             <!-- Job Listing -->
-                                <a href="{{ route('job.show', $job->id) }}" class="job-listing">
+                                <a href="{{ route('job.show', [$job->id, $job->slug]) }}" class="job-listing">
 
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">
@@ -183,7 +183,7 @@
                                             </li>
                                             <li>
                                                 <i class="icon-material-outline-access-time"></i>
-                                                {{ $job->created_at }} days ago
+                                                {{ $job->date_posted }} days ago
                                             </li>
                                         </ul>
                                     </div>
