@@ -25,7 +25,7 @@ class FreelancersTableSeeder extends Seeder
 
         $freelancers = [];
 
-        for ($i = 0; $i < 45; $i++) {
+        for ($i = 0; $i < 800; $i++) {
             $freelancers[] = [
                 'description' => $text->realText(255),
                 'pic_url'     => 'user-avatar-small-0' . $faker->numberBetween(1, 3) . '.jpg',

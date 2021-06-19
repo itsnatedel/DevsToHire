@@ -37,7 +37,7 @@
                                 <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('company.show', 4) }}">Your Company Profile</a>
+                                    <a href="{{ route('company.show', [4, 'abc']) }}">Your Company Profile</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('dashboard.job.create') }}">Post a Job</a>

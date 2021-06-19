@@ -49,7 +49,8 @@ Route::get('/blog/article/{id}', [BlogController::class, 'show'])->where('id', '
 
 /* Company Routes */
 Route::get('/companies', [CompanyController::class, 'index'])->name('company.index');
-Route::get('/company/{id}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
+Route::get('/company/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
+Route::get('/companies/{letter}', [CompanyController::class, 'search'])->where('letter','[a-z]')->name('company.search');
 
 /* Freelancer Routes */
 Route::get('/freelancers', [FreelancerController::class, 'index'])->name('freelancer.index');

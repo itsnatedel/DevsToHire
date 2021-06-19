@@ -30,6 +30,7 @@ class Welcome extends Model
             ->join('companies as co', 'co.id', '=', 'jo.id')
             ->join('locations as lo', 'co.location_id', '=', 'lo.id')
             ->where('featured', '=', 1)
+            ->where('open', '=', 1)
             ->inRandomOrder()
             ->limit(5)
             ->get();

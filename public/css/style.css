@@ -2598,7 +2598,8 @@ em.mm-counter+a.mm-fullsubopen+span {
 	box-shadow: 0 2px 8px rgba(0,0,0,0.2)
 }
 
-#wrapper > div.container > div > div.col-xl-9.col-lg-8.content-left-offset > div.listings-container.margin-top-35 > div.row > div > div > nav > nav > ul > li.page-item.active {
+#wrapper > div.container > div > div.col-xl-9.col-lg-8.content-left-offset > div.listings-container.margin-top-35 > div.row > div > div > nav > nav > ul > li.page-item.active,
+#company-pagination > nav > nav > ul > li.page-item.active {
     transform: translateY(-18px);
     font-weight: bold;
     color: white;
@@ -2607,11 +2608,11 @@ em.mm-counter+a.mm-fullsubopen+span {
     background-color: #333;
     padding: 8px 18px;
 }
-#wrapper > div.container > div > div.col-xl-9.col-lg-8.content-left-offset > div.listings-container.margin-top-35 > div.row > div > div > nav > nav > ul > li.page-item.disabled {
+#wrapper > div.container > div > div.col-xl-9.col-lg-8.content-left-offset > div.listings-container.margin-top-35 > div.row > div > div > nav > nav > ul > li.page-item.disabled,
+#company-pagination > nav > nav > ul > li.page-item.disabled {
     transform: translateY(-15px);
     margin-right: 20px;
 }
-
 .pagination ul li a.current-page {
 	background-color: #66676b;
 	color: #fff;

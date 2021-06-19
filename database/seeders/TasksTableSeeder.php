@@ -26,7 +26,7 @@ class TasksTableSeeder extends Seeder
         $text = new Text($faker);
         $company = new Company($faker);
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 500; $i++) {
             $tasks[] = [
                 'name'          => $company->bs(),
                 'description'   => $text->realText(255),

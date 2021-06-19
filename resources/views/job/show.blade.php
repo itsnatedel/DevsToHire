@@ -5,14 +5,14 @@
 
         <!-- Titlebar
         ================================================== -->
-        <div class="single-page-header" data-background-image="images/single-job.jpg">
+        <div class="single-page-header" data-background-image="{{ asset('images/job/gradient.png') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image">
-                                    <a href="single-company-profile.html">
+                                    <a href="{{ route('company.show', [$job->company_id, $job->company_slug]) }}">
                                         <img src="{{ asset('images/companies/' . $job->pic_url) }}" alt="Employer pic">
                                     </a>
                                 </div>
@@ -21,7 +21,7 @@
                                     <h5>About the Employer</h5>
                                     <ul>
                                         <li>
-                                            <a href="{{ route('company.index') }}">
+                                            <a href="{{ route('company.show', [$job->company_id, $job->company_slug]) }}">
                                                 <i class="icon-material-outline-business"></i>
                                                 {{ $job->name }}
                                             </a>

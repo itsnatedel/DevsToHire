@@ -25,7 +25,6 @@ class JobsTableSeeder extends Seeder
         $jobs = [];
         $faker = Faker::create();
         $company = new Company($faker);
-        $text = new Text($faker);
 
         for ($i = 0; $i < 400; $i++) {
             $title = $company->catchPhrase();
@@ -40,6 +39,7 @@ class JobsTableSeeder extends Seeder
                 'remote'        => $faker->randomElement(['Work At Home', 'Temporarily', 'No']),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
+                'open'          => $faker->boolean(60),
                 'featured'      => $faker->boolean(60),
             ];
         }
