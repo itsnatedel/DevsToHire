@@ -19,6 +19,7 @@ class UpdateJobsTable extends Migration
                 ->onDelete('restrict')->onUpdate('cascade');
 
             $table->string('slug', 255);
+            $table->boolean('open')->default(1);
         });
     }
 

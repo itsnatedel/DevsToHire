@@ -2,9 +2,11 @@
 namespace Database\Seeders;
 require_once 'vendor/autoload.php';
 
+use Faker\Provider\en_US\Company;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 
 class CompaniesTableSeeder extends Seeder
 {
@@ -23,13 +25,18 @@ class CompaniesTableSeeder extends Seeder
         $companies = [];
 
         $faker = Faker::create();
+        $faker->addProvider(new Company($faker));
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 400; $i++) {
+            $company_name = $faker->company;
+
             $companies[$i] = [
-                'name'          => $faker->company,
+                'name'          => $company_name,
+                'speciality'    => $faker->bs(),
+                'slug'          => Str::slug($company_name),
                 'description'   => $faker->paragraph(3, true),
                 'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
-                'verified'      => $faker->boolean(60),
+                'verified'      => $faker->boolean(40),
                 'user_id'       => $faker->numberBetween(2, 5),
                 'location_id'   => $faker->numberBetween(1, 208)
             ];

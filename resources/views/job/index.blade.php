@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="listings-container margin-top-35">
-                    @if(sizeof($jobs) >= 1)
+                    @if(count($jobs) >= 1)
                         @foreach($jobs as $job)
                             <!-- Job Listing -->
                                 <a href="{{ route('job.show', [$job->id, $job->slug]) }}" class="job-listing">
