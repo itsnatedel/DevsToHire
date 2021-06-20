@@ -29,7 +29,7 @@ class CompanyController extends Controller
      * Searches for companies by letter
      * @return Application|Factory|View
      */
-    public function search(Request $request, $letter) {
+    public function search($letter) {
         $companies = Company::searchCompaniesByLetter($letter);
 
         return view('company.index', [
@@ -62,17 +62,24 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id company's id
      * @return Application|Factory|View
      */
-    public function show($id, $slug)
+    public function show(int $id, Request $request)
     {
-        $company = Company::find($id);
-        $openedPositions = Company::getOpenPositionsOfCompany($id);
+        $company = Company::getCompanyInfo($id);
+        $openedPositions = Company::getOpenPositions($id);
+        $tasks = Company::getOpenTasks($id);
+
+        $ratings = isset($request) && $request->isMethod('post')
+            ? Company::getRatings($id, $request->sortBy)
+            : Company::getRatings($id);
 
         return view('company.show', [
             'company'           => $company,
-            'openedPositions'   => $openedPositions
+            'openedPositions'   => $openedPositions,
+            'tasks'             => $tasks,
+            'ratings'           => $ratings
         ]);
     }
 
