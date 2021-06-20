@@ -11,7 +11,6 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PremiumController;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -44,33 +43,44 @@ Route::get('/contact-us', function () {
 Auth::routes();
 
 /* Blog Routes */
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/article/{id}', [BlogController::class, 'show'])->where('id', '[0-9]+')->name('blog.show');
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('/', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('/article/{id}', [BlogController::class, 'show'])->where('id', '[0-9]+')->name('blog.show');
+});
 
 /* Company Routes */
-Route::get('/companies', [CompanyController::class, 'index'])->name('company.index');
-Route::get('/company/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
-Route::get('/companies/{letter}', [CompanyController::class, 'search'])->where('letter','[a-z]')->name('company.search');
+Route::group(['prefix' => 'companies'], function () {
+    Route::get('/', [CompanyController::class, 'index'])->name('company.index');
+    Route::get('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
+    Route::post('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.ratings.search');
+    Route::get('/{letter}', [CompanyController::class, 'search'])->where('letter', '[a-z]')->name('company.search');
+});
 
 /* Freelancer Routes */
-Route::get('/freelancers', [FreelancerController::class, 'index'])->name('freelancer.index');
-Route::get('/freelancer/{id}', [FreelancerController::class, 'show'])->where('id', '[0-9]+')->name('freelancer.show');
+Route::group(['prefix' => 'freelancers'], function () {
+    Route::get('/', [FreelancerController::class, 'index'])->name('freelancer.index');
+    Route::get('/{id}', [FreelancerController::class, 'show'])->where('id', '[0-9]+')->name('freelancer.show');
+});
 
 /* Invoice Routes */
 Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->where('id', '[0-9]+')->name('invoice.show');
 
 /* Job Routes */
-Route::get('/jobs', [JobController::class, 'index'])->name('job.index');
-Route::get('/jobs/category/{id}', [JobController::class, 'category'])->where('id', '[0-9]+')->name('job.category');
-Route::get('/job/{id}/{slug}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
-Route::get('/jobs/search', [JobController::class, 'search'])->name('job.search');
+Route::group(['prefix' => 'jobs'], function () {
+    Route::get('/', [JobController::class, 'index'])->name('job.index');
+    Route::get('/category/{id}', [JobController::class, 'category'])->where('id', '[0-9]+')->name('job.category');
+    Route::get('/{id}/{slug}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
+    Route::get('/search', [JobController::class, 'search'])->name('job.search');
+});
 
 /* Bid Routes */
 Route::get('/bid/place/{id}', [BidController::class, 'placeBid'])->where('id', '[0-9]+')->name('bid.place');
 
 /* Order Routes */
-Route::get('/order/success', [OrderController::class, 'success'])->name('order.success');
-Route::get('/order/error', [OrderController::class, 'error'])->name('order.error');
+Route::group(['prefix' => 'order'], function () {
+    Route::get('/success', [OrderController::class, 'success'])->name('order.success');
+    Route::get('/error', [OrderController::class, 'error'])->name('order.error');
+});
 
 /* Checkout pages */
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -79,8 +89,10 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::get('/premium-plans', [PremiumController::class, 'index'])->name('premium.index');
 
 /* Task Routes */
-Route::get('/tasks', [TaskController::class, 'index'])->name('task.index');
-Route::get('/task/{id}', [TaskController::class, 'show'])->where('id', '[0-9]+')->name('task.show');
+Route::group(['prefix' => 'tasks'], function () {
+    Route::get('/', [TaskController::class, 'index'])->name('task.index');
+    Route::get('/{id}/{slug}', [TaskController::class, 'show'])->where('id', '[0-9]+')->name('task.show');
+});
 
 /* Dashboard Routes */
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function () {
