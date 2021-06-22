@@ -191,12 +191,4 @@
             });
         });
     </script>
-
-    <!-- Google API & Maps -->
-    <!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_MAPS_KEY') }}&libraries=places"></script>
-    <script src="{{ asset('js/infobox.min.js') }}"></script>
-    <script src="{{ asset('js/markerclusterer.js') }}"></script>
-    <script src="{{ asset('js/maps.js') }}"></script>
 @endsection

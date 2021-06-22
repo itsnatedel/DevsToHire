@@ -26,7 +26,8 @@ class Task extends Model
      * Relation Task -> Company
      * @return BelongsTo
      */
-    public function company() {
+    public function company(): BelongsTo
+    {
         return $this->belongsTo(Company::class);
     }
 
@@ -34,7 +35,8 @@ class Task extends Model
      * Relation Task -> Category
      * @return BelongsTo
      */
-    public function category() {
+    public function category(): BelongsTo
+    {
         return $this->belongsTo(Category::class);
     }
 }

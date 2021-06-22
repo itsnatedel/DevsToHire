@@ -2,15 +2,12 @@
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
-
         <!-- Titlebar -->
         <div id="titlebar" class="gradient">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-
                         <h2>Browse Companies</h2>
-
                         <!-- Breadcrumbs -->
                         <nav id="breadcrumbs" class="dark">
                             <ul>
@@ -19,13 +16,10 @@
                                 <li>Browse Companies</li>
                             </ul>
                         </nav>
-
                     </div>
                 </div>
             </div>
         </div>
-
-
         <!-- Page Content -->
         <div class="container">
             <div class="row">

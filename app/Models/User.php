@@ -48,7 +48,7 @@ class User extends Authenticatable
      * Relation User -> Role
      * @return HasOne
      */
-    public function role()
+    public function role(): HasOne
     {
         return $this->hasOne(Role::class);
     }
@@ -57,7 +57,7 @@ class User extends Authenticatable
      * Relation User -> Location
      * @return BelongsTo
      */
-    public function location()
+    public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);
     }
@@ -66,7 +66,8 @@ class User extends Authenticatable
      * Relation User -> Freelancer
      * @return HasOne
      */
-    public function freelancer() {
+    public function freelancer(): HasOne
+    {
         return $this->hasOne(Freelancer::class);
     }
 
@@ -74,7 +75,8 @@ class User extends Authenticatable
      * Relation User -> Company
      * @return HasOne
      */
-    public function company() {
+    public function company(): HasOne
+    {
         return $this->hasOne(Company::class);
     }
 }

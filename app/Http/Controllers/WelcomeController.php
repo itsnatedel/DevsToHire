@@ -23,7 +23,6 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-
         $jobs = DB::table('jobs')->count();
         $freelancers = DB::table('freelancers')->count();
         $tasks = DB::table('tasks')->count();
@@ -94,7 +93,7 @@ class WelcomeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): Response
     {
         //
     }

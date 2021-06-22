@@ -22,7 +22,6 @@ class FreelancersTableSeeder extends Seeder
 
         $faker = Factory::create();
         $text = new Text($faker);
-
         $freelancers = [];
 
         for ($i = 0; $i < 800; $i++) {

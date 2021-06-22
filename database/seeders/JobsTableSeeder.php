@@ -39,8 +39,8 @@ class JobsTableSeeder extends Seeder
                 'remote'        => $faker->randomElement(['Work At Home', 'Temporarily', 'No']),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
-                'open'          => $faker->boolean(60),
-                'featured'      => $faker->boolean(60),
+                'open'          => $faker->boolean(40),
+                'featured'      => $faker->boolean(40),
             ];
         }
 
