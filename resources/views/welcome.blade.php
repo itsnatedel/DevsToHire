@@ -159,7 +159,7 @@
 
                                         <!-- Apply Button -->
                                         <span class="list-apply-button button-sliding-icon ripple-effect">
-                                            More info
+                                            Apply Now
                                             <i class="icon-material-outline-keyboard-arrow-right"
                                                style="transform: translateY(2px)"></i>
                                         </span>
