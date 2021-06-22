@@ -26,7 +26,7 @@ class RatingsCompaniesTableSeeder extends Seeder
                 'company_id'    => $faker->numberBetween(1, 400),
                 'freelancer_id' => $faker->numberBetween(1, 800),
                 'note'          => $faker->numberBetween(1, 5),
-                'comment'       => $faker->realText(120, 4),
+                'comment'       => $faker->realText(120, 3),
                 'when'          => $faker->dateTimeBetween('-30 days', '-1 day'),
             ];
         }

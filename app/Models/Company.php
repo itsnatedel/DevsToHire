@@ -86,6 +86,7 @@ class Company extends Model
             ->where('co.id', '=', $company_id)
             ->first();
 
+
         $company->rating = self::getCompanyRating($company_id);
 
         return $company;
@@ -146,14 +147,12 @@ class Company extends Model
     {
         $tasks = DB::table('tasks')
             ->join('categories as ca', 'ca.id', '=', 'tasks.category_id')
-            ->select(
-                'ca.id',
+            ->select('ca.id',
                 'tasks.budget_min',
                 'tasks.budget_max',
                 'tasks.name',
                 'tasks.type',
-                'ca.name as category_name'
-            )
+                'ca.name as category_name')
             ->where('tasks.employer_id', '=', $company_id)
             ->get();
 
@@ -166,7 +165,6 @@ class Company extends Model
      * getRatings method.
      * Gets a set of ratings for a specific company
      * @param int $company_id
-     * @param null $sortBy
      * @return Collection
      */
     public static function getRatings(int $company_id, $sortBy = null): Collection
@@ -188,6 +186,7 @@ class Company extends Model
         }
 
         $ratings = $ratings->get();
+
         self::removeDashesFromRatings($ratings);
 
         return $ratings;
@@ -251,7 +250,9 @@ class Company extends Model
      */
     private static function removeDashesFromRatings(Collection $ratings): Collection
     {
+
         if (!is_countable($ratings)) {
+
             $ratings->rating_when = str_replace('-', '', $ratings->rating_when);
         } else {
 

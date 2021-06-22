@@ -2,12 +2,15 @@
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
+
         <!-- Titlebar -->
         <div id="titlebar" class="gradient">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
+
                         <h2>Browse Companies</h2>
+
                         <!-- Breadcrumbs -->
                         <nav id="breadcrumbs" class="dark">
                             <ul>
@@ -16,10 +19,13 @@
                                 <li>Browse Companies</li>
                             </ul>
                         </nav>
+
                     </div>
                 </div>
             </div>
         </div>
+
+
         <!-- Page Content -->
         <div class="container">
             <div class="row">
@@ -37,30 +43,31 @@
                 </div>
                 <div class="col-xl-12">
                     <div class="companies-list">
-                        @if(count($companies) > 0)
-                            @foreach($companies as $company)
-                                <a href="{{ route('company.show', [$company->id, $company->slug]) }}" class="company">
-                                    <div class="company-inner-alignment">
+                        @forelse($companies as $company)
+                            <a href="{{ route('company.show', [$company->id, $company->slug]) }}" class="company">
+                                <div class="company-inner-alignment">
                                         <span class="company-logo"><img
                                                 src="{{ asset('images/companies/' . $company->pic_url) }}"
                                                 alt=""></span>
-                                        <h4>{{ $company->name }}</h4>
-                                        @if($company->verified)
-                                            <span class="verified-badge"
-                                                  title="Verified Employer"
-                                                  data-tippy-placement="top">
-                                            </span>
-                                        @endif
-                                    </div>
-                                </a>
-                            @endforeach
-                        @else
+
+                                    <h4>{{ $company->name }}</h4>
+                                    <div class="star-rating" data-rating="{{ $company->rating }}"></div>
+
+                                </div>
+                                @if($company->verified)
+                                    <span class="verified-badge"
+                                          title="Verified Employer"
+                                          data-tippy-placement="right">
+                                      </span>
+                                @endif
+                            </a>
+                        @empty
                             <div class="notification notice closeable">
                                 <p>No companies were found, <a href="{{ route('company.index') }}">click
                                         here to reset.</a></p>
                                 <a class="close"></a>
                             </div>
-                        @endif
+                        @endforelse
                     </div>
                 </div>
                 <div class="clearfix"></div>

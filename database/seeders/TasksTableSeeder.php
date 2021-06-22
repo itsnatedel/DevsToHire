@@ -34,7 +34,7 @@ class TasksTableSeeder extends Seeder
                 'budget_max'    => $faker->numberBetween(3100, 6000),
                 'type'          => $faker->randomElement(['Fixed', 'Hourly']),
                 'due_date'      => $faker->dateTimeBetween('-1 day', '+12 weeks'),
-                'employer_id'   => $faker->numberBetween(2, 5),
+                'employer_id'   => $faker->numberBetween(1, 400),
                 'category_id'   => $faker->numberBetween(1, 8)
             ];
         }
