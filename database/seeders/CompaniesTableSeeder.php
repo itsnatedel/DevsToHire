@@ -29,7 +29,6 @@ class CompaniesTableSeeder extends Seeder
 
         for ($i = 0; $i < 400; $i++) {
             $company_name = $faker->company;
-
             $companies[$i] = [
                 'name'          => $company_name,
                 'speciality'    => $faker->bs(),

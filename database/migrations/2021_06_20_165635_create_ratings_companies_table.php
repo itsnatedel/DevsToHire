@@ -22,13 +22,7 @@ class CreateRatingsCompaniesTable extends Migration
             $table->foreignId('company_id');
             $table->foreign('company_id')->references('id')->on('companies')->constraigned();
 
-            $table->enum('note', [
-                1,
-                2,
-                3,
-                4,
-                5
-            ])->default(1);
+            $table->enum('note', [ 1, 2, 3, 4, 5])->default(1);
             $table->longText('comment')->nullable();
             $table->timestamp('when')->default(now());
         });
