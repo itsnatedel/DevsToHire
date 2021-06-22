@@ -57,6 +57,52 @@ class Company extends Model
                 'co.pic_url')
             ->where('co.name', 'like', $letter . '%')
             ->paginate(6);
+      
+        foreach ($companies as $company) {
+            $company->rating = self::getCompanyRating($company->id);
+        }
+
+        return $companies;
+    }
+
+    /**
+     * getCompanyInfo method.
+     * Fetches the information of a company
+     * @param $company_id
+     * @return Model|Builder|object|null
+     */
+    public static function getCompanyInfo($company_id)
+    {
+        $company = DB::table('companies as co')
+            ->join('locations as lo', 'lo.id', '=', 'co.location_id')
+            ->select('co.*', 'lo.country_name', 'lo.country_code')
+            ->where('co.id', '=', $company_id)
+            ->first();
+
+        $company->rating = self::getCompanyRating($company_id);
+
+        return $company;
+    }
+
+    /**
+     * getCompanyRating method.
+     * Gets the ratings of a company
+     * @param $company_id
+     * @return float|int
+     */
+    private static function getCompanyRating($company_id) {
+        $ratings = DB::table('ratings_companies as rc')
+            ->select('rc.note')
+            ->where('rc.company_id', '=', $company_id)
+            ->get();
+
+        $total = 0;
+
+        foreach($ratings as $rating) {
+            $total += $rating->note;
+        }
+
+        return round($total / count($ratings), 1);
     }
 
     /**
