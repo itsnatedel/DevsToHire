@@ -23,7 +23,8 @@ class Category extends Model
      * Relation Category -> Job
      * @return HasMany
      */
-    public function jobs() {
+    public function jobs(): HasMany
+    {
         return $this->hasMany(Job::class);
     }
 }

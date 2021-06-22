@@ -22,7 +22,8 @@ class Role extends Model
      * Relation Role -> User
      * @return HasMany
      */
-    public function users() {
+    public function users(): HasMany
+    {
         return $this->hasMany(User::class);
     }
 
@@ -30,7 +31,8 @@ class Role extends Model
      * Relation Role -> Freelancer
      * @return HasMany
      */
-    public function freelancers() {
+    public function freelancers(): HasMany
+    {
         return $this->hasMany(Freelancer::class);
     }
 
@@ -38,7 +40,8 @@ class Role extends Model
      * Relation Role -> Company
      * @return HasMany
      */
-    public function companies() {
+    public function companies(): HasMany
+    {
         return $this->hasMany(Company::class);
     }
 }

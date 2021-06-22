@@ -216,12 +216,10 @@ class Job extends Model
         if (isset($request->country)) {
             $location_id = $request->country;
             $query->where('co.location_id', '=', $location_id);
-
         }
 
         if (isset($request->category) && !is_null($request->category)) {
-            $query
-                ->where('jo.category_id', '=', $request->category);
+            $query->where('jo.category_id', '=', $request->category);
         }
 
         $jobType = [];

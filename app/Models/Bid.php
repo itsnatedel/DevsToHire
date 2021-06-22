@@ -23,7 +23,8 @@ class Bid extends Model
      * Relation Bid -> Task
      * @return BelongsTo
      */
-    public function tasks() {
+    public function tasks(): BelongsTo
+    {
         return $this->belongsTo(Task::class);
     }
 
@@ -31,7 +32,8 @@ class Bid extends Model
      * Relation Bid -> Freelancer
      * @return BelongsTo
      */
-    public function freelancer() {
+    public function freelancer(): BelongsTo
+    {
         return $this->belongsTo(Freelancer::class);
     }
 }

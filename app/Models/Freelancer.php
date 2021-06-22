@@ -23,7 +23,8 @@ class Freelancer extends Model
      * Relation Freelancer -> Bid
      * @return HasMany
      */
-    public function bids() {
+    public function bids(): HasMany
+    {
         return $this->hasMany(Bid::class);
     }
 
@@ -31,7 +32,8 @@ class Freelancer extends Model
      * Relation Freelancer -> User
      * @return BelongsTo
      */
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 }
