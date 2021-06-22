@@ -160,11 +160,9 @@
                                                 {{ $job->description }}
                                             </p>
                                         </div>
-
                                         <!-- Bookmark -->
                                         <span class="bookmark-icon"></span>
                                     </div>
-
                                     <!-- Job Listing Footer -->
                                     <div class="job-listing-footer">
                                         <ul>

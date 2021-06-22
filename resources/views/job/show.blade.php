@@ -172,14 +172,12 @@
                         <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
                             <h3>Bookmark this job</h3>
-
                             <!-- Bookmark Button -->
                             <button class="bookmark-button margin-bottom-25">
                                 <span class="bookmark-icon"></span>
                                 <span class="bookmark-text">Bookmark</span>
                                 <span class="bookmarked-text">Bookmarked</span>
                             </button>
-
                             <!-- Share Buttons -->
                             <div class="share-buttons margin-top-25">
                                 <div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>

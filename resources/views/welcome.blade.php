@@ -156,7 +156,6 @@
                                                 </ul>
                                             </div>
                                         </div>
-
                                         <!-- Apply Button -->
                                         <span class="list-apply-button button-sliding-icon ripple-effect">
                                             More info

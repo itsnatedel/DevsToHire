@@ -15,26 +15,15 @@ use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 /* Homepage Route */
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
 
-/* 404 */
+/* 404 Route */
 Route::get('/404', function () {
     return view('404');
 })->name('error-404');
 
-/* 404 */
+/* Contact Route */
 Route::get('/contact-us', function () {
     return view('contact');
 })->name('contact');
