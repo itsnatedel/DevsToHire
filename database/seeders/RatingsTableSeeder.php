@@ -21,6 +21,14 @@ class RatingsTableSeeder extends Seeder
         $ratings = [];
         $faker = Factory::create();
 
+        for ($i = 0; $i < 8; $i++) {
+            $ratings[] = [
+                'voter_id'      => $faker->numberBetween(1, 21),
+                'rated_user'    => $faker->numberBetween(1, 21),
+                'note'          => $faker->numberBetween(0, 5),
+            ];
+        }
+
         DB::table('ratings')->insert($ratings);
     }
 }
