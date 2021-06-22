@@ -86,7 +86,6 @@ class Company extends Model
             ->where('co.id', '=', $company_id)
             ->first();
 
-
         $company->rating = self::getCompanyRating($company_id);
 
         return $company;
