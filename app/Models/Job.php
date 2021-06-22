@@ -212,7 +212,6 @@ class Job extends Model
      */
     protected static function refinedSearch($query, Request $request)
     {
-
         if (isset($request->country)) {
             $location_id = $request->country;
             $query->where('co.location_id', '=', $location_id);

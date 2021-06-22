@@ -27,7 +27,12 @@ class CreateRatingsFreelancersTable extends Migration
                 'Employer'
             ])->default('Employer');
 
-            $table->enum('note', [1, 2, 3, 4, 5])->default(1);
+            $table->enum('note', [
+                1,
+                2,
+                3,
+                4,
+                5])->default(1);
             $table->longText('comment')->nullable();
             $table->timestamp('when')->default(now());
 

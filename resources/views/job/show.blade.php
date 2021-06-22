@@ -206,9 +206,7 @@
         </div>
     </div>
     <!-- Wrapper / End -->
-
     @include('layouts.popups.applyJob')
-
     <script>
         // Snackbar for copy to clipboard button
         $('.copy-url-button').click(function () {

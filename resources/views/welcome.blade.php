@@ -85,7 +85,7 @@
                         </div>
                         <!-- Category Boxes Container -->
                         <div class="categories-container">
-                        @foreach($categories as $category)
+                            @foreach($categories as $category)
                                 <a href="{{ route('job.category', $category->id) }}" class="category-box">
                                     <div class="category-box-icon">
                                         <i class="{{ $category->icon }}"></i>
@@ -119,7 +119,8 @@
                         <div class="listings-container compact-list-layout margin-top-35">
                         @foreach($featuredJobs as $fJob)
                             <!-- Job Listing -->
-                                <a href="{{ route('job.show', [$fJob->id, $fJob->slug]) }}" class="job-listing with-apply-button">
+                                <a href="{{ route('job.show', [$fJob->id, $fJob->slug]) }}"
+                                   class="job-listing with-apply-button">
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">
                                         <!-- Logo -->
@@ -262,7 +263,6 @@
 
 
                     <div class="col-xl-12">
-
                         <!-- Billing Cycle  -->
                         <div class="billing-cycle-radios margin-bottom-70">
                             <div class="radio billed-monthly-radio">
@@ -281,42 +281,42 @@
                         <div class="pricing-plans-container">
                         @foreach($premiumPlans as $plan)
                             <!-- Plan -->
-                                @if($plan->plan === 'Standard')
-                                    <div class="pricing-plan recommended">
-                                        <div class="recommended-badge">Recommended</div>
-                                @else
-                                    <div class="pricing-plan">
-                                @endif
-                                    <h3>{{ $plan->plan }} Plan</h3>
-                                    <p class="margin-top-10">{{ $plan->description }}</p>
-                                    <div class="pricing-plan-label billed-monthly-label">
-                                        <strong>{{ $plan->monthly_price }}€</strong>/ monthly
-                                    </div>
-                                    <div class="pricing-plan-label billed-yearly-label">
-                                        <strong>{{ $plan->yearly_price }}€</strong>/ yearly
-                                    </div>
-                                    <div class="pricing-plan-features">
-                                        <strong>Features of our {{ $plan->plan }} Plan</strong>
-                                        <ul>
-                                            <li>
-                                                {{ $plan->listing }}
-                                                @if ($plan->listing == 1 && $plan->listing !== 'Unlimited')
-                                                    Listing
-                                                @else
-                                                    Listings
-                                                @endif
-                                            </li>
-                                            <li>{{ $plan->visibility_days }} Days Visibility</li>
-                                            <li>{{ $plan->highlighted }}</li>
-                                        </ul>
-                                    </div>
-                                    <a href="{{ route('checkout.index') }}"
-                                       class="button full-width margin-top-20">
-                                        Buy Now
-                                    </a>
+                            @if($plan->plan === 'Standard')
+                                <div class="pricing-plan recommended">
+                                <div class="recommended-badge">Recommended</div>
+                            @else
+                                <div class="pricing-plan">
+                            @endif
+                                <h3>{{ $plan->plan }} Plan</h3>
+                                <p class="margin-top-10">{{ $plan->description }}</p>
+                                <div class="pricing-plan-label billed-monthly-label">
+                                    <strong>{{ $plan->monthly_price }}€</strong>/ monthly
                                 </div>
-                                @endforeach
+                                <div class="pricing-plan-label billed-yearly-label">
+                                    <strong>{{ $plan->yearly_price }}€</strong>/ yearly
                                 </div>
+                                <div class="pricing-plan-features">
+                                    <strong>Features of our {{ $plan->plan }} Plan</strong>
+                                    <ul>
+                                        <li>
+                                            {{ $plan->listing }}
+                                            @if ($plan->listing == 1 && $plan->listing !== 'Unlimited')
+                                                Listing
+                                            @else
+                                                Listings
+                                            @endif
+                                        </li>
+                                        <li>{{ $plan->visibility_days }} Days Visibility</li>
+                                        <li>{{ $plan->highlighted }}</li>
+                                    </ul>
+                                </div>
+                                <a href="{{ route('checkout.index') }}"
+                                   class="button full-width margin-top-20">
+                                    Buy Now
+                                </a>
+                            </div>
+                        @endforeach
+                        </div>
                         </div>
                     </div>
                 </div>

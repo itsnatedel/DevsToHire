@@ -188,7 +188,6 @@ class Company extends Model
         }
 
         $ratings = $ratings->get();
-
         self::removeDashesFromRatings($ratings);
 
         return $ratings;
@@ -252,9 +251,7 @@ class Company extends Model
      */
     private static function removeDashesFromRatings(Collection $ratings): Collection
     {
-
         if (!is_countable($ratings)) {
-
             $ratings->rating_when = str_replace('-', '', $ratings->rating_when);
         } else {
 
