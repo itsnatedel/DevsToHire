@@ -151,7 +151,7 @@
                                         </li>
                                         <li>
                                             <i class="icon-material-outline-local-atm"></i>
-                                            <span>Yearly Salary</span>
+                                            <span>Salary</span>
                                             <h5>{{ $job->salary_low . '€ - ' . $job->salary_high . '€' }}</h5>
                                         </li>
                                         <li>
@@ -171,7 +171,7 @@
 
                         <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
-                            <h3>Bookmark this job</h3>
+                            <h3>Bookmark or Share</h3>
 
                             <!-- Bookmark Button -->
                             <button class="bookmark-button margin-bottom-25">
@@ -179,6 +179,14 @@
                                 <span class="bookmark-text">Bookmark</span>
                                 <span class="bookmarked-text">Bookmarked</span>
                             </button>
+
+                            <!-- Copy URL -->
+                            <div class="copy-url">
+                                <input id="copy-url" type="text" value="" class="with-border">
+                                <button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url"
+                                        title="Copy to Clipboard" data-tippy-placement="top"><i
+                                        class="icon-material-outline-file-copy"></i></button>
+                            </div>
 
                             <!-- Share Buttons -->
                             <div class="share-buttons margin-top-25">
