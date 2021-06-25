@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Freelancer;
 use App\Models\Job;
 use App\Models\Premium;
+use App\Models\Task;
 use App\Models\Welcome;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -23,10 +25,10 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-        $jobs = DB::table('jobs')->count();
-        $freelancers = DB::table('freelancers')->count();
-        $tasks = DB::table('tasks')->count();
-        $categories = DB::table('categories')->get();
+        $jobs = count(Job::all());
+        $freelancers = count(Freelancer::all());
+        $tasks = count(Task::all());
+        $categories = Category::all();
 
         $featuredJobs = Welcome::getFeaturedJobs();
         $featuredFreelancers = Welcome::getFeaturedFreelancers();
