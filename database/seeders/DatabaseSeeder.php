@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             BidsTableSeeder::class,
             PremiumUsersTable::class,
             RatingsCompaniesTableSeeder::class,
-            RatingsFreelancersTableSeeder::class
+            RatingsFreelancersTableSeeder::class,
+            SkillsTableSeeder::class,
+            SkillsTasksTableSeeder::class
         ]);
     }
 }

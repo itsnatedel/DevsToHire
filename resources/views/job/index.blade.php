@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-xl-9 col-lg-8 content-left-offset">
 
-                    <h3 class="page-title">Search Results</h3>
+                    <h3 class="page-title">Search Results - {{ $jobs->total() }} jobs found.</h3>
 
                     <div class="notify-box margin-top-15">
                         <a href="{{ route('job.index') }}" class="button gray ripple-effect button-sliding-icon" style="margin: -10px 0; padding: 5px; transform: translateY(3px)">

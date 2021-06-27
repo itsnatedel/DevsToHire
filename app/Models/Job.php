@@ -108,6 +108,9 @@ class Job extends Model
         }
 
         // User searches for a job title
+        /**
+         * TODO: broken pagination => page 2 resets the results and shows all jobs.
+         */
         if (isset($request->title) && !is_null($request->title)) {
             $query = self::getJobsWithTitle($query, $request);
         }
@@ -204,13 +207,18 @@ class Job extends Model
     }
 
     /**
+     * TODO: When a user searches for jobs in jobs@index, keep the results & make it able to be sorted (newest, oldest,...)
+     * This shouldn't reset the search and sort all jobs, only the search's results.
+     */
+
+    /**
      * refinedSearch method.
      * Searches for any record match with user's search criterias
      * @param $query
      * @param Request $request
-     * @return mixed
+     * @return Builder Query
      */
-    protected static function refinedSearch($query, Request $request)
+    protected static function refinedSearch($query, Request $request): Builder
     {
         if (isset($request->country)) {
             $location_id = $request->country;
@@ -225,10 +233,6 @@ class Job extends Model
 
         if (isset($request->freelance)) {
             $jobType[] = 'freelance';
-        }
-
-        if (isset($request->full_time)) {
-            $jobType[] = 'Full Time';
         }
 
         if (isset($request->full_time)) {
@@ -262,9 +266,9 @@ class Job extends Model
      *  Or
      *  - Job Category
      * @param mixed $job Reference job.
-     * @return mixed
+     * @return Collection
      */
-    public static function getRelatedJobs($job)
+    public static function getRelatedJobs($job): Collection
     {
         $relatedJobs = DB::table('jobs as jo')
             ->join('companies as co', 'co.id', '=', 'jo.company_id')

@@ -30,13 +30,21 @@ class TasksTableSeeder extends Seeder
             $tasks[] = [
                 'name'          => $company->bs(),
                 'description'   => $text->realText(255),
-                'budget_min'    => $faker->numberBetween(500, 3000),
-                'budget_max'    => $faker->numberBetween(3100, 6000),
+                'budget_min'    => $faker->numberBetween(10, 50),
                 'type'          => $faker->randomElement(['Fixed', 'Hourly']),
+                'created_at'    => $faker->dateTimeBetween('-30 days', '-1 day'),
                 'due_date'      => $faker->dateTimeBetween('-1 day', '+12 weeks'),
                 'employer_id'   => $faker->numberBetween(1, 400),
                 'category_id'   => $faker->numberBetween(1, 8)
             ];
+        }
+
+        for($i = 0; $i < 500; $i++) {
+            if ($tasks[$i]['type'] === 'Fixed') {
+                $tasks[$i]['budget_max'] = $faker->numberBetween(500, 2500);
+            } else {
+                $tasks[$i]['budget_max'] = $faker->numberBetween(100, 250);
+            }
         }
 
         DB::table('tasks')->insert($tasks);

@@ -26,7 +26,8 @@ class Company extends Model
      * Relation Company -> User
      * @return BelongsTo
      */
-    public function user() {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -47,6 +48,8 @@ class Company extends Model
 
         return $companies;
     }
+
+    // TODO: in company@index, add sort method (rating ?)
 
     /**
      * Searches all companies starting with a specific letter
@@ -98,7 +101,7 @@ class Company extends Model
      * @param $company_id
      * @return float|int
      */
-    private static function getCompanyRating($company_id) {
+    public static function getCompanyRating($company_id) {
         $ratings = DB::table('ratings_companies as rc')
             ->select('rc.note')
             ->where('rc.company_id', '=', $company_id)
@@ -143,6 +146,12 @@ class Company extends Model
         return $positions;
     }
 
+    /**
+     * getOpenTasks method.
+     * Gets the tasks that have the opened status
+     * @param int $company_id
+     * @return Collection
+     */
     public static function getOpenTasks(int $company_id): Collection
     {
         $tasks = DB::table('tasks')
@@ -165,6 +174,7 @@ class Company extends Model
      * getRatings method.
      * Gets a set of ratings for a specific company
      * @param int $company_id
+     * @param null $sortBy
      * @return Collection
      */
     public static function getRatings(int $company_id, $sortBy = null): Collection

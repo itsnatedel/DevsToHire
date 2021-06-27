@@ -92,6 +92,7 @@ Route::get('/premium-plans', [PremiumController::class, 'index'])->name('premium
 Route::group(['prefix' => 'tasks'], function () {
     Route::get('/', [TaskController::class, 'index'])->name('task.index');
     Route::get('/{id}/{slug}', [TaskController::class, 'show'])->where('id', '[0-9]+')->name('task.show');
+    Route::get('/search', [TaskController::class, 'search'])->name('task.search');
 });
 
 /* Dashboard Routes */

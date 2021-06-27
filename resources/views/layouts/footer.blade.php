@@ -90,7 +90,7 @@
                         <h3>For Candidates</h3>
                         <ul>
                             <li><a href="{{ route('job.index') }}"><span>Browse Jobs</span></a></li>
-                            <li><a href="{{ route('task.index') }}"><span>Brows Tasks</span></a></li>
+                            <li><a href="{{ route('task.index') }}"><span>Browse Tasks</span></a></li>
                             <li><a href="{{ route('dashboard.bookmarks') }}"><span>My Bookmarks</span></a></li>
                         </ul>
                     </div>
