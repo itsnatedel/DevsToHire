@@ -101,7 +101,7 @@ class Company extends Model
      * @param $company_id
      * @return float|int
      */
-    private static function getCompanyRating($company_id) {
+    public static function getCompanyRating($company_id) {
         $ratings = DB::table('ratings_companies as rc')
             ->select('rc.note')
             ->where('rc.company_id', '=', $company_id)

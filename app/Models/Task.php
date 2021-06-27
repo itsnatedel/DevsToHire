@@ -81,6 +81,30 @@ class Task extends Model
     }
 
     /**
+     * getTaskInfo method.
+     * Retrives data of the corresponding task
+     * @param int $id Task id
+     * @return Model|Builder|object|null
+     */
+    public static function getTaskInfo(int $id)
+    {
+        return DB::table('tasks as ta')
+            ->join('companies as co', 'co.id', '=', 'ta.employer_id')
+            ->select(
+                'ta.*',
+                DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date'),
+                'co.id as company_id',
+                'co.name as company_name',
+                'co.location_id',
+                'co.slug as company_slug',
+                'co.verified',
+                'co.pic_url'
+            )
+            ->where('ta.id', '=', $id)
+            ->first();
+    }
+
+    /**
      * searchTasks method.
      * Searches through all tasks depending on the request's data.
      * @param Builder $query
@@ -89,7 +113,6 @@ class Task extends Model
      */
     private static function searchTasks(Builder $query, Request $request): Builder
     {
-
         $DBFixedRates   = self::getFixedRatesLimits();
         $DBHourlyRates  = self::getHourlyRatesLimits();
         $sliderFixedRates = explode(',', $request->fixed_price);
@@ -104,9 +127,12 @@ class Task extends Model
             $query->where('ta.category_id', '=', $request->task_category);
         }
 
-        // TODO: Add Skills table, link it to tasks & seed a random amount of skills per tasks
         if (!is_null($request->skills)) {
-            $query->where('ta.name', '=', $request->skills);
+            $query->join('skills_tasks as st', 'st.task_id', '=', 'ta.id');
+
+            foreach($request->skills as $skill) {
+                $query->where('st.skills', 'like', '%' . $skill . '%');
+            }
         }
 
         if ($sliderFixedRates[0] > $DBFixedRates->min_rate || $sliderFixedRates[1] < $DBFixedRates->max_rate) {
@@ -197,6 +223,45 @@ class Task extends Model
             ->selectRaw('MIN(ta.budget_min) as min_rate')
             ->where('ta.type', '=', 'Hourly')
             ->first();
+    }
+
+    /**
+     * getSkills method.
+     * Retrieves the skills linked to the task
+     * Strips every skill of any unwanted character such as :
+     *  -> "
+     *  -> [
+     *  -> ]
+     *
+     * @param int $id task id
+     * @return array
+     */
+    public static function getSkills(int $id): array
+    {
+        $skills = DB::table('skills_tasks as st')
+            ->select('st.skills')
+            ->where('st.task_id', '=', $id)
+            ->first()
+            ->skills;
+
+        return self::curateSkills(explode(',', $skills));
+    }
+
+    /**
+     * curateSkills method.
+     * Strips the ", [ and ] from the skills strings.
+     * @param array $skills
+     * @return array
+     */
+    private static function curateSkills(array $skills): array
+    {
+        $curatedArrSkills = [];
+
+        foreach($skills as $skill) {
+            $curatedArrSkills[] = preg_replace('/[\W\b]/','', $skill);
+        }
+
+        return $curatedArrSkills;
     }
 
     /**

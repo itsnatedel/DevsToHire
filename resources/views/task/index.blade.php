@@ -51,12 +51,14 @@
                             <!-- Keywords -->
                             <div class="sidebar-widget">
                                 <h3>Skills</h3>
-                                <div class="keywords-container">
-                                    <div class="keyword-input-container">
-                                        <input type="text" class="keyword-input" name="skills"
-                                               placeholder="e.g. PHP"/>
-                                    </div>
-                                </div>
+                                <select class="form-control selectpicker with-border" multiple name="skills[]" data-live-search="true">
+                                    @foreach($skills as $skill)
+                                        <option data-tokens="{{ $skill->skill }}" value="{{ $skill->skill }}">
+                                            {{ $skill->skill }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
                             </div>
 
                             <!-- Budget -->
@@ -80,7 +82,8 @@
                                        data-slider-currency="€"
                                        data-slider-min="{{ $hourlyRates->min_rate }}"
                                        data-slider-max="{{ $hourlyRates->max_rate }}" data-slider-step="5"
-                                       data-slider-value="[{{ $hourlyRates->min_rate }}, {{ $hourlyRates->max_rate }}]"/>
+                                       data-slider-value="[{{ $hourlyRates->min_rate }}, {{ $hourlyRates->max_rate }}]"
+                                />
                             </div>
 
                             <button class="button ripple-effect button-sliding-icon" type="submit"
@@ -113,11 +116,12 @@
                                 <option value="later">End Date - Later</option>
                                 <option value="remunHigh">Remuneration - Highest</option>
                                 <option value="remunLow">Remuneration - Lowest</option>
-                                <option value="random">Random</option>
+                                <option value="random">Randomize</option>
                             </select>
                         </form>
                     </div>
                 </div>
+                <!-- TODO: Fix select inputs taking height space -->
                 <div class="tasks-list-container margin-top-35">
                 @forelse($tasks as $task)
                     <!-- Task -->
@@ -165,7 +169,7 @@
                         </a>
                     @empty
                         <div>
-                            <p>No task available right now, come back later !</p>
+                            <p>No task found, come back later or broaden your search criterias !</p>
                         </div>
                     @endforelse
                 </div>
