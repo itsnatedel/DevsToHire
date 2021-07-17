@@ -24,14 +24,18 @@ class FreelancersTableSeeder extends Seeder
         $text = new Text($faker);
         $freelancers = [];
 
-        for ($i = 0; $i < 800; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $freelancers[] = [
-                'description' => $text->realText(255),
-                'pic_url'     => 'user-avatar-small-0' . $faker->numberBetween(1, 3) . '.jpg',
-                'hourly_rate' => $faker->numberBetween(8, 70),
-                'success_rate'=> $faker->numberBetween(60, 100),
-                'verified'    => $faker->boolean(70),
-                'user_id'     => $faker->numberBetween(6, 21)
+                'firstname'     => $faker->firstName(),
+                'lastname'      => $faker->lastName(),
+                'description'   => $text->realText(255),
+                'pic_url'       => 'user-avatar-small-0' . $faker->numberBetween(1, 3) . '.jpg',
+                'hourly_rate'   => $faker->numberBetween(8, 70),
+                'success_rate'  => $faker->numberBetween(60, 100),
+                'verified'      => $faker->boolean(70),
+                'location_id'   => $faker->numberBetween(1, 208),
+                'category_id'   => $faker->numberBetween(1, 8),
+                'joined_at'     => $faker->dateTimeBetween('-2 years', '-1 day')
             ];
         }
 

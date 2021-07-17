@@ -59,7 +59,11 @@ Route::group(['prefix' => 'companies'], function () {
 /* Freelancer Routes */
 Route::group(['prefix' => 'freelancers'], function () {
     Route::get('/', [FreelancerController::class, 'index'])->name('freelancer.index');
-    Route::get('/{id}', [FreelancerController::class, 'show'])->where('id', '[0-9]+')->name('freelancer.show');
+    Route::get('/{id}/{fullname}', [FreelancerController::class, 'show'])
+        ->where('id', '[0-9]+')
+        ->where('fullname', '[a-z-]+')
+        ->name('freelancer.show');
+    Route::post('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
 });
 
 /* Invoice Routes */

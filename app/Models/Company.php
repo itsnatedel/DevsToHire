@@ -181,10 +181,9 @@ class Company extends Model
     {
         $ratings = DB::table('ratings_companies as rc')
             ->join('freelancers as fr', 'fr.id', '=', 'rc.freelancer_id')
-            ->join('users as u', 'u.id', '=', 'fr.user_id')
             ->select('rc.note',
                 'rc.comment',
-                DB::raw("CONCAT(u.firstname, ' ', u.lastname) AS full_name"),
+                DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) AS full_name"),
                 DB::raw("DATEDIFF(rc.when, NOW()) as rating_when"))
             ->where('rc.company_id', '=', $company_id)
             ->limit(5);

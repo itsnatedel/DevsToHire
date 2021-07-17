@@ -48,14 +48,13 @@ class Welcome extends Model
         return DB::table('premium_users as pu')
             ->select(DB::raw('DISTINCT fr.id'),
                 'fr.pic_url',
-                DB::raw("CONCAT(u.firstname, ' ', u.lastname) as fullName"),
+                DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as fullName"),
                 'lo.country_code',
                 'lo.country_name',
                 'fr.hourly_rate',
                 'fr.success_rate')
-            ->join('users as u', 'u.id', '=', 'pu.user_id')
-            ->join('freelancers as fr', 'fr.user_id', '=', 'u.id')
-            ->join('locations as lo', 'lo.id', '=', 'u.location_id')
+            ->join('freelancers as fr', 'fr.id', '=', 'pu.user_id')
+            ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->where('fr.verified', '=', 1)
             ->inRandomOrder()
             ->limit(6)

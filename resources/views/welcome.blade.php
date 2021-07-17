@@ -202,14 +202,14 @@
                                                 <div class="verified-badge"
                                                      title="Verified Freelancer"
                                                      data-tippy-placement="right"></div>
-                                                <a href="{{ route('freelancer.show', $freelancer->id) }}">
+                                                <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}">
                                                     <img src="{{ asset('images/user/' . $freelancer->pic_url) }}"
                                                          alt=""></a>
                                             </div>
                                             <!-- Name -->
                                             <div class="freelancer-name">
                                                 <h4>
-                                                    <a href="{{ route('freelancer.show', $freelancer->id) }}">
+                                                    <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}">
                                                         {{ $freelancer->fullName }}
                                                         <img class="flag"
                                                              src="{{ asset('images/flags/' . strtolower($freelancer->country_code) . '.svg') }}"
@@ -234,7 +234,7 @@
                                                 <li>Job Success <strong>{{ $freelancer->success_rate }}%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="{{ route('freelancer.show', $freelancer->id) }}"
+                                        <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}"
                                            class="button button-sliding-icon ripple-effect">
                                             View Profile
                                             <i class="icon-material-outline-arrow-right-alt"></i>
