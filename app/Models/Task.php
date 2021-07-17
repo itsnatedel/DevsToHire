@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -244,24 +245,7 @@ class Task extends Model
             ->first()
             ->skills;
 
-        return self::curateSkills(explode(',', $skills));
-    }
-
-    /**
-     * curateSkills method.
-     * Strips the ", [ and ] from the skills strings.
-     * @param array $skills
-     * @return array
-     */
-    private static function curateSkills(array $skills): array
-    {
-        $curatedArrSkills = [];
-
-        foreach($skills as $skill) {
-            $curatedArrSkills[] = preg_replace('/[\W\b]/','', $skill);
-        }
-
-        return $curatedArrSkills;
+        return Controller::curateSkills($skills);
     }
 
     /**
