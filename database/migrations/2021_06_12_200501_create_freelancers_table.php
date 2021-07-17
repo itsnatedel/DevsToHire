@@ -15,6 +15,8 @@ class CreateFreelancersTable extends Migration
     {
         Schema::create('freelancers', function (Blueprint $table) {
             $table->id();
+            $table->string('firstname', 90);
+            $table->string('lastname', 90);
             $table->longText('description')->nullable();
             $table->string('pic_url', 255)->nullable();
             $table->integer('hourly_rate');
@@ -22,9 +24,7 @@ class CreateFreelancersTable extends Migration
             $table->string('CV_url')->nullable();
             $table->integer('success_rate')->nullable();
 
-            $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onDelete('restrict')->onUpdate('cascade');
+            // TODO : Add main skills / specialization + other skills
         });
     }
 
