@@ -28,7 +28,9 @@
 
         @yield('content')
 
-        @include('layouts.footer')
+        @if (Route::currentRouteName() !== 'freelancer.index' && Route::currentRouteName() !== 'freelancer.search')
+            @include('layouts.footer')
+        @endif
     </main>
 </div>
 
