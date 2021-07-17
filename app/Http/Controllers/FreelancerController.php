@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Freelancer;
+use App\Models\Location;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FreelancerController extends Controller
 {
@@ -16,13 +20,64 @@ class FreelancerController extends Controller
      */
     public function index()
     {
-        return view('freelancer.index');
+        $freelancers        = Freelancer::getFreelancersInfos();
+        $hourlyRateLimits   = Freelancer::getHourlyRateLimits();
+        $successRates       = Freelancer::getSuccessRateLimits();
+        $categories         = Category::all('id', 'name');
+        $countries          = Location::all('id', 'country_name');
+        $sortOption         = $request->sortOption ?? null;
+        $form               = null;
+
+        return view('freelancer.index', compact([
+            'freelancers',
+            'hourlyRateLimits',
+            'successRates',
+            'categories',
+            'countries',
+            'sortOption',
+            'form'
+        ]));
+    }
+
+    /**
+     * Searches for a resource
+     *
+     * @param Request $request
+     *
+     * @return Application|Factory|View
+     */
+    public function search(Request $request)
+    {
+        if (!is_null($request->sortOption)) {
+            $freelancers = Freelancer::getFreelancersInfos($request, true);
+        } else {
+            $freelancers = Freelancer::getFreelancersInfos($request);
+        }
+
+        $hourlyRateLimits   = Freelancer::getHourlyRateLimits();
+        $successRates       = Freelancer::getSuccessRateLimits();
+        $categories         = Category::all('id', 'name');
+        $countries          = Location::all('id', 'country_name');
+        $sortOption         = $request->sortOption ?? null;
+
+        // Populate inputs with selected
+        $form               = $request;
+
+        return view('freelancer.index', compact([
+            'freelancers',
+            'hourlyRateLimits',
+            'successRates',
+            'categories',
+            'countries',
+            'sortOption',
+            'form'
+        ]));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -32,8 +87,9 @@ class FreelancerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -43,19 +99,28 @@ class FreelancerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id Freelancer id
+     *
+     * @return Application|Factory|View
      */
-    public function show($id)
+    public function show(int $id)
     {
-        //
+        $freelancer         = Freelancer::find($id);
+        $freelancer->skills = Freelancer::getFreelancerSkills($id);
+        $freelancer->info   = Freelancer::getSingleFreelancerInfos($id);
+        $freelancer->jobs   = Freelancer::getSingleFreelancerJobs($id);
+
+        return view('freelancer.show', compact([
+            'freelancer'
+        ]));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Response
      */
     public function edit($id)
     {
@@ -65,9 +130,10 @@ class FreelancerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -77,8 +143,9 @@ class FreelancerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     *
+     * @return Response
      */
     public function destroy($id)
     {

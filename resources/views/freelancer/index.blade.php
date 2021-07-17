@@ -2,127 +2,105 @@
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
-        <!-- Page Content
-        ================================================== -->
+        <!-- Page Content -->
         <div class="full-page-container">
             <div class="full-page-sidebar">
                 <div class="full-page-sidebar-inner" data-simplebar>
                     <div class="sidebar-container">
+                        <form action="{{ route('freelancer.search', ) }}" method="post">
+                        @csrf
                         <!-- Location -->
-                        <div class="sidebar-widget">
-                            <h3>Location</h3>
-                            <div class="input-with-icon">
-                                <div id="autocomplete-container">
-                                    <input id="autocomplete-input" type="text" placeholder="Location">
-                                </div>
-                                <i class="icon-material-outline-location-on"></i>
-                            </div>
-                        </div>
-
-                        <!-- Category -->
-                        <div class="sidebar-widget">
-                            <h3>Category</h3>
-                            <select class="selectpicker default" multiple data-selected-text-format="count"
-                                    data-size="7" title="All Categories">
-                                <option>Admin Support</option>
-                                <option>Customer Service</option>
-                                <option>Data Analytics</option>
-                                <option>Design & Creative</option>
-                                <option>Legal</option>
-                                <option>Software Developing</option>
-                                <option>IT & Networking</option>
-                                <option>Writing</option>
-                                <option>Translation</option>
-                                <option>Sales & Marketing</option>
-                            </select>
-                        </div>
-
-                        <!-- Keywords -->
-                        <div class="sidebar-widget">
-                            <h3>Keywords</h3>
-                            <div class="keywords-container">
-                                <div class="keyword-input-container">
-                                    <input type="text" class="keyword-input" placeholder="e.g. task title"/>
-                                    <button class="keyword-input-button ripple-effect"><i
-                                            class="icon-material-outline-add"></i></button>
-                                </div>
-                                <div class="keywords-list"><!-- keywords go here --></div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-
-
-                        <!-- Hourly Rate -->
-                        <div class="sidebar-widget">
-                            <h3>Hourly Rate</h3>
-                            <div class="margin-top-55"></div>
-
-                            <!-- Range Slider -->
-                            <input class="range-slider" type="text" value="" data-slider-currency="$"
-                                   data-slider-min="10" data-slider-max="250" data-slider-step="5"
-                                   data-slider-value="[10,250]"/>
-                        </div>
-
-                        <!-- Tags -->
-                        <div class="sidebar-widget">
-                            <h3>Skills</h3>
-
-                            <div class="tags-container">
-                                <div class="tag">
-                                    <input type="checkbox" id="tag1"/>
-                                    <label for="tag1">front-end dev</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag2"/>
-                                    <label for="tag2">angular</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag3"/>
-                                    <label for="tag3">react</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag4"/>
-                                    <label for="tag4">vue js</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag5"/>
-                                    <label for="tag5">web apps</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag6"/>
-                                    <label for="tag6">design</label>
-                                </div>
-                                <div class="tag">
-                                    <input type="checkbox" id="tag7"/>
-                                    <label for="tag7">wordpress</label>
+                            <div class="sidebar-widget">
+                                <h3>Location</h3>
+                                <div class="bootstrap-select">
+                                    <select class="form-control selectpicker with-border" id="select-country"
+                                            data-live-search="true" title="Search by country" name="country"
+                                            aria-expanded="false">
+                                        <option disabled>Countries</option>
+                                        @foreach($countries as $country)
+                                            <option data-tokens="{{ $country->country_name }}"
+                                                    {{ !is_null($form) && $form->country === $country->country_name ? 'selected' : '' }}
+                                                    value="{{ $country->country_name }}">
+                                                {{ $country->country_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
-
-                            <!-- More Skills -->
-                            <div class="keywords-container margin-top-20">
-                                <div class="keyword-input-container">
-                                    <input type="text" class="keyword-input" placeholder="add more skills"/>
-                                    <button class="keyword-input-button ripple-effect"><i
-                                            class="icon-material-outline-add"></i></button>
-                                </div>
-                                <div class="keywords-list"><!-- keywords go here --></div>
-                                <div class="clearfix"></div>
+                            <!-- Category -->
+                            <div class="sidebar-widget">
+                                <h3>Specialization Field</h3>
+                                <select class="form-control selectpicker with-border" data-live-search="true"
+                                        name="specialization"
+                                        title="Search by specialization">
+                                    <option disabled>Specializations</option>
+                                    <!-- TODO: change in other select->categories value=name-->
+                                    @foreach($categories as $category)
+                                        <option data-tokens="{{ $category->name }}" {{ !is_null($form) && $form->specialization === $category->name ? 'selected' : ''}}
+                                                value="{{ $category->name }}">
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
 
-                        <div class="margin-bottom-40"></div>
+                            <!-- Skill -->
+                            <div class="sidebar-widget">
+                                <h3>Skill</h3>
+                                <div class="keywords-container">
+                                    <div class="keyword-input-container">
+                                        <input type="text" class="keyword-input" placeholder="e.g. wordpress" name="skill" value="{{ $form->skill ?? '' }}"/>
+                                        <button class="keyword-input-button ripple-effect">
+                                            <i class="icon-material-outline-add"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Hourly Rate -->
+                            <div class="sidebar-widget">
+                                <h3 style="margin-bottom: 35px">Hourly Rate</h3>
+                                <!-- Range Slider -->
+                                <input class="range-slider" name="hourlyRates" type="text" value="" data-slider-currency="€"
+                                       data-slider-min="{{ $hourlyRateLimits->min_rate }}"
+                                       data-slider-max="{{ $hourlyRateLimits->max_rate }}" data-slider-step="5"
+                                       data-slider-value="[{{ $form->hourlyRates ?? $hourlyRateLimits->min_rate . ',' . $hourlyRateLimits->max_rate }}]"
+                                />
+                            </div>
 
+                            <div class="clearfix"></div>
+                            <!-- Success Rate-->
+                            <div class="sidebar-widget">
+                                <h3>Success Rate</h3>
+                                <!-- Range Slider -->
+                                <div class="slider slider-horizontal" title="Success rate of at least " data-tippy-placement="bottom">
+
+                                    <input class="range-slider-single" name="successRates" type="text" data-slider-min="0"
+                                           data-slider-max="100" data-slider-step="1"
+                                           data-slider-value="{{ $form->successRates ?? 75 }}" data-value="0" value="">
+                                </div>
+                            </div>
+                            <div class="sidebar-widget">
+                                <h3>Rating</h3>
+
+                                <!-- Range Slider -->
+                                <div class="slider slider-horizontal" title="Rating of at least " data-tippy-placement="bottom">
+                                    <input class="range-slider-single" name="rated" type="text" data-slider-min="0"
+                                           data-slider-max="5" data-slider-step="0.5"
+                                           data-slider-value="{{ $form->rated ?? 3 }}" data-value="0" value="">
+                                </div>
+                            </div>
+                            <!-- Search Button -->
+                            <div class="sidebar-search-button-container">
+                                <button class="button ripple-effect button-sliding-icon"  type="submit" style="margin: -50px">Search
+                                    <i class="icon-material-outline-search"></i>
+                                </button>
+
+                            </div>
+                        </form>
                     </div>
                     <!-- Sidebar Container / End -->
-
-                    <!-- Search Button -->
-                    <div class="sidebar-search-button-container">
-                        <button class="button ripple-effect">Search</button>
-                    </div>
                     <!-- Search Button / End-->
-
                 </div>
             </div>
             <!-- Full Page Sidebar / End -->
@@ -131,351 +109,128 @@
             <div class="full-page-content-container" data-simplebar>
                 <div class="full-page-content-inner">
 
-                    <h3 class="page-title">Search Results</h3>
-
+                    <h3 class="page-title">Search Results - {{ $freelancers->total() }} profiles found.</h3>
+                    @if(count($freelancers) > 0)
                     <div class="notify-box margin-top-15">
-                        <div class="switch-container">
-                            <label class="switch"><input type="checkbox"><span class="switch-button"></span><span
-                                    class="switch-text">Turn on email alerts for this search</span></label>
-                        </div>
-
+                        <!-- TODO: Hide Reset search if route !== search -> to other reset searches el. too -->
+                        @if(!is_null($form) || !is_null($sortOption))
+                        <a href="{{ route('freelancer.index') }}" class="button gray ripple-effect button-sliding-icon"
+                           style="margin: -10px 0; padding: 5px; transform: translateY(3px)">
+                            Reset Search Filters
+                            <i class="icon-material-outline-autorenew"></i>
+                        </a>
+                        @endif
                         <div class="sort-by">
                             <span>Sort by:</span>
-                            <select class="selectpicker hide-tick">
-                                <option>Relevance</option>
-                                <option>Newest</option>
-                                <option>Oldest</option>
-                                <option>Random</option>
-                            </select>
+                            <form action="{{ route('freelancer.search') }}" method="post">
+                                @csrf
+                                <select class="selectpicker hide-tick" name="sortOption" onchange="this.form.submit()">
+                                    <option @if(is_null($sortOption)) selected @endif disabled>Method</option>
+                                    <option value="jobHiLo" @if($sortOption === 'jobHiLo') selected @endif>Job Success - High to Low
+                                    </option>
+                                    <option value="jobLoHi" @if($sortOption === 'jobLoHi') selected @endif>Job Success - Low to High
+                                    </option>
+                                    <option value="ratingHiLo" @if($sortOption === 'ratingHiLo') selected @endif>Rating - High to Low
+                                    </option>
+                                    <option value="ratingLoHi" @if($sortOption === 'ratingLoHi') selected @endif>Rating - Low to High
+                                    </option>
+                                    <option value="hrHiLo" @if($sortOption === 'hrHiLo') selected @endif>Hourly Rate - High to Low</option>
+                                    <option value="hrLoHi" @if($sortOption === 'hrLoHi') selected @endif>Hourly Rate - Low to High</option>
+                                    <option value="random" @if($sortOption === 'random') selected @endif>Randomize</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
 
                     <!-- Freelancers List Container -->
                     <div class="freelancers-container freelancers-grid-layout margin-top-35">
-
                         <!--Freelancer -->
-                        <div class="freelancer">
+                        @forelse($freelancers as $freelancer)
+                            <div class="freelancer">
+                                <!-- Overview -->
+                                <div class="freelancer-overview">
+                                    <div class="freelancer-overview-inner">
+                                        <!-- Bookmark Icon -->
+                                        <span class="bookmark-icon"></span>
+                                        <!-- Avatar -->
+                                        <div class="freelancer-avatar">
+                                            @if($freelancer->verified)
+                                                <div class="verified-badge" title="Verified freelancer" data-tippy-placement="right"></div>
+                                            @endif
+                                            <a href={{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}><img
+                                                    src="{{ asset('images/freelancer/' . $freelancer->pic_url) }}" alt="Profile Pic"></a>
+                                        </div>
+                                        <!-- Name -->
+                                        <div class="freelancer-name">
+                                            <h4>
+                                                <a href={{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}>
+                                                    {{ $freelancer->full_name }}
+                                                    <img class="flag"
+                                                         src="{{ asset('images/flags/' . strtolower($freelancer->country_code) . '.svg') }}"
+                                                         alt="Country"
+                                                         title="{{ $freelancer->country_name }}"
+                                                         data-tippy-placement="right">
+                                                </a>
+                                            </h4>
+                                            <span title="Specialized in"
+                                                  data-tippy-placement="left">{{ $freelancer->specialization }}</span>
+                                        </div>
 
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <div class="verified-badge"></div>
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-big-01.jpg" alt=""></a>
-                                    </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="single-freelancer-profile.html">Tom Smith <img class="flag"
-                                                                                                    src="images/flags/gb.svg"
-                                                                                                    alt=""
-                                                                                                    title="United Kingdom"
-                                                                                                    data-tippy-placement="top"></a>
-                                        </h4>
-                                        <span>UI/UX Designer</span>
-                                    </div>
-
-                                    <!-- Rating -->
-                                    <div class="freelancer-rating">
-                                        <div class="star-rating" data-rating="4.9"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i>
-                                                London</strong></li>
-                                        <li>Rate <strong>$60 / hr</strong></li>
-                                        <li>Job Success <strong>95%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-
-                        <!--Freelancer -->
-                        <div class="freelancer">
-
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <div class="verified-badge"></div>
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-big-02.jpg" alt=""></a>
-                                    </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="#">David Peterson <img class="flag" src="images/flags/de.svg"
-                                                                            alt="" title="Germany"
-                                                                            data-tippy-placement="top"></a></h4>
-                                        <span>iOS Expert + Node Dev</span>
-                                    </div>
-
-                                    <!-- Rating -->
-                                    <div class="freelancer-rating">
-                                        <div class="star-rating" data-rating="4.2"></div>
+                                        <!-- Rating -->
+                                        <div class="freelancer-rating">
+                                            <div class="star-rating" data-rating="{{ round($freelancer->rating) }}" title="Rating"
+                                                 data-tippy-placement="bottom"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i>
-                                                Berlin</strong></li>
-                                        <li>Rate <strong>$40 / hr</strong></li>
-                                        <li>Job Success <strong>88%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-
-                        <!--Freelancer -->
-                        <div class="freelancer">
-
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-placeholder.png" alt=""></a>
+                                <!-- Details -->
+                                <div class="freelancer-details">
+                                    <div class="freelancer-details-list">
+                                        <ul>
+                                            <li>Location
+                                                <strong>
+                                                    <i class="icon-material-outline-location-on"></i>
+                                                    {{ Str::limit($freelancer->country_name, 35) }}
+                                                </strong>
+                                            </li>
+                                            <li>Rate <strong>{{ $freelancer->hourly_rate }}€ / hr</strong></li>
+                                            <li>Job Success <strong>{{ $freelancer->success_rate }}%</strong></li>
+                                        </ul>
                                     </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="#">Marcin Kowalski <img class="flag" src="images/flags/pl.svg"
-                                                                             alt="" title="Poland"
-                                                                             data-tippy-placement="top"></a></h4>
-                                        <span>Front-End Developer</span>
-                                    </div>
-
-                                    <!-- Rating -->
-                                    <span class="company-not-rated margin-bottom-5">Minimum of 3 votes required</span>
+                                    <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}"
+                                       class="button button-sliding-icon ripple-effect">View Profile <i
+                                            class="icon-material-outline-arrow-right-alt"></i></a>
                                 </div>
                             </div>
+                    @empty
 
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i>
-                                                Warsaw</strong></li>
-                                        <li>Rate <strong>$50 / hr</strong></li>
-                                        <li>Job Success <strong>100%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-
-                        <!--Freelancer -->
-                        <div class="freelancer">
-
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <div class="verified-badge"></div>
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-big-03.jpg" alt=""></a>
-                                    </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="#">Sindy Forest <img class="flag" src="images/flags/au.svg" alt=""
-                                                                          title="Australia" data-tippy-placement="top"></a>
-                                        </h4>
-                                        <span>Magento Certified Developer</span>
-                                    </div>
-
-                                    <!-- Rating -->
-                                    <div class="freelancer-rating">
-                                        <div class="star-rating" data-rating="5.0"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i> Brisbane</strong>
-                                        </li>
-                                        <li>Rate <strong>$70 / hr</strong></li>
-                                        <li>Job Success <strong>100%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-
-                        <!--Freelancer -->
-                        <div class="freelancer">
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-placeholder.png" alt=""></a>
-                                    </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="#">Sebastiano Piccio <img class="flag" src="images/flags/it.svg"
-                                                                               alt="" title="Italy"
-                                                                               data-tippy-placement="top"></a></h4>
-                                        <span>Laravel Dev</span>
-                                    </div>
-
-                                    <!-- Rating -->
-                                    <div class="freelancer-rating">
-                                        <div class="star-rating" data-rating="4.5"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i>
-                                                Milan</strong></li>
-                                        <li>Rate <strong>$80 / hr</strong></li>
-                                        <li>Job Success <strong>89%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-                        <!--Freelancer -->
-                        <div class="freelancer">
-                            <!-- Overview -->
-                            <div class="freelancer-overview">
-                                <div class="freelancer-overview-inner">
-                                    <!-- Bookmark Icon -->
-                                    <span class="bookmark-icon"></span>
-
-                                    <!-- Avatar -->
-                                    <div class="freelancer-avatar">
-                                        <a href="single-freelancer-profile.html"><img
-                                                src="images/user-avatar-placeholder.png" alt=""></a>
-                                    </div>
-
-                                    <!-- Name -->
-                                    <div class="freelancer-name">
-                                        <h4><a href="#">Gabriel Lagueux <img class="flag" src="images/flags/fr.svg"
-                                                                             alt="" title="France"
-                                                                             data-tippy-placement="top"></a></h4>
-                                        <span>WordPress Expert</span>
-                                    </div>
-                                    <!-- Rating -->
-                                    <div class="freelancer-rating">
-                                        <div class="star-rating" data-rating="5.0"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Details -->
-                            <div class="freelancer-details">
-                                <div class="freelancer-details-list">
-                                    <ul>
-                                        <li>Location <strong><i class="icon-material-outline-location-on"></i>
-                                                Paris</strong></li>
-                                        <li>Rate <strong>$50 / hr</strong></li>
-                                        <li>Job Success <strong>100%</strong></li>
-                                    </ul>
-                                </div>
-                                <a href="single-freelancer-profile.html"
-                                   class="button button-sliding-icon ripple-effect">View Profile <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-                        <!-- Freelancer / End -->
-
+                    @endforelse
+                    <!-- Freelancer / End -->
                     </div>
                     <!-- Freelancers Container / End -->
 
                     <!-- Pagination -->
+                    <!-- TODO: Fix pagination design. create CSS class to unify all paginations ? -->
                     <div class="clearfix"></div>
                     <div class="pagination-container margin-top-20 margin-bottom-20">
                         <nav class="pagination">
-                            <ul>
-                                <li class="pagination-arrow"><a href="#" class="ripple-effect"><i
-                                            class="icon-material-outline-keyboard-arrow-left"></i></a></li>
-                                <li><a href="#" class="ripple-effect">1</a></li>
-                                <li><a href="#" class="ripple-effect current-page">2</a></li>
-                                <li><a href="#" class="ripple-effect">3</a></li>
-                                <li><a href="#" class="ripple-effect">4</a></li>
-                                <li class="pagination-arrow"><a href="#" class="ripple-effect"><i
-                                            class="icon-material-outline-keyboard-arrow-right"></i></a></li>
-                            </ul>
+                            {{ $freelancers->links() }}
                         </nav>
                     </div>
                     <div class="clearfix"></div>
+                    @else
+                        <div class="margin-top-20"></div>
+                        <div class="notification warning closeable">
+                            <p color="blue">No freelancer found by your search criterias. Please broaden your search or <a href="{{ route('freelancer.index') }}">click here to reset the search filters.</a></p>
+                        </div>
+                    @endif
                     <!-- Pagination / End -->
+                    @include('layouts.freelancers.footer')
                 </div>
             </div>
             <!-- Full Page Content / End -->
         </div>
     </div>
-    <!-- Wrapper / End -->
-    <!-- Google Autocomplete -->
-    <script>
-        function initAutocomplete() {
-            var options = {
-                types: ['(cities)'],
-                // componentRestrictions: {country: "us"}
-            };
-
-            var input = document.getElementById('autocomplete-input');
-            var autocomplete = new google.maps.places.Autocomplete(input, options);
-        }
-    </script>
-    <!-- Google API & Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_MAPS_KEY') }}&libraries=places"></script>
 
 @endsection
