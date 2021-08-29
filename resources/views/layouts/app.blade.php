@@ -35,6 +35,40 @@
 </div>
 
 <!-- Scripts -->
+<script>
+    (function () {
+        let userAvatar = document.getElementById('user-avatar');
+        let dropDownuserAvatar = document.getElementById('dropdown-user-avatar');
+        let setStatusOnline = document.getElementById('set-status-online');
+        let setStatusOffline = document.getElementById('set-status-offline');
+
+        if (sessionStorage.getItem('activityStatus') === 'online') {
+            // Removing offline status in class
+            userAvatar.classList.remove('status-offline');
+            dropDownuserAvatar.classList.remove('status-offline');
+
+            // Switching current status
+            setStatusOffline.classList.remove('current-status');
+            setStatusOnline.classList.add('current-status');
+
+            // Adding online status in class
+            userAvatar.classList.add('status-online');
+            dropDownuserAvatar.classList.add('status-online');
+        } else {
+            // Removing online status in class
+            userAvatar.classList.remove('status-online');
+            dropDownuserAvatar.classList.remove('status-online');
+
+            // Switching current status
+            setStatusOnline.classList.remove('current-status');
+            setStatusOffline.classList.add('current-status');
+
+            // Adding offline status in class
+            userAvatar.classList.add('status-offline');
+            dropDownuserAvatar.classList.add('status-offline');
+        }
+    })();
+</script>
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('js/jquery-migrate-3.3.2.min.js') }}"></script>
 <script src="{{ asset('js/mmenu.min.js') }}"></script>
@@ -61,6 +95,34 @@
             backgroundColor: '#383838'
         });
     });
+</script>
+<script>
+    // Change Activity Status in navbar
+    let setStatusOnline = document.getElementById('set-status-online');
+    let setStatusOffline = document.getElementById('set-status-offline');
+    let userAvatar = document.getElementById('user-avatar');
+    let dropDownuserAvatar = document.getElementById('dropdown-user-avatar');
+
+    setStatusOnline.addEventListener('click', () => {
+        userAvatar.classList.remove('status-offline');
+        dropDownuserAvatar.classList.remove('status-offline');
+
+        sessionStorage.setItem('activityStatus', 'online');
+
+        userAvatar.classList.add('status-online');
+        dropDownuserAvatar.classList.add('status-online');
+    });
+
+    setStatusOffline.addEventListener('click', () => {
+        userAvatar.classList.remove('status-online');
+        dropDownuserAvatar.classList.remove('status-online');
+
+        sessionStorage.setItem('activityStatus', 'offline');
+
+        userAvatar.classList.add('status-offline');
+        dropDownuserAvatar.classList.add('status-offline');
+
+    })
 </script>
 </body>
 </html>

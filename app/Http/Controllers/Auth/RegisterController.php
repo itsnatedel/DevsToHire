@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FreelancerController;
+use App\Models\Company;
+use App\Models\Freelancer;
 use App\Models\Location;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterController extends Controller
@@ -58,7 +63,11 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'account-type' => ['required'],
-            'password' => ['required_with:password_confirmation', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
+            'password' => [
+                'required_with:password_confirmation',
+                'string',
+                Password::min(8)->letters()->mixedCase()->numbers()
+            ],
             'country' => ['required'],
         ]);
     }
@@ -71,18 +80,34 @@ class RegisterController extends Controller
      */
     protected function create(array $data): User
     {
+        // 2 = Freelancer / 3 = Company
         $data = $this->setRoleId($data);
         $data = $this->setLocationId($data);
 
-        return User::create([
-            'firstname'     => $data['firstname'],
-            'lastname'      => $data['lastname'],
-            'email'         => $data['email'],
-            'password'      => Hash::make($data['password']),
-            'role_id'       => $data['account-type'],
-            'location_id'   => $data['country'],
-            'created_at'    => Carbon::now(),
+        $user = User::create([
+            'firstname'         => $data['firstname'],
+            'lastname'          => $data['lastname'],
+            'email'             => $data['email'],
+            'email_verified_at' => null,
+            'password'          => Hash::make($data['password']),
+            'role_id'           => $data['account-type'],
+            'location_id'       => $data['country'],
+            'created_at'        => Carbon::now(),
+            'updated_at'        => null,
+            'pic_url'           => 'user-avatar-placeholder.png'
         ]);
+
+        $userId = $this->retrieveUserId($data);
+
+        if ($data['account-type'] === 2) {
+            Freelancer::registerFreelancer($user, $data, $userId);
+        }
+
+        if ($data['account-type'] === 3) {
+            dd(true);
+        }
+
+        return $user;
     }
 
     protected function setRoleId(array $data): array
@@ -103,5 +128,15 @@ class RegisterController extends Controller
             ->id;
 
         return $data;
+    }
+
+    protected function retrieveUserId($data)
+    {
+        return DB::table('users as u')
+            ->select('u.id')
+            ->where('u.email', '=', $data['email'])
+            ->where('role_id', '=', $data['account-type'])
+            ->first()
+            ->id;
     }
 }

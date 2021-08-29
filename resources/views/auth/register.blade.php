@@ -28,8 +28,8 @@
                     <div class="login-register-page">
                         <!-- Welcome Text -->
                         <div class="welcome-text">
-                            <h3 style="font-size: 26px;">Let's create your account!</h3>
-                            <span>Already have an account? <a href="{{ route('login') }}">Log In!</a></span>
+                            <h3 style="font-size: 26px;">Let's create your account !</h3>
+                            <span>Already have an account? <a href="{{ route('login') }}">Log In !</a></span>
                         </div>
 
                         @if(count($errors) > 0)
@@ -44,7 +44,6 @@
                         <!-- Form -->
                         <form method="post" id="register-account-form-main" action="{{ route('register') }}">
                         @csrf
-
                         <!-- Account Type -->
                             <div class="account-type">
                                 <div>
@@ -55,10 +54,10 @@
                                 </div>
 
                                 <div>
-                                    <input type="radio" name="account-type" id="employer-radio"
-                                           class="account-type-radio" value="employer"/>
-                                    <label for="employer-radio" class="ripple-effect-dark"><i
-                                            class="icon-material-outline-business-center"></i> Employer</label>
+                                    <input type="radio" name="account-type" id="company-radio"
+                                           class="account-type-radio" value="company"/>
+                                    <label for="company-radio" class="ripple-effect-dark"><i
+                                            class="icon-material-outline-business-center"></i> Company</label>
                                 </div>
                             </div>
 
@@ -81,9 +80,10 @@
                                        id="email-register" placeholder="Email Address" required/>
                             </div>
 
-                            <div class="bootstrap-select" style="margin-bottom: 15px">
+                            <div class="bootstrap-select" style="margin-bottom: 15px;">
+                                <!-- TODO: Fix select taking extra space below page -->
                                 <select class="form-control selectpicker with-border" id="select-country"
-                                        data-live-search="true" name="country" data-size="10">
+                                        data-live-search="true" aria-expanded="false" name="country" data-size="5">
                                     <option disabled selected>Your Country</option>
                                     @foreach($countries as $country)
                                         <option data-tokens="{{ $country->name }}"
@@ -103,6 +103,11 @@
                                 <i class="icon-material-outline-lock"></i>
                                 <input type="password" class="input-text with-border" name="password_confirmation"
                                        id="password-repeat-register-form" placeholder="Repeat Password"/>
+                            </div>
+
+                            <div class="form-group" id="description-field">
+                                <label for="description">Description</label>
+                                <textarea  name="description" class="form-control" id="description" rows="5" placeholder="Write something about yourself..."></textarea>
                             </div>
 
                             <!-- Button -->
@@ -135,9 +140,4 @@
         <!-- Spacer / End-->
     </div>
     <!-- Wrapper / End -->
-    <script>
-        $(function () {
-            $('.selectpicker').selectpicker();
-        });
-    </script>
 @endsection

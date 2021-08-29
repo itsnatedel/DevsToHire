@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('content')
     <!-- Wrapper -->
+    <!-- TODO: Fix pagination number hover being blanks -->
     <div id="wrapper">
         <!-- Page Content -->
         <div class="full-page-container">
             <div class="full-page-sidebar">
                 <div class="full-page-sidebar-inner" data-simplebar>
                     <div class="sidebar-container">
-                        <form action="{{ route('freelancer.search', ) }}" method="post">
+                        <form action="{{ route('freelancer.search') }}" method="post">
                         @csrf
                         <!-- Location -->
                             <div class="sidebar-widget">
@@ -151,7 +152,7 @@
                                 <div class="freelancer-overview">
                                     <div class="freelancer-overview-inner">
                                         <!-- Bookmark Icon -->
-                                        <span class="bookmark-icon"></span>
+                                        @Auth <span class="bookmark-icon"></span> @endauth
                                         <!-- Avatar -->
                                         <div class="freelancer-avatar">
                                             @if($freelancer->verified)
@@ -215,7 +216,7 @@
                     <div class="clearfix"></div>
                     <div class="pagination-container margin-top-20 margin-bottom-20">
                         <nav class="pagination">
-                            {{ $freelancers->links() }}
+                            {{ $freelancers->withQueryString()->links() }}
                         </nav>
                     </div>
                     <div class="clearfix"></div>

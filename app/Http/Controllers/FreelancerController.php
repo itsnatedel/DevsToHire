@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Freelancer;
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -61,7 +62,7 @@ class FreelancerController extends Controller
         $sortOption         = $request->sortOption ?? null;
 
         // Populate inputs with selected
-        $form               = $request;
+        $form = $request;
 
         return view('freelancer.index', compact([
             'freelancers',
@@ -77,7 +78,6 @@ class FreelancerController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
      */
     public function create()
     {
@@ -87,9 +87,9 @@ class FreelancerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param User $user
+     * @param int  $userId
      *
-     * @return Response
      */
     public function store(Request $request)
     {
