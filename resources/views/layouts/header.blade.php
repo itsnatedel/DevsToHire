@@ -1,7 +1,6 @@
 <!-- Header Container
         ================================================== -->
 <header id="header-container" class="fullwidth">
-
     <!-- Header -->
     <div id="header">
         <div class="container">
@@ -32,52 +31,56 @@
                         </li>
 
                         <!-- Auth check for employer status -->
-                        <li><a href="#">For Employers</a>
-                            <ul class="dropdown-nav">
-                                <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('company.show', [4, 'abc']) }}">Your Company Profile</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('dashboard.task.create') }}">Post a Task</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- Auth::check() -->
-                        <li><a href="#">Dashboard</a>
-                            <ul class="dropdown-nav">
-                                <li><a href="{{ route('dashboard.index') }}">Overview</a></li>
-                                <li><a href="{{ route('dashboard.messages') }}">My messages</a></li>
-                                <li><a href="{{ route('dashboard.bookmarks') }}">My bookmarks</a></li>
-                                <li><a href="{{ route('dashboard.reviews') }}">My reviews</a></li>
-                                <li><a href="{{ route('dashboard.job.manage') }}">Jobs</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs</a></li>
-                                        <!-- If user === employer-->
-                                        <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a>
-                                        </li>
-                                        <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="{{ route('dashboard.task.manage') }}">Tasks</a>
-                                    <ul class="dropdown-nav">
-                                        <li><a href="{{ route('dashboard.task.manage') }}">Manage Tasks</a></li>
-                                        <!-- If user === employer -->
-                                        <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
-                                        <!-- If user === freelancer -->
-                                        <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
-                                        <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="{{ route('dashboard.settings') }}">Settings</a></li>
-                            </ul>
-                        </li>
-
+                        @if (Auth::user()->role_id === 3)
+                            <li><a href="#">For Employers</a>
+                                <ul class="dropdown-nav">
+                                    <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('company.show', [4, 'abc']) }}">Your Company Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('dashboard.task.create') }}">Post a Task</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endif
+                    <!-- Auth::check() -->
+                        @if(Auth::check())
+                            <li><a href="#">Dashboard</a>
+                                <ul class="dropdown-nav">
+                                    <li><a href="{{ route('dashboard.index') }}">Overview</a></li>
+                                    <li><a href="{{ route('dashboard.messages') }}">My messages</a></li>
+                                    <li><a href="{{ route('dashboard.bookmarks') }}">My bookmarks</a></li>
+                                    <li><a href="{{ route('dashboard.reviews') }}">My reviews</a></li>
+                                    <li><a href="{{ route('dashboard.job.manage') }}">Jobs</a>
+                                        <ul class="dropdown-nav">
+                                            <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs</a></li>
+                                            <!-- If user === employer-->
+                                            @if(Auth::user()->role_id === 3)
+                                                <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a>
+                                                </li>
+                                                <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ route('dashboard.task.manage') }}">Tasks</a>
+                                        <ul class="dropdown-nav">
+                                            <li><a href="{{ route('dashboard.task.manage') }}">Manage Tasks</a></li>
+                                            <!-- If user === employer -->
+                                            <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
+                                            <!-- If user === freelancer -->
+                                            <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
+                                            <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ route('dashboard.settings') }}">Settings</a></li>
+                                </ul>
+                            </li>
+                        @endif
                         <li><a href="#">Pages</a>
                             <ul class="dropdown-nav">
                                 <li><a href="{{ route('blog.index') }}">Blog</a></li>
@@ -105,207 +108,46 @@
 
             <!-- Right Side Content / End -->
             <div class="right-side">
-                @if(Auth::check())
-                    <!--  User Notifications -->
-                    <div class="header-widget hide-on-mobile">
-
-                        <!-- Notifications -->
-                        <div class="header-notifications">
-
-                            <!-- Trigger -->
-                            <div class="header-notifications-trigger">
-                                <a href="#"><i class="icon-feather-bell"></i><span>4</span></a>
-                            </div>
-
-                            <!-- Dropdown -->
-                            <div class="header-notifications-dropdown">
-
-                                <div class="header-notifications-headline">
-                                    <h4>Notifications</h4>
-                                    <button class="mark-as-read ripple-effect-dark" title="Mark all as read"
-                                            data-tippy-placement="left">
-                                        <i class="icon-feather-check-square"></i>
-                                    </button>
-                                </div>
-
-                                <div class="header-notifications-content">
-                                    <div class="header-notifications-scroll" data-simplebar>
-                                        <ul>
-                                            <!-- Notification -->
-                                            <li class="notifications-not-read">
-                                                <a href="dashboard-manage-candidates.html">
-                                                    <span class="notification-icon"><i
-                                                            class="icon-material-outline-group"></i></span>
-                                                    <span class="notification-text">
-													<strong>Michael Shannah</strong> applied for a job <span
-                                                            class="color">Full Stack Software Engineer</span>
-												</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Notification -->
-                                            <li>
-                                                <a href="dashboard-manage-bidders.html">
-                                                    <span class="notification-icon"><i
-                                                            class=" icon-material-outline-gavel"></i></span>
-                                                    <span class="notification-text">
-													<strong>Gilbert Allanis</strong> placed a bid on your <span
-                                                            class="color">iOS App Development</span> project
-												</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Notification -->
-                                            <li>
-                                                <a href="dashboard-manage-jobs.html">
-                                                    <span class="notification-icon"><i
-                                                            class="icon-material-outline-autorenew"></i></span>
-                                                    <span class="notification-text">
-													Your job listing <span class="color">Full Stack PHP Developer</span> is expiring.
-												</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Notification -->
-                                            <li>
-                                                <a href="dashboard-manage-candidates.html">
-                                                    <span class="notification-icon"><i
-                                                            class="icon-material-outline-group"></i></span>
-                                                    <span class="notification-text">
-													<strong>Sindy Forrest</strong> applied for a job <span
-                                                            class="color">Full Stack Software Engineer</span>
-												</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!-- Messages -->
-                        <div class="header-notifications">
-                            <div class="header-notifications-trigger">
-                                <a href="#"><i class="icon-feather-mail"></i><span>3</span></a>
-                            </div>
-
-                            <!-- Dropdown -->
-                            <div class="header-notifications-dropdown">
-
-                                <div class="header-notifications-headline">
-                                    <h4>Messages</h4>
-                                    <button class="mark-as-read ripple-effect-dark" title="Mark all as read"
-                                            data-tippy-placement="left">
-                                        <i class="icon-feather-check-square"></i>
-                                    </button>
-                                </div>
-
-                                <div class="header-notifications-content">
-                                    <div class="header-notifications-scroll" data-simplebar>
-                                        <ul>
-                                            <!-- Notification -->
-                                            <li class="notifications-not-read">
-                                                <a href="dashboard-messages.html">
-                                                    <span class="notification-avatar status-online"><img
-                                                            src="images/user-avatar-small-03.jpg" alt=""></span>
-                                                    <div class="notification-text">
-                                                        <strong>David Peterson</strong>
-                                                        <p class="notification-msg-text">Thanks for reaching
-                                                            out.
-                                                            I'm
-                                                            quite busy right now on many...</p>
-                                                        <span class="color">4 hours ago</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-
-                                            <!-- Notification -->
-                                            <li class="notifications-not-read">
-                                                <a href="dashboard-messages.html">
-                                                    <span class="notification-avatar status-offline"><img
-                                                            src="images/user-avatar-small-02.jpg" alt=""></span>
-                                                    <div class="notification-text">
-                                                        <strong>Sindy Forest</strong>
-                                                        <p class="notification-msg-text">Hi Tom! Hate to break
-                                                            it to
-                                                            you, but I'm actually on vacation until...</p>
-                                                        <span class="color">Yesterday</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-
-                                            <!-- Notification -->
-                                            <li class="notifications-not-read">
-                                                <a href="dashboard-messages.html">
-                                                    <span class="notification-avatar status-online"><img
-                                                            src="images/user-avatar-placeholder.png" alt=""></span>
-                                                    <div class="notification-text">
-                                                        <strong>Marcin Kowalski</strong>
-                                                        <p class="notification-msg-text">I received payment.
-                                                            Thanks
-                                                            for
-                                                            cooperation!</p>
-                                                        <span class="color">Yesterday</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <a href="dashboard-messages.html"
-                                   class="header-notifications-button ripple-effect button-sliding-icon">View
-                                    All
-                                    Messages<i class="icon-material-outline-arrow-right-alt"></i></a>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!--  User Notifications / End -->
-
-                    <!-- User Menu -->
+            @if(Auth::check())
+                <!-- User Menu -->
                     <div class="header-widget">
-
                         <!-- Messages -->
                         <div class="header-notifications user-menu">
                             <div class="header-notifications-trigger">
                                 <a href="#">
-                                    <div class="user-avatar status-online"><img
-                                            src="images/user-avatar-small-01.jpg"
-                                            alt=""></div>
+                                    <div id="user-avatar" class="user-avatar status-online"><img
+                                            src="{{ asset('images/user/' . Auth::user()->pic_url) }}"
+                                            alt="Profile Pic"></div>
                                 </a>
                             </div>
-
                             <!-- Dropdown -->
                             <div class="header-notifications-dropdown">
-
                                 <!-- User Status -->
                                 <div class="user-status">
-
                                     <!-- User Name / Avatar -->
                                     <div class="user-details">
-                                        <div class="user-avatar status-online"><img
-                                                src="images/user-avatar-small-01.jpg" alt=""></div>
+                                        <div id="dropdown-user-avatar" class="user-avatar status-online"><img
+                                                src="{{ asset('images/user/' . Auth::user()->pic_url) }}"
+                                                alt="Profile Pic"></div>
                                         <div class="user-name">
-                                            Tom Smith <span>Freelancer</span>
+                                            {{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}
+                                            <span>{{ Auth::user()->role_id === 2 ? 'Freelancer' : 'Employer' }}</span>
                                         </div>
                                     </div>
 
                                     <!-- User Status Switcher -->
                                     <div class="status-switch" id="snackbar-user-status">
-                                        <label class="user-online current-status">Online</label>
-                                        <label class="user-invisible">Invisible</label>
+                                        <label id="set-status-online" class="user-online current-status">Online</label>
+                                        <label id="set-status-offline" class="user-invisible">Invisible</label>
                                         <!-- Status Indicator -->
-                                        <span class="status-indicator" aria-hidden="true"></span>
+                                        <span id="status-indicator" class="status-indicator online" aria-hidden="true"></span>
                                     </div>
                                 </div>
 
                                 <ul class="user-menu-small-nav">
-                                    <li><a href="dashboard.html"><i class="icon-material-outline-dashboard"></i>
+                                    <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                             Dashboard</a></li>
-                                    <li><a href="dashboard-settings.html"><i
+                                    <li><a href="{{ route('dashboard.settings') }}"><i
                                                 class="icon-material-outline-settings"></i>
                                             Settings</a></li>
                                     <li>
@@ -320,13 +162,13 @@
                             </div>
                         </div>
                     </div>
-                <!-- User Menu / End -->
+                    <!-- User Menu / End -->
                 @else
                     <div class="header-widget">
                         <a href="{{ route('login') }}" class="log-in-button"><i
                                 class="icon-feather-log-in"></i> <span>Log In / Register</span></a>
                     </div>
-                @endif
+            @endif
             <!-- Mobile Navigation Button -->
                 <span class="mmenu-trigger">
 					<button class="hamburger hamburger--collapse" type="button">

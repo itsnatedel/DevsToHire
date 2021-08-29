@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Freelancer extends Model
@@ -23,8 +25,12 @@ class Freelancer extends Model
         'description',
         'pic_url',
         'hourly_rate',
-        'CV_url'
+        'CV_url',
+        'firstname',
+        'lastname',
+        'description',
     ];
+
 
     /**
      * Relation Freelancer -> Bid
@@ -292,5 +298,28 @@ class Freelancer extends Model
             )
             ->where('fjd.freelancer_id', '=', $id)
             ->get();
+    }
+
+    public static function registerFreelancer(User $user, array $data, int $userId)
+    {
+        if (Auth() && $user->id === $userId) {
+            $freelancer = [
+                'firstname'     => $user->firstname,
+                'lastname'      => $user->lastname,
+                'description'   => $data['description'],
+                'pic_url'       => $user->pic_url,
+                'hourly_rate'   => 15,
+                'verified'      => 0,
+                'CV_url'        => null,
+                'success_rate'  => 0,
+                'location_id'   => $user->location_id,
+                'joined_at'     => Carbon::now(),
+                'category_id'   => 1
+            ];
+
+            DB::table('freelancers')->insert($freelancer);
+            //dd($user, $data, $userId);
+
+        }
     }
 }

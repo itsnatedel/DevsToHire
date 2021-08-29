@@ -172,6 +172,7 @@
                                 @endforelse
                             </div>
                         </div>
+                        @Auth
                         <!-- Widget -->
                         <div class="sidebar-widget">
                             <h3>Attachments</h3>
@@ -180,6 +181,7 @@
                                 <a href="#" class="attachment-box ripple-effect"><span>Contract</span><i>DOCX</i></a>
                             </div>
                         </div>
+                        @endauth
                         <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
                             <h3>Bookmark or Share</h3>

@@ -5,8 +5,7 @@
         <div class="margin-top-60"></div>
         <!-- Spacer / End-->
 
-        <!-- Page Content
-        ================================================== -->
+        <!-- Page Content -->
         <div class="container">
             <div class="row">
                 <div class="col-xl-3 col-lg-4">
@@ -58,7 +57,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-
                             </div>
 
                             <!-- Budget -->
@@ -182,7 +180,7 @@
                         <!-- Pagination -->
                         <div class="pagination-container margin-top-30 margin-bottom-60">
                             <nav class="pagination">
-                                {{ $tasks->links() }}
+                                {{ $tasks->withQueryString()->links() }}
                             </nav>
                         </div>
                     </div>
