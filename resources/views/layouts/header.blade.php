@@ -31,22 +31,24 @@
                         </li>
 
                         <!-- Auth check for employer status -->
-                        @if (Auth::user()->role_id === 3)
-                            <li><a href="#">For Employers</a>
-                                <ul class="dropdown-nav">
-                                    <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('company.show', [4, 'abc']) }}">Your Company Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('dashboard.task.create') }}">Post a Task</a>
-                                    </li>
-                                </ul>
-                            </li>
+                        @auth
+                            @if (Auth::user()->role_id === 3)
+                                <li><a href="#">For Employers</a>
+                                    <ul class="dropdown-nav">
+                                        <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('company.show', [4, 'abc']) }}">Your Company Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('dashboard.task.create') }}">Post a Task</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
                         @endif
                     <!-- Auth::check() -->
                         @if(Auth::check())
@@ -60,11 +62,13 @@
                                         <ul class="dropdown-nav">
                                             <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs</a></li>
                                             <!-- If user === employer-->
-                                            @if(Auth::user()->role_id === 3)
-                                                <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a>
-                                                </li>
-                                                <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
-                                            @endif
+                                            @Auth
+                                                @if(Auth::user()->role_id === 3)
+                                                    <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a>
+                                                    </li>
+                                                    <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
+                                                @endif
+                                            @endauth
                                         </ul>
                                     </li>
                                     <li><a href="{{ route('dashboard.task.manage') }}">Tasks</a>
@@ -109,6 +113,7 @@
             <!-- Right Side Content / End -->
             <div class="right-side">
             @if(Auth::check())
+
                 <!-- User Menu -->
                     <div class="header-widget">
                         <!-- Messages -->
@@ -116,21 +121,22 @@
                             <div class="header-notifications-trigger">
                                 <a href="#">
                                     <div id="user-avatar" class="user-avatar status-online"><img
-                                            src="{{ asset('images/user/' . Auth::user()->pic_url) }}"
+                                            src="{{ asset('images/user/' . Auth::user()->remember_token . '/avatars/big/' . Auth::user()->pic_url) }}"
                                             alt="Profile Pic"></div>
                                 </a>
                             </div>
                             <!-- Dropdown -->
+
                             <div class="header-notifications-dropdown">
                                 <!-- User Status -->
                                 <div class="user-status">
                                     <!-- User Name / Avatar -->
                                     <div class="user-details">
                                         <div id="dropdown-user-avatar" class="user-avatar status-online"><img
-                                                src="{{ asset('images/user/' . Auth::user()->pic_url) }}"
+                                                src="{{ asset('images/user/' . Auth::user()->remember_token . '/avatars/small/' . Auth::user()->pic_url) }}"
                                                 alt="Profile Pic"></div>
                                         <div class="user-name">
-                                            {{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}
+                                            {{ ucFirst(Auth::user()->firstname) . ' ' . ucfirst(Auth::user()->lastname) }}
                                             <span>{{ Auth::user()->role_id === 2 ? 'Freelancer' : 'Employer' }}</span>
                                         </div>
                                     </div>
@@ -145,6 +151,23 @@
                                 </div>
 
                                 <ul class="user-menu-small-nav">
+                                    <!-- IIF user is freelancer -->
+                                    @if(Auth::user()->role_id === 2)
+                                        <li>
+                                            <a href="{{ route('freelancer.show', [Auth::user()->freelancer_id , Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}"><i
+                                                    class="icon-material-outline-dashboard"></i>
+                                                My Profile
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @if(Auth::user()->role_id === 3)
+                                        <li>
+                                            <a href="{{ route('company.show', [Auth::user()->company_id , Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}"><i
+                                                    class="icon-material-outline-dashboard"></i>
+                                                My Profile
+                                            </a>
+                                        </li>
+                                    @endif
                                     <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                             Dashboard</a></li>
                                     <li><a href="{{ route('dashboard.settings') }}"><i

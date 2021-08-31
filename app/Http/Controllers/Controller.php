@@ -46,6 +46,9 @@ class Controller extends BaseController
         $amountDays = substr($days, 1);
         $daysPerYear = 365;
 
+        if (empty($amountDays)) {
+            return '0 day';
+        }
         if ($amountDays > 364) {
             for ($i = 1; $i <= 5; $i++) {
                 // If $amountDays between 365 * $i and 365 * $i + 1
