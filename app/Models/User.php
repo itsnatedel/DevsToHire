@@ -25,7 +25,11 @@ class User extends Authenticatable
         'password',
         'role_id',
         'location_id',
-        'can_be_rated'
+        'can_be_rated',
+        'pic_url',
+        'remember_token',
+        'company_id',
+        'freelancer_id'
     ];
 
     /**
