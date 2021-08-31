@@ -4,9 +4,9 @@
     <div id="wrapper">
         <!-- Dashboard Container -->
         <div class="dashboard-container">
-            @include('layouts.dashboard.sidebar')
+        @include('layouts.dashboard.sidebar')
 
-            <!-- Dashboard Content
+        <!-- Dashboard Content
             ================================================== -->
             <div class="dashboard-content-container" data-simplebar>
                 <div class="dashboard-content-inner">
@@ -18,8 +18,8 @@
                         <!-- Breadcrumbs -->
                         <nav id="breadcrumbs" class="dark">
                             <ul>
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Dashboard</a></li>
+                                <li><a href="{{ route('homepage') }}">Home</a></li>
+                                <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                                 <li>Settings</li>
                             </ul>
                         </nav>
@@ -57,14 +57,14 @@
                                                 <div class="col-xl-6">
                                                     <div class="submit-field">
                                                         <h5>First Name</h5>
-                                                        <input type="text" class="with-border" value="Tom">
+                                                        <input type="text" class="with-border" value="{{ $user->firstname }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-xl-6">
                                                     <div class="submit-field">
                                                         <h5>Last Name</h5>
-                                                        <input type="text" class="with-border" value="Smith">
+                                                        <input type="text" class="with-border" value="{{ $user->lastname }}">
                                                     </div>
                                                 </div>
 
@@ -76,7 +76,7 @@
                                                             <div>
                                                                 <input type="radio" name="account-type-radio"
                                                                        id="freelancer-radio" class="account-type-radio"
-                                                                       checked/>
+                                                                       @if($user->role_id === 2) checked @endif />
                                                                 <label for="freelancer-radio"
                                                                        class="ripple-effect-dark"><i
                                                                         class="icon-material-outline-account-circle"></i>
@@ -85,7 +85,8 @@
 
                                                             <div>
                                                                 <input type="radio" name="account-type-radio"
-                                                                       id="employer-radio" class="account-type-radio"/>
+                                                                       id="employer-radio" class="account-type-radio"
+                                                                       @if($user->role_id === 3) checked @endif />
                                                                 <label for="employer-radio"
                                                                        class="ripple-effect-dark"><i
                                                                         class="icon-material-outline-business-center"></i>
@@ -98,7 +99,7 @@
                                                 <div class="col-xl-6">
                                                     <div class="submit-field">
                                                         <h5>Email</h5>
-                                                        <input type="text" class="with-border" value="tom@example.com">
+                                                        <input type="text" class="with-border" value="{{ $user->email }}">
                                                     </div>
                                                 </div>
 
