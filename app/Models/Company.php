@@ -113,6 +113,9 @@ class Company extends Model
             $total += $rating->note;
         }
 
+        if ($total === 0) {
+            return 0;
+        }
         return round($total / count($ratings), 1);
     }
 
@@ -156,7 +159,8 @@ class Company extends Model
     {
         $tasks = DB::table('tasks')
             ->join('categories as ca', 'ca.id', '=', 'tasks.category_id')
-            ->select('ca.id',
+            ->select('tasks.id as task_id',
+                'ca.id as category_id',
                 'tasks.budget_min',
                 'tasks.budget_max',
                 'tasks.name',
