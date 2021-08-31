@@ -15,9 +15,15 @@
                                 <div class="header-details">
                                     <h3>{{ $company->name }}<span>{{ ucFirst($company->speciality) }}</span></h3>
                                     <ul>
+                                        @if($company->rating !== 0)
                                         <li>
                                             <div class="star-rating" data-rating="{{ $company->rating }}"></div>
                                         </li>
+                                        @else
+                                            <li>
+                                                <mark>This company hasn't been rated yet.</mark>
+                                            </li>
+                                        @endif
                                         <li><img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($company->country_code) . '.svg') }}"
                                                  alt="Flag">{{ $company->country_name }}</li>
@@ -37,7 +43,7 @@
                                     <ul>
                                         <li><a href="{{ route('homepage') }}">Home</a></li>
                                         <li><a href="{{ route('company.index') }}">Browse Companies</a></li>
-                                        <li>{{ $company->name }}</li>
+                                        <li>{{ ucfirst($company->name) }}</li>
                                     </ul>
                                 </nav>
                             </div>
@@ -109,7 +115,7 @@
                         <div class="listings-container compact-list-layout">
                         @forelse($tasks as $task)
                             <!-- Job Listing -->
-                                <a href="{{ route('task.show', [$task->id, Str::slug($task->name)]) }}"
+                                <a href="{{ route('task.show', [$company->id, $task->task_id, Str::slug($task->name)]) }}"
                                    class="job-listing">
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">
