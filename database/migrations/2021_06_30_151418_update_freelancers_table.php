@@ -22,6 +22,10 @@ class UpdateFreelancersTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories')
                 ->onDelete('restrict')->onUpdate('cascade');
 
+            $table->foreignId('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('restrict')->onUpdate('cascade');
+
             $table->dateTime('joined_at');
         });
     }

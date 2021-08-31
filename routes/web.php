@@ -51,7 +51,7 @@ Route::group(['prefix' => 'blog'], function () {
 /* Company Routes */
 Route::group(['prefix' => 'companies'], function () {
     Route::get('/', [CompanyController::class, 'index'])->name('company.index');
-    Route::get('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
+    Route::get('/{id}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
     Route::post('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.ratings.search');
     Route::get('/{letter}', [CompanyController::class, 'search'])->where('letter', '[a-z]')->name('company.search');
 });
@@ -95,7 +95,10 @@ Route::get('/premium-plans', [PremiumController::class, 'index'])->name('premium
 /* Task Routes */
 Route::group(['prefix' => 'tasks'], function () {
     Route::get('/', [TaskController::class, 'index'])->name('task.index');
-    Route::get('/{id}/{slug}', [TaskController::class, 'show'])->where('id', '[0-9]+')->name('task.show');
+    Route::get('/{company_id}/{task_id}/{slug}', [TaskController::class, 'show'])
+        ->where('company_id', '[0-9]+')
+        ->where('task_name', '[a-Z]+')
+        ->name('task.show');
     Route::get('/search', [TaskController::class, 'search'])->name('task.search');
 });
 
