@@ -110,6 +110,17 @@ class FreelancerController extends Controller
         $freelancer->info   = Freelancer::getSingleFreelancerInfos($id);
         $freelancer->jobs   = Freelancer::getSingleFreelancerJobs($id);
 
+        $user = User::where('freelancer_id', $id)->first();
+
+        if (!is_null($user)
+            && !is_null($user->remember_token)
+            && !is_null($user->pic_url)
+            && !is_null($user->can_be_rated)) {
+            $freelancer->uuid       = $user->remember_token;
+            $freelancer->pic_url    = $user->pic_url;
+            $freelancer->canBeRated = $user->can_be_rated;
+        }
+
         return view('freelancer.show', compact([
             'freelancer'
         ]));
