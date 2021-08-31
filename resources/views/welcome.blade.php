@@ -202,14 +202,14 @@
                                                 <div class="verified-badge"
                                                      title="Verified Freelancer"
                                                      data-tippy-placement="right"></div>
-                                                <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}">
+                                                <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}">
                                                     <img src="{{ asset('images/user/' . $freelancer->pic_url) }}"
                                                          alt=""></a>
                                             </div>
                                             <!-- Name -->
                                             <div class="freelancer-name">
                                                 <h4>
-                                                    <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}">
+                                                    <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}">
                                                         {{ $freelancer->fullName }}
                                                         <img class="flag"
                                                              src="{{ asset('images/flags/' . strtolower($freelancer->country_code) . '.svg') }}"

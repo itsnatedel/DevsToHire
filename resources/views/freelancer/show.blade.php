@@ -9,15 +9,27 @@
                     <div class="col-md-12">
                         <div class="single-page-header-inner">
                             <div class="left-side">
-                                <div class="header-image freelancer-avatar"><img
-                                        src="{{ asset('images/freelancer/' . $freelancer->pic_url) }}" alt="Freelancer's pic"></div>
+                                <div class="header-image freelancer-avatar">
+                                    @if(!is_null($freelancer->uuid) && !is_null($freelancer->pic_url))
+                                    <img
+                                        src="{{ asset('images/user/' . $freelancer->uuid . '/avatars/big/' . $freelancer->pic_url) }}"
+                                        alt="Freelancer's pic">
+                                    @else
+                                        <img
+                                            src="{{ asset('images/freelancer/' . $freelancer->pic_url) }}"
+                                            alt="Freelancer's pic">
+                                    @endif
+                                </div>
                                 <div class="header-details">
-                                    <h3>{{ $freelancer->firstname . ' ' . $freelancer->lastname }} <span>{{ $freelancer->speciality }}</span></h3>
+                                    <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span>{{ $freelancer->speciality }}</span></h3>
                                     <ul>
+                                        @if($freelancer->canBeRated || round($freelancer->info->stats->rating) > 0)
                                         <li>
                                             <div class="star-rating" data-rating="{{ round($freelancer->info->stats->rating) }}"></div>
                                         </li>
-
+                                        @else
+                                            <li><mark>Hasn't been rated yet</mark></li>
+                                        @endif
                                         <li><img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($freelancer->info->country_code) . '.svg') }}" alt="Country Flag">
                                             {{ $freelancer->info->country_name }}
@@ -37,7 +49,7 @@
                                     <ul>
                                         <li><a href="{{ route('homepage') }}">Home</a></li>
                                         <li><a href="{{ route('freelancer.index') }}">Freelancers</a></li>
-                                        <li>{{ $freelancer->firstname . ' ' . $freelancer->lastname}}</li>
+                                        <li>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }}</li>
                                     </ul>
                                 </nav>
                             </div>
@@ -53,7 +65,7 @@
                 <div class="col-xl-8 col-lg-8 content-right-offset">
                     <!-- Page Content -->
                     <div class="single-page-section">
-                        <h3 class="margin-bottom-25">About Me</h3>
+                        <h2 class="margin-bottom-25">About Me</h2>
                         <p>{{ $freelancer->description }}</p>
                     </div>
                     <!-- Boxed List -->
@@ -89,6 +101,13 @@
                                 </div>
                             </li>
                             @empty
+                                <div class="boxed-list-item" style="margin-top: 20px">
+                                    <div class="item-content">
+                                        <h4>No work history so far
+                                        <span>This freelancer hasn't completed any job or task on this platform</span>
+                                        </h4>
+                                    </div>
+                                </div>
                             @endforelse
                         </ul>
                     </div>

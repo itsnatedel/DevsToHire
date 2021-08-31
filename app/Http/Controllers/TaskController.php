@@ -90,15 +90,17 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param int $company_id
+     * @param int $taskId
+     *
      * @return Application|Factory|View
      */
-    public function show(int $id)
+    public function show(int $company_id, int $taskId)
     {
-        $task           = Task::getTaskInfo($id);
-        $company_rating = Company::getCompanyRating($task->company_id);
+        $task           = Task::getTaskInfo($taskId);
+        $company_rating = Company::getCompanyRating($company_id);
         $location       = Location::find($task->location_id);
-        $skills         = Task::getSkills($id);
+        $skills         = Task::getSkills($taskId);
 
         return view('task.show', compact([
             'task',

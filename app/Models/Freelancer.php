@@ -208,10 +208,12 @@ class Freelancer extends Model
         $skillsSet = DB::table('skills_freelancers as skfr')
             ->select('skills')
             ->where('freelancer_id', '=', $id)
-            ->first()
-            ->skills;
+            ->first();
 
-        return Controller::curateSkills($skillsSet);
+        return is_null($skillsSet)
+            ? ['None']
+            : Controller::curateSkills($skillsSet->skills);
+
     }
 
     /**
@@ -298,28 +300,5 @@ class Freelancer extends Model
             )
             ->where('fjd.freelancer_id', '=', $id)
             ->get();
-    }
-
-    public static function registerFreelancer(User $user, array $data, int $userId)
-    {
-        if (Auth() && $user->id === $userId) {
-            $freelancer = [
-                'firstname'     => $user->firstname,
-                'lastname'      => $user->lastname,
-                'description'   => $data['description'],
-                'pic_url'       => $user->pic_url,
-                'hourly_rate'   => 15,
-                'verified'      => 0,
-                'CV_url'        => null,
-                'success_rate'  => 0,
-                'location_id'   => $user->location_id,
-                'joined_at'     => Carbon::now(),
-                'category_id'   => 1
-            ];
-
-            DB::table('freelancers')->insert($freelancer);
-            //dd($user, $data, $userId);
-
-        }
     }
 }

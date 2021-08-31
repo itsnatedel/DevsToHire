@@ -10,7 +10,7 @@
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image">
-                                    <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}">
+                                    <a href="{{ route('company.show', [$task->employer_id]) }}">
                                         <img src="{{ asset('images/companies/' . $task->pic_url) }}" alt="Employer Pic">
                                     </a>
                                 </div>
@@ -19,7 +19,7 @@
                                     <h5>About the Employer</h5>
                                     <ul>
                                         <li>
-                                            <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}"><i
+                                            <a href="{{ route('company.show', [$task->employer_id,]) }}"><i
                                                     class="icon-material-outline-business"></i>
                                             {{ $task->company_name }}</a></li>
                                         <li>
