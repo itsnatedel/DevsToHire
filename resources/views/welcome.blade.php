@@ -23,30 +23,57 @@
                 <!-- Search Bar -->
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="intro-banner-search-form margin-top-95">
+                        <form action="{{ route('welcome.search') }}" method="get">
+                            @csrf
+                            <div class="intro-banner-search-form margin-top-95">
+                                <!-- Search Field -->
+                                <div class="intro-search-field with-autocomplete">
+                                    <label for="autocomplete-input" class="field-title ripple-effect">Where ?</label>
+                                    <div class="input-with-icon">
+                                        <input id="autocomplete-input" name="searchCountry" type="text" placeholder="France">
+                                        <i class="icon-material-outline-location-on"></i>
+                                    </div>
+                                </div>
 
-                            <!-- Search Field -->
-                            <div class="intro-search-field with-autocomplete">
-                                <label for="autocomplete-input" class="field-title ripple-effect">Where?</label>
-                                <div class="input-with-icon">
-                                    <input id="autocomplete-input" type="text" placeholder="Online Job">
-                                    <i class="icon-material-outline-location-on"></i>
+                                <!-- Search Field -->
+                                <div class="intro-search-field">
+                                    <label for="select-jobCategories" class="field-title ripple-effect">Which field ?</label>
+                                    <select id="select-jobCategories" name="category" class="selectpicker default"
+                                            data-selected-text-format="count" data-size="7" title="Choose a field category">
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="intro-search-field">
+                                    <label for="select-jobType" class="field-title ripple-effect">What kind ?</label>
+                                    <select id="select-jobType" name="type" class="selectpicker default" title="Choose a job/task type">
+                                        <optgroup label="Job">
+                                            <option value="freelance">Freelance</option>
+                                            <option value="full-time">Full Time</option>
+                                            <option value="part-time">Part Time</option>
+                                            <option value="internship">Internship</option>
+                                        </optgroup>
+                                        <optgroup label="Task">
+                                            <option value="fixed">Fixed Price</option>
+                                            <option value="hourly">Hourly Rate</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <!-- Button -->
+                                <div class="intro-search-button">
+                                    <button class="button ripple-effect"
+                                            onclick="window.location.href='{{ route('job.index') }}'">Search
+                                    </button>
                                 </div>
                             </div>
-
-                            <!-- Search Field -->
-                            <div class="intro-search-field">
-                                <label for="intro-keywords" class="field-title ripple-effect">What job you want?</label>
-                                <input id="intro-keywords" type="text" placeholder="Job Title or Keywords">
+                        </form>
+                        @if(Session::has('fail'))
+                            <div class="alert alert-danger" style="margin-top: 10px">
+                                <p style="font-weight: bold">{{ Session::get('fail') }}</p>
                             </div>
-
-                            <!-- Button -->
-                            <div class="intro-search-button">
-                                <button class="button ripple-effect"
-                                        onclick="window.location.href='{{ route('job.index') }}'">Search
-                                </button>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -55,15 +82,15 @@
                     <div class="col-md-12">
                         <ul class="intro-stats margin-top-45 hide-under-992px">
                             <li>
-                                <strong class="counter">{{ $jobs }}</strong>
+                                <strong class="counter">{{ $countJobs }}</strong>
                                 <span>Jobs Posted</span>
                             </li>
                             <li>
-                                <strong class="counter">{{ $tasks }}</strong>
+                                <strong class="counter">{{ $countTasks }}</strong>
                                 <span>Tasks Posted</span>
                             </li>
                             <li>
-                                <strong class="counter">{{ $freelancers }}</strong>
+                                <strong class="counter">{{ $countFreelancers }}</strong>
                                 <span>Freelancers</span>
                             </li>
                         </ul>
@@ -73,7 +100,6 @@
             </div>
         </div>
 
-        <!-- Content -->
         <!-- Category Boxes -->
         <div class="section margin-top-65">
             <div class="container">
@@ -91,6 +117,9 @@
                                         <i class="{{ $category->icon }}"></i>
                                     </div>
                                     <div class="category-box-content">
+                                        <div class="category-box-counter" data-tippy-placement="top" title="Amount of jobs"
+                                             data-tippy-theme="light">{{ $category->jobCount }}
+                                        </div>
                                         <h3>{{ $category->name }}</h3>
                                         <p>{{ $category->description }}</p>
                                     </div>
@@ -103,7 +132,7 @@
         </div>
         <!-- Category Boxes / End -->
 
-        <!-- Features Jobs -->
+        <!-- Featured Jobs -->
         <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
             <div class="container">
                 <div class="row">
@@ -175,18 +204,16 @@
         <!-- Featured Jobs / End -->
 
         <!-- Highest Rated Freelancers -->
-        <div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
+        <div class="section white padding-top-65 padding-bottom-70 full-width-carousel-fix">
             <div class="container">
                 <div class="row">
-
                     <div class="col-xl-12">
                         <!-- Section Headline -->
                         <div class="section-headline margin-top-0 margin-bottom-25">
-                            <h3>Highest Rated Freelancers</h3>
+                            <h3>Featured Freelancers</h3>
                             <a href="{{ route('freelancer.index') }}" class="headline-link">Browse All Freelancers</a>
                         </div>
                     </div>
-
                     <div class="col-xl-12">
                         <div class="default-slick-carousel freelancers-container freelancers-grid-layout">
                             <!--Freelancer -->
@@ -196,15 +223,29 @@
                                     <div class="freelancer-overview">
                                         <div class="freelancer-overview-inner">
                                             <!-- Bookmark Icon -->
-                                            <span class="bookmark-icon"></span>
-                                            <!-- Avatar -->
+                                            @Auth
+                                                <span class="bookmark-icon"></span>
+                                        @endauth
+                                        <!-- Avatar -->
                                             <div class="freelancer-avatar">
-                                                <div class="verified-badge"
-                                                     title="Verified Freelancer"
-                                                     data-tippy-placement="right"></div>
+                                                @if($freelancer->verified)
+                                                    <div class="verified-badge"
+                                                         title="Verified Freelancer"
+                                                         data-tippy-placement="right">
+                                                    </div>
+                                                @endif
                                                 <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}">
-                                                    <img src="{{ asset('images/user/' . $freelancer->pic_url) }}"
-                                                         alt=""></a>
+                                                    <!-- If null -->
+                                                    @if (is_null($freelancer->remember_token))
+                                                        <img src="{{ asset('images/user/' . $freelancer->pic_url) }}"
+                                                             alt="Freelancer Avatar">
+                                                </a>
+                                                @else
+                                                    <img
+                                                        src="{{ asset('images/user/' . $freelancer->remember_token . '/avatar/' . $freelancer->pic_url) }}"
+                                                        alt="Freelancer Avatar">
+                                                    </a>
+                                                @endif
                                             </div>
                                             <!-- Name -->
                                             <div class="freelancer-name">
@@ -218,11 +259,11 @@
                                                              data-tippy-placement="top">
                                                     </a>
                                                 </h4>
-                                                <span>Lorem Tags</span>
+                                                <span title="Specialized in" data-tippy-theme="dark"
+                                                      data-tippy-placement="bottom">{{ $freelancer->speciality }}</span>
                                             </div>
                                         </div>
                                     </div>
-
                                     <!-- Details -->
                                     <div class="freelancer-details">
                                         <div class="freelancer-details-list">
@@ -230,11 +271,11 @@
                                                 <li>Location <strong><i class="icon-material-outline-location-on"></i>
                                                         {{ Str::limit($freelancer->country_name, 10, '.') }}</strong>
                                                 </li>
-                                                <li>Rate <strong>{{ $freelancer->hourly_rate }}€/h</strong></li>
+                                                <li>Rate <strong>{{ $freelancer->hourly_rate }} €/h</strong></li>
                                                 <li>Job Success <strong>{{ $freelancer->success_rate }}%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="{{ route('freelancer.show', [$freelancer->id, $freelancer->fullName]) }}"
+                                        <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}"
                                            class="button button-sliding-icon ripple-effect">
                                             View Profile
                                             <i class="icon-material-outline-arrow-right-alt"></i>
@@ -249,6 +290,73 @@
             </div>
         </div>
         <!-- Highest Rated Freelancers / End-->
+
+        <!-- Recent Tasks -->
+        <div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <!-- Section Headline -->
+                        <div class="section-headline margin-top-0 margin-bottom-35">
+                            <h3>Recent Tasks</h3>
+                            <a href="{{ route('task.index') }}" class="headline-link">Browse All Tasks</a>
+                        </div>
+                        <!-- Jobs Container -->
+                        <div class="tasks-list-container compact-list margin-top-35">
+                            <!-- Task -->
+                            @foreach($tasks as $task)
+                                <a href="{{ route('task.show', [$task->company_id, $task->id, Str::slug($task->name)]) }}"
+                                   class="task-listing">
+                                    <!-- Job Listing Details -->
+                                    <div class="task-listing-details">
+                                        <!-- Details -->
+                                        <div class="task-listing-description">
+                                            <h3 class="task-listing-title">{{ ucfirst($task->name) }}</h3>
+                                            <ul class="task-icons">
+                                                <li title="Employer located in" data-tippy-placement="left" data-tippy-theme="dark"><i
+                                                        class="icon-material-outline-location-on"></i> {{ $task->country }}</li>
+                                                <li data-tippy-placement="right" title="Uploaded" data-tippy-theme="dark">
+                                                    <i class="icon-material-outline-access-time"></i>
+                                                    @if($task->task_created_at > 1)
+                                                        {{ $task->task_created_at }} days ago
+                                                    @endif
+
+                                                    @if($task->task_created_at === 1)
+                                                        {{ $task->task_created_at }} day ago
+                                                    @endif
+
+                                                    @if($task->task_created_at < 1)
+                                                        Today
+                                                    @endif
+                                                </li>
+                                            </ul>
+                                            <div class="task-tags margin-top-15" title="Desired skills" data-tippy-placement="left"
+                                                 data-tippy-theme="dark">
+                                                @foreach($task->skills as $skill)
+                                                    <span>{{ $skill }}</span>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="task-listing-bid">
+                                        <div class="task-listing-bid-inner">
+                                            <div class="task-offers">
+                                                <strong title="Allocated Budget" data-tippy-placement="top"
+                                                        data-tippy-theme="black">{{ 'Up to ' . $task->budget_max . ' €' }}</strong>
+                                                <span>{{ $task->type }} Price</span>
+                                            </div>
+                                            <span class="button button-sliding-icon ripple-effect">Bid Now <i
+                                                    class="icon-material-outline-arrow-right-alt"></i></span>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        <!-- Jobs Container / End -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Membership Plans -->
         <div class="section padding-top-60 padding-bottom-75">
             <div class="container">
@@ -260,10 +368,7 @@
                             <h3>Membership Plans</h3>
                         </div>
                     </div>
-
-
                     <div class="col-xl-12">
-
                         <!-- Billing Cycle  -->
                         <div class="billing-cycle-radios margin-bottom-70">
                             <div class="radio billed-monthly-radio">
@@ -277,7 +382,6 @@
                                         class="small-label">Save 10%</span></label>
                             </div>
                         </div>
-
                         <!-- Pricing Plans Container -->
                         <div class="pricing-plans-container">
                         @foreach($premiumPlans as $plan)

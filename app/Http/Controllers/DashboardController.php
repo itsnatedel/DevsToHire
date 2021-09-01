@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dashboard;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -93,7 +95,12 @@ class DashboardController extends Controller
      */
     public function settings()
     {
-        return view('dashboard.settings');
+        $user = Auth::user();
+        $user->freelancerSettings = Dashboard::getUserSettings($user);
+
+        return view('dashboard.settings', compact([
+            'user',
+        ]));
     }
 
     /**

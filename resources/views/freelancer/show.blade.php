@@ -12,7 +12,7 @@
                                 <div class="header-image freelancer-avatar">
                                     @if(!is_null($freelancer->uuid) && !is_null($freelancer->pic_url))
                                     <img
-                                        src="{{ asset('images/user/' . $freelancer->uuid . '/avatars/big/' . $freelancer->pic_url) }}"
+                                        src="{{ asset('images/user/' . $freelancer->uuid . '/avatar/' . $freelancer->pic_url) }}"
                                         alt="Freelancer's pic">
                                     @else
                                         <img
@@ -141,7 +141,6 @@
                                 </div>
 
                                 <!-- Indicator -->
-                                <!-- TODO: Recommend button in leave review -> calculate overall % -->
                                 <div class="indicator" data-tippy-placement="bottom" title="Recommended by their previous employers">
                                     <strong>{{ round($freelancer->info->stats->recommended) }}%</strong>
                                     <div class="indicator-bar" data-indicator-percentage="{{ round($freelancer->info->stats->recommended) }}"><span></span></div>

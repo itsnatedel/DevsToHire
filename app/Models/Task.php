@@ -29,6 +29,7 @@ class Task extends Model
 
     /**
      * Relation Task -> Company
+     *
      * @return BelongsTo
      */
     public function company(): BelongsTo
@@ -38,6 +39,7 @@ class Task extends Model
 
     /**
      * Relation Task -> Category
+     *
      * @return BelongsTo
      */
     public function category(): BelongsTo
@@ -48,20 +50,22 @@ class Task extends Model
     /**
      * getTasks method.
      * Gets all tasks and returns it, paginated.
+     *
      * @param Request|null $request if $sort, gets the sort method from the Request
-     * @param bool $sort to sort the query or not
+     * @param bool         $sort to sort the query or not
+     *
      * @return LengthAwarePaginator $tasks
      */
     public static function getTasks(Request $request = null, bool $sort = false): LengthAwarePaginator
     {
-        $query =  DB::table('tasks as ta')
+        $query = DB::table('tasks as ta')
             ->select(
                 'ta.*',
                 DB::raw('DATEDIFF(ta.created_at, NOW()) as date_posted'),
                 DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date')
             );
 
-        if (!empty($request && !$sort)) {
+        if ($request !== null && !$sort) {
             $query = self::searchTasks($query, $request);
         }
 
@@ -72,7 +76,7 @@ class Task extends Model
         $tasks = $query->paginate(4);
 
         foreach ($tasks as $task) {
-            $task->company  = Company::where('id', '=', $task->employer_id)->first();
+            $task->company = Company::where('id', '=', $task->employer_id)->first();
             $task->location = Location::where('id', '=', $task->company->location_id)->first();
 
             self::removeDashesFromDates($task);
@@ -84,7 +88,9 @@ class Task extends Model
     /**
      * getTaskInfo method.
      * Retrives data of the corresponding task
+     *
      * @param int $id Task id
+     *
      * @return Model|Builder|object|null
      */
     public static function getTaskInfo(int $id)
@@ -108,16 +114,22 @@ class Task extends Model
     /**
      * searchTasks method.
      * Searches through all tasks depending on the request's data.
+     *
      * @param Builder $query
      * @param Request $request
+     *
      * @return Builder
      */
     private static function searchTasks(Builder $query, Request $request): Builder
     {
-        $DBFixedRates   = self::getFixedRatesLimits();
-        $DBHourlyRates  = self::getHourlyRatesLimits();
-        $sliderFixedRates = explode(',', $request->fixed_price);
-        $sliderHourlyRates = explode(',', $request->hourly_rate);
+        $DBFixedRates = self::getFixedRatesLimits();
+        $DBHourlyRates = self::getHourlyRatesLimits();
+
+        if (!is_null($request->fixed_price) && !is_null($request->hourly_rate)) {
+            $sliderFixedRates = explode(',', $request->fixed_price);
+            $sliderHourlyRates = explode(',', $request->hourly_rate);
+        }
+
 
         if (!is_null($request->task_country)) {
             $query->join('companies as co', 'co.id', '=', 'ta.employer_id')
@@ -131,21 +143,27 @@ class Task extends Model
         if (!is_null($request->skills)) {
             $query->join('skills_tasks as st', 'st.task_id', '=', 'ta.id');
 
-            foreach($request->skills as $skill) {
+            foreach ($request->skills as $skill) {
                 $query->where('st.skills', 'like', '%' . $skill . '%');
             }
         }
 
-        if ($sliderFixedRates[0] > $DBFixedRates->min_rate || $sliderFixedRates[1] < $DBFixedRates->max_rate) {
-            $query->where('ta.type', '=', 'Fixed')
-                ->where('ta.budget_min', '>=', $sliderFixedRates[0])
-                ->where('ta.budget_max', '<=', $sliderFixedRates[1]);
+        if (!is_null($request->type)) {
+            $query->where('ta.type', 'LIKE', '%' . $request->type . '%');
         }
 
-        if ($sliderHourlyRates[0] > $DBHourlyRates->min_rate || $sliderHourlyRates[1] < $DBHourlyRates->max_rate) {
-            $query->where('ta.type', '=', 'Hourly')
-                ->where('budget_min', '>=', $sliderHourlyRates[0])
-                ->where('budget_max', '<=', $sliderHourlyRates[1]);
+        if (isset($request->fixed_price, $request->hourly_rate)) {
+            if ($sliderFixedRates[0] > $DBFixedRates->min_rate || $sliderFixedRates[1] < $DBFixedRates->max_rate) {
+                $query->where('ta.type', '=', 'Fixed')
+                    ->where('ta.budget_min', '>=', $sliderFixedRates[0])
+                    ->where('ta.budget_max', '<=', $sliderFixedRates[1]);
+            }
+
+            if ($sliderHourlyRates[0] > $DBHourlyRates->min_rate || $sliderHourlyRates[1] < $DBHourlyRates->max_rate) {
+                $query->where('ta.type', '=', 'Hourly')
+                    ->where('budget_min', '>=', $sliderHourlyRates[0])
+                    ->where('budget_max', '<=', $sliderHourlyRates[1]);
+            }
         }
 
         return $query;
@@ -154,8 +172,10 @@ class Task extends Model
     /**
      * sortTasks method.
      * Sorts the list of tasks depending on user's request
+     *
      * @param Builder $query
-     * @param string $sortByMethod Random|Newest|Oldest
+     * @param string  $sortByMethod Random|Newest|Oldest
+     *
      * @return Builder
      */
     private static function sortTasks(Builder $query, string $sortByMethod): Builder
@@ -235,6 +255,7 @@ class Task extends Model
      *  -> ]
      *
      * @param int $id task id
+     *
      * @return array
      */
     public static function getSkills(int $id): array
@@ -251,7 +272,9 @@ class Task extends Model
     /**
      * removeDashesFromDates method.
      * Removes the dash from the date generated by the DATEDIFF() func. from MYSQL.
+     *
      * @param $task
+     *
      * @return mixed
      */
     private static function removeDashesFromDates($task)

@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Freelancer;
 use App\Models\Job;
+use App\Models\Location;
 use App\Models\Premium;
 use App\Models\Task;
 use App\Models\Welcome;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 class WelcomeController extends Controller
 {
     /**
@@ -20,24 +24,67 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-        // TODO: Refacto below fcts to take less time on loading homepage
-        $jobs = count(Job::all());
-        $freelancers = count(Freelancer::all());
-        $tasks = count(Task::all());
-        $categories = Category::all();
-
+        $countJobs = count(Job::all('id'));
+        $countFreelancers = count(Freelancer::all('id'));
+        $countTasks = count(Task::all('id'));
+        $tasks = Welcome::getRecentTasks();
+        $categories = Welcome::getCountJobsCategories(Category::all());
         $featuredJobs = Welcome::getFeaturedJobs();
         $featuredFreelancers = Welcome::getFeaturedFreelancers();
         $premiumPlans = Premium::all();
 
-        return view('welcome', [
-            'jobs'                  => $jobs,
-            'freelancers'           => $freelancers,
-            'tasks'                 => $tasks,
-            'categories'            => $categories,
-            'featuredJobs'          => $featuredJobs,
-            'featuredFreelancers'   => $featuredFreelancers,
-            'premiumPlans'          => $premiumPlans
-        ]);
+        return view('welcome', compact([
+            'countJobs',
+            'countFreelancers',
+            'countTasks',
+            'tasks',
+            'categories',
+            'featuredJobs',
+            'featuredFreelancers',
+            'premiumPlans'
+        ]));
+    }
+
+    public function search(Request $request)
+    {
+        if (is_null($request->type)) {
+            return back()->withFail('Please select a type of job or task !');
+        }
+        $taskOrJob = Welcome::isTaskOrJob($request);
+
+        if (!is_bool($taskOrJob)) {
+            if ($taskOrJob === 'job') {
+                $jobs       = Welcome::searchJobsOrTasks($request, $taskOrJob);
+                // To populate select inputs in sidebar
+                $countries  = Job::getCountries();
+                $categories = Category::all();
+
+                return view('job.index', [
+                    'jobs' => $jobs,
+                    'countries' => $countries,
+                    'categories' => $categories
+                ]);
+            }
+
+            if ($taskOrJob === 'task') {
+                $tasks              = Welcome::searchJobsOrTasks($request, $taskOrJob);
+                $fixedRates         = Task::getFixedRatesLimits();
+                $hourlyRates        = Task::getHourlyRatesLimits();
+                $categories         = Category::all(['id', 'name']);
+                $locations          = Location::all(['id', 'country_name']);
+                $skills             = DB::table('skills')->get('skill');
+
+                return view('task.index', compact([
+                    'tasks',
+                    'categories',
+                    'locations',
+                    'skills',
+                    'fixedRates',
+                    'hourlyRates'
+                ]));
+            }
+        } else {
+            return back()->withFail('No match found, try again !');
+        }
     }
 }

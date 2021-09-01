@@ -123,7 +123,7 @@
                 <div class="tasks-list-container margin-top-35">
                 @forelse($tasks as $task)
                     <!-- Task -->
-                        <a href="{{ route('task.show', [$task->id, Str::slug($task->name)]) }}"
+                        <a href="{{ route('task.show', [$task->employer_id, $task->id, Str::slug($task->name)]) }}"
                            class="task-listing">
                             <!-- Job Listing Details -->
                             <div class="task-listing-details">

@@ -8878,8 +8878,8 @@ input:checked + .switch-button:before {
     line-height: 25px;
     border-radius: 4px;
     padding: 0 8px;
-    color: #909090;
-    background: rgba(0, 0, 0, 0.06);
+    color: #757575;
+    background: rgba(38, 38, 38, 0.06);
     font-weight: 600;
     display: inline-block;
     margin: 0 auto;

@@ -194,7 +194,7 @@
                                     <!-- Pagination -->
                                     <div class="pagination-container margin-top-30 margin-bottom-60">
                                         <nav class="pagination">
-                                            {{ $jobs->links() }}
+                                            {{ $jobs->withQueryString()->links() }}
                                         </nav>
                                     </div>
                                 </div>

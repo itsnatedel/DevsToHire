@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 
 /* Homepage Route */
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
+Route::get('/search', [WelcomeController::class, 'search'])->name('welcome.search');
 
 /* 404 */
 Route::get('/404', function () {
@@ -51,7 +52,7 @@ Route::group(['prefix' => 'blog'], function () {
 /* Company Routes */
 Route::group(['prefix' => 'companies'], function () {
     Route::get('/', [CompanyController::class, 'index'])->name('company.index');
-    Route::get('/{id}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
+    Route::get('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
     Route::post('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.ratings.search');
     Route::get('/{letter}', [CompanyController::class, 'search'])->where('letter', '[a-z]')->name('company.search');
 });
@@ -97,7 +98,8 @@ Route::group(['prefix' => 'tasks'], function () {
     Route::get('/', [TaskController::class, 'index'])->name('task.index');
     Route::get('/{company_id}/{task_id}/{slug}', [TaskController::class, 'show'])
         ->where('company_id', '[0-9]+')
-        ->where('task_name', '[a-Z]+')
+        ->where('task_id', '[0-9]+')
+        ->where('slug', '[a-z-]+')
         ->name('task.show');
     Route::get('/search', [TaskController::class, 'search'])->name('task.search');
 });

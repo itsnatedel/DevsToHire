@@ -112,9 +112,6 @@ class Job extends Model
         }
 
         // User searches for a job title
-        /**
-         * TODO: broken pagination => page 2 resets the results and shows all jobs.
-         */
         if (isset($request->title) && !is_null($request->title)) {
             $query = self::getJobsWithTitle($query, $request);
         }
@@ -248,6 +245,7 @@ class Job extends Model
         $jobType = [];
 
         if (isset($request->freelance)) {
+
             $jobType[] = 'freelance';
         }
 

@@ -36,8 +36,7 @@ class JobController extends Controller
      * @param Request $request
      * @return Application|Factory|View
      */
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         // User selected a sort method
         if (isset($request->sortBy) && in_array($request->sortBy, ['newest', 'oldest', 'random'])) {
             $jobs = Job::getAllJobsAndCompanyInfo($request, true, false);

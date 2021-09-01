@@ -271,15 +271,8 @@ class RegisterController extends Controller
                 . $avatar->getClientOriginalExtension();
 
             if ($directoriesCreated) {
-                // Creating a 70x70 pic and uploads it
                 Image::make($avatar)
-                    ->resize(70, 70)
-                    ->save(public_path('/images/user/' . $userUUID->toString() . '/avatars/big/' . $filename));
-
-                // Creating a 42x42 pic and uploads it
-                Image::make($avatar)
-                    ->resize(42, 42)
-                    ->save(public_path('/images/user/' . $userUUID->toString() . '/avatars/small/' . $filename));
+                    ->save(public_path('/images/user/' . $userUUID->toString() . '/avatar/' . $filename));
             }
 
             return [true, $filename, $userUUID];
@@ -290,13 +283,8 @@ class RegisterController extends Controller
 
             // Creating a 70x70 pic and uploads it
             Image::make($placeholderPicPath)
-                ->resize(70, 70)
-                ->save(public_path('images/user/' . $userUUID->toString() . '/avatars/big/' . 'user-avatar-placeholder.png'));
-
-            // Creating a 42x42 pic and uploads it
-            Image::make($placeholderPicPath)
-                ->resize(42, 42)
-                ->save(public_path('images/user/' . $userUUID->toString() . '/avatars/small/' . 'user-avatar-placeholder.png'));
+                ->resize(72, 72)
+                ->save(public_path('images/user/' . $userUUID->toString() . '/avatar/' . 'user-avatar-placeholder.png'));
 
             return [true, 'user-avatar-placeholder.png', $userUUID];
         }
@@ -317,21 +305,14 @@ class RegisterController extends Controller
     protected function createPictureDirectories($UUID): bool
     {
         $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString();
-        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString() . '/avatars/';
-        $bigPicPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString() . '/avatars/big/';
-        $smallPicPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString() . '/avatars/small/';
+        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString() . '/avatar/';
+
 
         if (!mkdir($userDirPath, 0755) && !is_dir($userDirPath)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $userDirPath));
         }
         if (!mkdir($avatarDirPath, 0755) && !is_dir($avatarDirPath)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $avatarDirPath));
-        }
-        if (!mkdir($bigPicPath, 0755) && !is_dir($bigPicPath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $bigPicPath));
-        }
-        if (!mkdir($smallPicPath, 0755) && !is_dir($smallPicPath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $smallPicPath));
         }
 
         return true;

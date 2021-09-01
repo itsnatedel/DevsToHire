@@ -1,16 +1,17 @@
 @extends('layouts.app')
 @section('content')
     <!-- Wrapper -->
+
     <div id="wrapper">
         <!-- Titlebar -->
-        <div class="single-page-header" data-background-image="{{ asset('images/blog/blog-04.jpg') }}">
+        <div class="single-page-header" data-background-image="{{ asset('images/task/single-task.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image">
-                                    <a href="{{ route('company.show', [$task->employer_id]) }}">
+                                    <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}">
                                         <img src="{{ asset('images/companies/' . $task->pic_url) }}" alt="Employer Pic">
                                     </a>
                                 </div>
@@ -19,9 +20,9 @@
                                     <h5>About the Employer</h5>
                                     <ul>
                                         <li>
-                                            <a href="{{ route('company.show', [$task->employer_id,]) }}"><i
+                                            <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}"><i
                                                     class="icon-material-outline-business"></i>
-                                            {{ $task->company_name }}</a></li>
+                                                {{ $task->company_name }}</a></li>
                                         <li>
                                             <div class="star-rating" data-rating="{{ $company_rating }}"></div>
                                         </li>
@@ -44,7 +45,7 @@
                                 <div class="salary-box">
                                     <div class="salary-type">Project Budget</div>
                                     <div
-                                        class="salary-amount">{{ $task->budget_min . ' € - ' . $task->budget_max . ' €' }}</div>
+                                        class="salary-amount">{{ 'Up to ' . $task->budget_max . ' €' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +136,7 @@
                     <div class="sidebar-container">
 
                         @if($task->end_date > 1)
-                        <div class="countdown green margin-bottom-35">{{ $task->end_date }} days left</div>
+                            <div class="countdown green margin-bottom-35">{{ $task->end_date }} days left</div>
                             <div class="sidebar-widget">
                                 <div class="bidding-widget">
                                     <div class="bidding-headline"><h3>Bid on this job!</h3></div>
@@ -147,7 +148,8 @@
                                         <!-- Price Slider -->
                                         <div class="bidding-value">€<span id="biddingVal"></span></div>
                                         <input class="bidding-slider" type="text" value="" data-slider-handle="custom"
-                                               data-slider-currency="€" data-slider-min="{{ $task->budget_min }}" data-slider-max="{{ $task->budget_max + 1000 }}"
+                                               data-slider-currency="€" data-slider-min="{{ $task->budget_min }}"
+                                               data-slider-max="{{ $task->budget_max + 1000 }}"
                                                data-slider-value="auto" data-slider-step="50" data-slider-tooltip="hide"/>
 
                                         <!-- Headline -->
@@ -178,17 +180,20 @@
                                         </button>
 
                                     </div>
-                                    <div class="bidding-signup">Don't have an account? <a href="#sign-in-dialog"
-                                                                                          class="register-tab sign-in popup-with-zoom-anim">Sign
-                                            Up</a></div>
+                                    @if(!Auth::check())
+                                    <div class="bidding-signup">Don't have an account?
+                                        <a href="#sign-in-dialog" class="register-tab sign-in popup-with-zoom-anim">
+                                            Sign Up</a>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         @else
                             <div class="countdown red margin-bottom-35">This project has reached its due date.</div>
-                        @endif
+                    @endif
 
 
-                        <!-- Sidebar Widget -->
+                    <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
                             <h3>Bookmark or Share</h3>
 

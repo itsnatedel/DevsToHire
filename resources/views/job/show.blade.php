@@ -5,7 +5,7 @@
 
         <!-- Titlebar
         ================================================== -->
-        <div class="single-page-header" data-background-image="{{ asset('images/job/gradient.png') }}">
+        <div class="single-page-header" data-background-image="{{ asset('images/job/single-job.jpg') }}">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
