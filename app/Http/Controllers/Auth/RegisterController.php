@@ -124,7 +124,7 @@ class RegisterController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => null,
                 'pic_url' => $avatarPicture[1],
-                'remember_token' => $avatarPicture[2]->toString(),
+                'dir_url' => $avatarPicture[2],
             ]);
 
             $userId = $this->retrieveUserId($data);
@@ -254,7 +254,7 @@ class RegisterController extends Controller
     protected function checkIfAvatarWasUploaded(Request $request)
     {
         // Generating an unique UUID for the folder's name
-        $userUUID = Uuid::fromDateTime(Carbon::now());
+        $userUUID = Str::slug(time() . date('Y-m-d H:i:s'));
 
         /**
          * Creating the user's avatar dir
@@ -266,13 +266,14 @@ class RegisterController extends Controller
 
         if ($request->hasfile('avatar-upload')) {
             $avatar = $request->file('avatar-upload');
-            $filename = Uuid::fromDateTime(Carbon::now())
+            $filename = time()
                 . '.'
                 . $avatar->getClientOriginalExtension();
 
             if ($directoriesCreated) {
                 Image::make($avatar)
-                    ->save(public_path('/images/user/' . $userUUID->toString() . '/avatar/' . $filename));
+                    ->resize(72,72)
+                    ->save(public_path('/images/user/' . $userUUID . '/avatar/' . $filename));
             }
 
             return [true, $filename, $userUUID];
@@ -284,7 +285,7 @@ class RegisterController extends Controller
             // Creating a 70x70 pic and uploads it
             Image::make($placeholderPicPath)
                 ->resize(72, 72)
-                ->save(public_path('images/user/' . $userUUID->toString() . '/avatar/' . 'user-avatar-placeholder.png'));
+                ->save(public_path('images/user/' . $userUUID . '/avatar/' . 'user-avatar-placeholder.png'));
 
             return [true, 'user-avatar-placeholder.png', $userUUID];
         }
@@ -304,8 +305,9 @@ class RegisterController extends Controller
      */
     protected function createPictureDirectories($UUID): bool
     {
-        $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString();
-        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID->toString() . '/avatar/';
+
+        $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID;
+        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID . '/avatar/';
 
 
         if (!mkdir($userDirPath, 0755) && !is_dir($userDirPath)) {
