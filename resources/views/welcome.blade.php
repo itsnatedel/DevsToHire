@@ -370,63 +370,77 @@
                     </div>
                     <div class="col-xl-12">
                         <!-- Billing Cycle  -->
-                        <div class="billing-cycle-radios margin-bottom-70">
-                            <div class="radio billed-monthly-radio">
-                                <input id="radio-5" name="radio-payment-type" type="radio" checked>
-                                <label for="radio-5"><span class="radio-label"></span> Billed Monthly</label>
-                            </div>
+                        <form action="{{ route('checkout.index') }}" method="get">
+                            <div class="billing-cycle-radios margin-bottom-70">
+                                <div class="radio billed-monthly-radio">
+                                    <input id="radio-5" name="payment_type" value="monthly" type="radio" checked>
+                                    <label for="radio-5"><span class="radio-label"></span> Billed Monthly</label>
+                                </div>
 
-                            <div class="radio billed-yearly-radio">
-                                <input id="radio-6" name="radio-payment-type" type="radio">
-                                <label for="radio-6"><span class="radio-label"></span> Billed Yearly <span
-                                        class="small-label">Save 10%</span></label>
+                                <div class="radio billed-yearly-radio">
+                                    <input id="radio-6" name="payment_type" value="yearly" type="radio">
+                                    <label for="radio-6"><span class="radio-label"></span> Billed Yearly <span
+                                            class="small-label">Save 10%</span></label>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Pricing Plans Container -->
-                        <div class="pricing-plans-container">
-                        @foreach($premiumPlans as $plan)
-                            <!-- Plan -->
-                                @if($plan->plan === 'Standard')
-                                    <div class="pricing-plan recommended">
-                                        <div class="recommended-badge">Recommended</div>
-                                        @else
-                                            <div class="pricing-plan">
-                                                @endif
-                                                <h3>{{ $plan->plan }} Plan</h3>
-                                                <p class="margin-top-10">{{ $plan->description }}</p>
-                                                <div class="pricing-plan-label billed-monthly-label">
-                                                    <strong>{{ $plan->monthly_price }}€</strong>/ monthly
-                                                </div>
-                                                <div class="pricing-plan-label billed-yearly-label">
-                                                    <strong>{{ $plan->yearly_price }}€</strong>/ yearly
-                                                </div>
-                                                <div class="pricing-plan-features">
-                                                    <strong>Features of our {{ $plan->plan }} Plan</strong>
-                                                    <ul>
-                                                        <li>
-                                                            {{ $plan->listing }}
-                                                            @if ($plan->listing == 1 && $plan->listing !== 'Unlimited')
-                                                                Listing
-                                                            @else
-                                                                Listings
+                            <!-- Pricing Plans Container -->
+                            <div class="pricing-plans-container">
+                            @foreach($premiumPlans as $plan)
+                                <!-- Plan -->
+                                    @if($plan->title === 'Standard')
+                                        <div class="pricing-plan recommended">
+                                            <div class="recommended-badge">Recommended</div>
+                                            @else
+                                                <div class="pricing-plan">
+                                                    @endif
+                                                    <h3>{{ $plan->title }} Plan</h3>
+                                                    <p class="margin-top-10">{{ $plan->description }}</p>
+                                                    <div class="pricing-plan-label billed-monthly-label">
+                                                        <strong>{{ $plan->monthly_price }}€</strong>/ monthly
+                                                    </div>
+                                                    <div class="pricing-plan-label billed-yearly-label">
+                                                        <strong>{{ $plan->yearly_price }}€</strong>/ yearly
+                                                    </div>
+                                                    <div class="pricing-plan-features">
+                                                        <strong>Features of our {{ $plan->title }} Plan</strong>
+                                                        <ul class="list-2" style="margin-left: 25px">
+                                                            <li>
+                                                                {{ $plan->listing }}
+                                                                @if ($plan->listing == 1 && $plan->listing !== 'Unlimited')
+                                                                    Listing
+                                                                @else
+                                                                    Listings
+                                                                @endif
+                                                            </li>
+                                                            <li>{{ $plan->visibility_days }} Days Visibility</li>
+                                                            @if(!$loop->first)
+                                                                <li>{{ $plan->highlighted }}</li>
                                                             @endif
-                                                        </li>
-                                                        <li>{{ $plan->visibility_days }} Days Visibility</li>
-                                                        <li>{{ $plan->highlighted }}</li>
-                                                    </ul>
+                                                        </ul>
+                                                    </div>
+                                                    @if($loop->first)
+                                                        <button type="submit" name="plan_id"
+                                                                class="button full-width margin-top-50" value="{{ $loop->iteration }}">
+                                                            Buy Now
+                                                        </button>
+
+                                                    @else
+                                                        <button type="submit" name="plan_id"
+                                                                value="{{ $loop->iteration }}"
+                                                                class="button full-width margin-top-20">
+                                                            Buy Now
+                                                        </button>
+                                                    @endif
                                                 </div>
-                                                <a href="{{ route('checkout.index') }}"
-                                                   class="button full-width margin-top-20">
-                                                    Buy Now
-                                                </a>
-                                            </div>
-                                            @endforeach
-                                    </div>
-                        </div>
+                                                @endforeach
+                                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <!-- Membership Plans / End-->
         </div>
-        <!-- Wrapper / End -->
+        <!-- Membership Plans / End-->
+    </div>
+    <!-- Wrapper / End -->
 @endsection

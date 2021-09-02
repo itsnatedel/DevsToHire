@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Premium;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -16,72 +20,51 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        return view('checkout.index');
+        $planDetails = Premium::where('id', app('request')->plan_id)->first();
+        $data = [
+            'intent' => auth()->user()->createSetupIntent()
+        ];
+
+        return view('checkout.index', compact([
+            'planDetails'
+        ]))->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function suceeded()
     {
-        //
+        return view('checkout.ordersuccess');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'two-step' => 'accepted',
+            'token' => 'required',
+        ]);
+
+        $plan = DB::table('premium as pr')
+            ->select('pr.*')
+            ->where('pr.monthly_identifier', '=', $request->plan)
+            ->orWhere('pr.yearly_identifier', '=', $request->plan)
+            ->first();
+
+        if ($request->subType === 'monthly') {
+            $request->user()->newSubscription('default', $plan->stripe_monthly_id)->create($request->token);
+        }
+
+        if ($request->subType === 'yearly') {
+            $request->user()->newSubscription('default', $plan->stripe_yearly_id)->create($request->token);
+        }
+
+        return redirect()->route('order.success');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

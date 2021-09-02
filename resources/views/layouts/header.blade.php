@@ -49,6 +49,7 @@
                             </li>
                         @endif
                     <!-- Auth::check() -->
+
                         @if(Auth::check())
                             <li><a href="#">Dashboard</a>
                                 <ul class="dropdown-nav">
@@ -121,11 +122,12 @@
                             <div class="header-notifications-trigger">
                                 <a href="#">
                                     <div id="user-avatar" class="user-avatar status-online">
-                                        @if(!is_null(Auth::user()->remember_token))
+                                        @if(!is_null(Auth::user()->dir_url))
                                         <img
-                                            src="{{ asset('images/user/' . Auth::user()->remember_token . '/avatar/' . Auth::user()->pic_url) }}"
+                                            src="{{ asset('images/user/' . Auth::user()->dir_url . '/avatar/' . Auth::user()->pic_url) }}"
                                             alt="Profile Pic">
                                         @else
+
                                             <img
                                                 src="{{ asset('images/user/' . Auth::user()->pic_url) }}"
                                                 alt="Profile Pic">
@@ -140,9 +142,9 @@
                                     <!-- User Name / Avatar -->
                                     <div class="user-details">
                                         <div id="dropdown-user-avatar" class="user-avatar status-online">
-                                            @if(!is_null(Auth::user()->remember_token))
+                                            @if(!is_null(Auth::user()->dir_url))
                                                 <img
-                                                    src="{{ asset('images/user/' . Auth::user()->remember_token . '/avatar/' . Auth::user()->pic_url) }}"
+                                                    src="{{ asset('images/user/' . Auth::user()->dir_url . '/avatar/' . Auth::user()->pic_url) }}"
                                                     alt="Profile Pic">
                                             @else
                                                 <img

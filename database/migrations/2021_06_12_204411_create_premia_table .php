@@ -15,7 +15,11 @@ class CreatePremiaTable extends Migration
     {
         Schema::create('premium', function (Blueprint $table) {
             $table->id();
-            $table->string('plan', 20);
+            $table->string('title', 20);
+            $table->string('monthly_identifier')->unique;
+            $table->string('yearly_identifier')->unique;
+            $table->string('stripe_monthly_id')->unique;
+            $table->string('stripe_yearly_id')->unique;
             $table->text('description');
             $table->integer('monthly_price');
             $table->integer('yearly_price');

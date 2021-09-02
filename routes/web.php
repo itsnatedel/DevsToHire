@@ -88,10 +88,14 @@ Route::group(['prefix' => 'order'], function () {
 });
 
 /* Checkout pages */
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::group(['prefix' => 'checkout', 'middleware' => 'auth'], function() {
+    Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/payment', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/order-success', [CheckoutController::class, 'suceeded'])->name('checkout.success');
+});
 
 /* Premium Routes */
-Route::get('/premium-plans', [PremiumController::class, 'index'])->name('premium.index');
+Route::get('/plans', [PremiumController::class, 'index'])->name('premium.index');
 
 /* Task Routes */
 Route::group(['prefix' => 'tasks'], function () {
