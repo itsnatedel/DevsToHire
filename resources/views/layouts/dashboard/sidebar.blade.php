@@ -17,10 +17,11 @@
             <!-- Navigation -->
             <div class="dashboard-nav">
                 <div class="dashboard-nav-inner">
-
                     <ul data-submenu-title="Start">
+                        @if(Auth::check() && Auth::user()->role_id === 3)
                         <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                 Dashboard</a></li>
+                        @endif
                         <li><a href="{{ route('dashboard.messages') }}"><i
                                     class="icon-material-outline-question-answer"></i> Messages <span
                                     class="nav-tag">2</span></a></li>
@@ -35,7 +36,9 @@
                             <ul>
                                 <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs <span
                                             class="nav-tag">3</span></a></li>
+                                @if(Auth::check() && Auth::user()->role_id === 3)
                                 <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a></li>
+                                @endif
                                 <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
                             </ul>
                         </li>
@@ -43,7 +46,10 @@
                             <ul>
                                 <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks <span
                                             class="nav-tag">2</span></a></li>
+                                @if(Auth::check() && Auth::user()->role_id === 3)
                                 <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
+                                @endif
+
                                 <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids <span
                                             class="nav-tag">4</span></a></li>
                                 <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>

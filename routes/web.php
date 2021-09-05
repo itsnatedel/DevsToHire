@@ -35,7 +35,7 @@ Route::get('/404', function () {
     return view('404');
 })->name('error-404');
 
-/* 404 */
+/* Contact */
 Route::get('/contact-us', function () {
     return view('contact');
 })->name('contact');

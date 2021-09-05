@@ -3,6 +3,7 @@
 <div id="wrapper">
 <!-- Dashboard Container -->
 <div class="dashboard-container">
+    <!-- Dashboard index only for companies ?-->
     @include('layouts.dashboard.sidebar')
     <!-- Dashboard Content
 	================================================== -->
@@ -17,7 +18,7 @@
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="#">Home</a></li>
+						<li><a href="{{ route('homepage') }}">Home</a></li>
 						<li>Dashboard</li>
 					</ul>
 				</nav>
@@ -27,7 +28,7 @@
 			<div class="fun-facts-container">
 				<div class="fun-fact" data-fun-fact-color="#36bd78">
 					<div class="fun-fact-text">
-						<span>Task Bids Won</span>
+						<span>Subscription</span>
 						<h4>22</h4>
 					</div>
 					<div class="fun-fact-icon"><i class="icon-material-outline-gavel"></i></div>

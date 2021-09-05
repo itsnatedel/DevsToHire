@@ -12,7 +12,7 @@ class Dashboard extends Model
     public static function getUserSettings(User $user)
     {
         //dd($user->role_id);
-        dd($user);
+
         $user->stats = $user->role_id === 2
             ? Freelancer::where('user_id', $user->id)->first()
             : Company::where('user_id', $user->id)->first();

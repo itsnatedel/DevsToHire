@@ -225,7 +225,7 @@
                                             <!-- Bookmark Icon -->
                                             @Auth
                                                 <span class="bookmark-icon"></span>
-                                        @endauth
+                                            @endauth
                                         <!-- Avatar -->
                                             <div class="freelancer-avatar">
                                                 @if($freelancer->verified)
