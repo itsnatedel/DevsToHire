@@ -120,7 +120,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
     Route::get('/reviews', [DashboardController::class, 'reviews'])->name('dashboard.reviews');
 
     /* Settings */
-    Route::get('/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+    Route::get('/settings', [DashboardController::class, 'edit'])->name('dashboard.settings');
+    Route::post('/settings/update', [DashboardController::class, 'update'])->name('dashboard.settings.update');
 
     /* Messages */
     Route::get('/messages', [DashboardController::class, 'messages'])->name('dashboard.messages');

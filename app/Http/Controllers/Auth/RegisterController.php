@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Intervention\Image\Facades\Image;
-use Ramsey\Uuid\Uuid;
 use RuntimeException;
 
 class RegisterController extends Controller
@@ -305,7 +304,6 @@ class RegisterController extends Controller
      */
     protected function createPictureDirectories($UUID): bool
     {
-
         $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID;
         $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID . '/avatar/';
 

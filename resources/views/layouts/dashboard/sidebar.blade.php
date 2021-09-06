@@ -61,7 +61,6 @@
                         <li class="active"><a href="{{ route('dashboard.settings') }}"><i
                                     class="icon-material-outline-settings"></i> Settings</a></li>
                     </ul>
-
                 </div>
             </div>
             <!-- Navigation / End -->
