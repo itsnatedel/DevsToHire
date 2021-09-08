@@ -23,12 +23,15 @@ class CreateTasksTable extends Migration
                 'Fixed',
                 'Hourly'
             ])->default('Fixed');
-            $table->date('due_date');
+            $table->string('due_date');
             $table->timestamp('created_at')->default(now());
-            $table->foreignId('employer_id');
+            $table->foreignId('employer_id')->nullable();
 
             $table->foreign('employer_id')->references('id')->on('companies')
                 ->onDelete('restrict')->onUpdate('cascade');
+
+            $table->string('dir_url', 255)->nullable();
+            $table->string('file_url', 255)->nullable();
         });
     }
 

@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Psy\Util\Str;
+use Ramsey\Uuid\Uuid;
 
 class Task extends Model
 {
@@ -77,7 +79,7 @@ class Task extends Model
 
         foreach ($tasks as $task) {
             $task->company = Company::where('id', '=', $task->employer_id)->first();
-            $task->location = Location::where('id', '=', $task->company->location_id)->first();
+            $task->location = Location::where('id', '=', $task->location_id)->first();
 
             self::removeDashesFromDates($task);
         }
@@ -86,6 +88,13 @@ class Task extends Model
     }
 
     /**
+     *                 'co.id as company_id',
+     * 'co.name as company_name',
+     * 'co.location_id',
+     * 'co.slug as company_slug',
+     * 'co.verified',
+     * 'co.pic_url'
+     *
      * getTaskInfo method.
      * Retrives data of the corresponding task
      *
@@ -95,20 +104,54 @@ class Task extends Model
      */
     public static function getTaskInfo(int $id)
     {
-        return DB::table('tasks as ta')
-            ->join('companies as co', 'co.id', '=', 'ta.employer_id')
+        $task = DB::table('tasks as ta')
             ->select(
                 'ta.*',
                 DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date'),
-                'co.id as company_id',
-                'co.name as company_name',
-                'co.location_id',
-                'co.slug as company_slug',
-                'co.verified',
-                'co.pic_url'
-            )
-            ->where('ta.id', '=', $id)
+                'ta.location_id'
+            );
+
+        if (is_null(Task::where('id', $id)->get('employer_id')->first()->employer_id)) {
+            $task->join('freelancers as fr', 'fr.id', '=', 'ta.freelancer_id')
+                ->addSelect(
+                    'ta.freelancer_id as company_id',
+                    DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as company_name"),
+                    'fr.verified',
+                    'fr.pic_url'
+                );
+        } else {
+            $task->join('companies as co', 'co.id', '=', 'ta.employer_id')
+                ->addSelect(
+                    'co.id as company_id',
+                    'co.name as company_name',
+                    'co.slug as company_slug',
+                    'co.verified',
+                    'co.pic_url'
+                );
+        }
+
+        $task = $task->where('ta.id', '=', $id)
             ->first();
+
+
+        if (is_null($task->employer_id)) {
+            $task->company_slug = \Illuminate\Support\Str::slug($task->company_name);
+        }
+
+        return $task;
+    }
+
+    public static function getFreelancerSkills(int $id): array
+    {
+        $skillsSet = DB::table('skills_freelancers as skfr')
+            ->select('skills')
+            ->where('freelancer_id', '=', $id)
+            ->first();
+
+        return is_null($skillsSet)
+            ? ['None']
+            : Controller::curateSkills($skillsSet->skills);
+
     }
 
     /**
@@ -283,5 +326,33 @@ class Task extends Model
         $task->end_date = str_replace('-', '', $task->end_date);
 
         return $task;
+    }
+
+    /**
+     * @param int    $taskId
+     * @param string $dir_url
+     *
+     * @return bool
+     */
+    public static function uploadFile(int $taskId, string $dir_url): bool
+    {
+        $filesDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dir_url . '/files/';
+
+        if (!is_dir($filesDirPath)) {
+            if (!mkdir($filesDirPath, 0755)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $filesDirPath));
+            }
+        }
+
+        $filename = Uuid::uuid4() . '.' . app('request')->file('files')->extension();
+
+        app('request')->file('files')->move(public_path('images/user/' . $dir_url . '/files'), $filename);
+
+         DB::table('tasks')
+            ->where('id',  $taskId)
+            ->update(['file_url' => $filename]);
+
+
+        return true;
     }
 }

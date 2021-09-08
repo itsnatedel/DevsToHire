@@ -3,16 +3,16 @@
     <!-- Wrapper -->
     <div id="wrapper">
     <!-- Titlebar -->
-        <div class="single-page-header freelancer-header" data-background-image="{{ asset('images/section-background.jpg')}}">
+        <div class="single-page-header freelancer-header" data-background-image="{{ asset('images/companies/backgro.jpeg')}}">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image freelancer-avatar">
-                                    @if(!is_null($freelancer->uuid) && !is_null($freelancer->pic_url))
+                                    @if(!is_null($freelancer->dir_url) && !is_null($freelancer->pic_url))
                                     <img
-                                        src="{{ asset('images/user/' . $freelancer->uuid . '/avatar/' . $freelancer->pic_url) }}"
+                                        src="{{ asset('images/user/' . $freelancer->dir_url . '/avatar/' . $freelancer->pic_url) }}"
                                         alt="Freelancer's pic">
                                     @else
                                         <img
@@ -41,8 +41,7 @@
                                         @endif
                                     </ul>
                                 </div>
-                                <!-- TODO: add contracts & CVs https://templatelab.com/employment-contracts/-->
-                                <!-- TODO: put contracts & CVs in resources/files/freelancers folders -> create name folder for each freelancer -->
+
                                 <!-- TODO: social links for freelancers -->
                                 <!-- Breadcrumbs -->
                                 <nav id="breadcrumbs" class="dark right-side">
@@ -195,7 +194,16 @@
                         <div class="sidebar-widget">
                             <h3>Attachments</h3>
                             <div class="attachments-container">
-                                <a href="#" class="attachment-box ripple-effect"><span>Cover Letter</span><i>PDF</i></a>
+                                <!-- TODO: add contracts & CVs https://templatelab.com/employment-contracts/-->
+
+                                <a href="{{ !is_null($freelancer->CV_url) ? route('freelancer.cv.download', [$freelancer->id, substr($freelancer->CV_url, 0, -4)]) : '' }}" class="attachment-box ripple-effect">
+                                    <span>Curriculum Vitae
+                                        @if(is_null($freelancer->CV_url))
+                                            - None submitted
+                                        @endif
+                                    </span>
+                                    <i>PDF</i>
+                                </a>
                                 <a href="#" class="attachment-box ripple-effect"><span>Contract</span><i>DOCX</i></a>
                             </div>
                         </div>

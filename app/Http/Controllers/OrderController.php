@@ -25,7 +25,9 @@ class OrderController extends Controller
      */
     public function success()
     {
-        return view('order.success');
+        $invoiceId = app('request')->user()->invoices()->first()->id;
+
+        return view('order.success', compact(['invoiceId']));
     }
 
     /**

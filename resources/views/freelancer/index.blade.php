@@ -8,7 +8,7 @@
             <div class="full-page-sidebar">
                 <div class="full-page-sidebar-inner" data-simplebar>
                     <div class="sidebar-container">
-                        <form action="{{ route('freelancer.search') }}" method="post">
+                        <form action="{{ route('freelancer.search') }}" method="get">
                         @csrf
                         <!-- Location -->
                             <div class="sidebar-widget">
@@ -123,7 +123,7 @@
                         @endif
                         <div class="sort-by">
                             <span>Sort by:</span>
-                            <form action="{{ route('freelancer.search') }}" method="post">
+                            <form action="{{ route('freelancer.search') }}" method="method">
                                 @csrf
                                 <select class="selectpicker hide-tick" name="sortOption" onchange="this.form.submit()">
                                     <option @if(is_null($sortOption)) selected @endif disabled>Method</option>

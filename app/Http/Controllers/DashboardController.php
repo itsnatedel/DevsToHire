@@ -64,6 +64,22 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.settings');
     }
 
+    public function createJob()
+    {
+        return view('dashboard.post-job');
+    }
+
+    public function createTask()
+    {
+        $categories = Category::all('id', 'name');
+        $locations  = Location::all('id', 'country_name');
+
+        return view('dashboard.post-task', compact([
+            'categories',
+            'locations'
+        ]));
+    }
+
     /**
      * Remove the specified resource from storage.
      *

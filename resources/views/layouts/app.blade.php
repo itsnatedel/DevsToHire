@@ -28,7 +28,10 @@
 
         @yield('content')
 
-        @if (Route::currentRouteName() !== 'freelancer.index' && Route::currentRouteName() !== 'freelancer.search' && Route::currentRouteName() !== ('dashboard.settings'))
+        @if (Route::currentRouteName() !== 'freelancer.index'
+            && Route::currentRouteName() !== 'freelancer.search'
+            && Route::currentRouteName() !== ('dashboard.settings')
+            && Route::currentRouteName() !== 'dashboard.task.create')
             @include('layouts.footer')
         @endif
     </main>
