@@ -79,7 +79,7 @@
                         <p>{{ $task->description }}</p>
                     </div>
 
-                    <!-- TODO: Task Atachments -->
+                    <!-- TODO: Task Attachments -->
                     <div class="single-page-section">
                         <h3>Attachments</h3>
                         <div class="attachments-container">

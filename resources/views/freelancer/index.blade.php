@@ -7,101 +7,98 @@
         <div class="full-page-container">
             <div class="full-page-sidebar">
                 <div class="full-page-sidebar-inner" data-simplebar>
-                    <div class="sidebar-container">
-                        <form action="{{ route('freelancer.search') }}" method="get">
+                    <form action="{{ route('freelancer.search') }}" method="get">
                         @csrf
+                    <div class="sidebar-container">
                         <!-- Location -->
-                            <div class="sidebar-widget">
-                                <h3>Location</h3>
-                                <div class="bootstrap-select">
-                                    <select class="form-control selectpicker with-border" id="select-country"
-                                            data-live-search="true" title="Search by country" name="country"
-                                            aria-expanded="false">
-                                        <option disabled>Countries</option>
-                                        @foreach($countries as $country)
-                                            <option data-tokens="{{ $country->country_name }}"
-                                                    {{ !is_null($form) && $form->country === $country->country_name ? 'selected' : '' }}
-                                                    value="{{ $country->country_name }}">
-                                                {{ $country->country_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <!-- Category -->
-                            <div class="sidebar-widget">
-                                <h3>Specialization Field</h3>
-                                <select class="form-control selectpicker with-border" data-live-search="true"
-                                        name="specialization"
-                                        title="Search by specialization">
-                                    <option disabled>Specializations</option>
-                                    <!-- TODO: change in other select->categories value=name-->
-                                    @foreach($categories as $category)
-                                        <option data-tokens="{{ $category->name }}" {{ !is_null($form) && $form->specialization === $category->name ? 'selected' : ''}}
-                                                value="{{ $category->name }}">
-                                            {{ $category->name }}
+                        <div class="sidebar-widget">
+                            <h3>Location</h3>
+                            <div class="bootstrap-select">
+                                <select class="form-control selectpicker with-border" id="select-country"
+                                        data-live-search="true" title="Search by country" name="country"
+                                        aria-expanded="false">
+                                    <option disabled>Countries</option>
+                                    @foreach($countries as $country)
+                                        <option data-tokens="{{ $country->country_name }}"
+                                                {{ !is_null($form) && $form->country === $country->country_name ? 'selected' : '' }}
+                                                value="{{ $country->country_name }}">
+                                            {{ $country->country_name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <!-- Category -->
+                        <div class="sidebar-widget">
+                            <h3>Specialization Field</h3>
+                            <select class="form-control selectpicker with-border" data-live-search="true"
+                                    name="specialization"
+                                    title="Search by specialization">
+                                <option disabled>Specializations</option>
+                                @foreach($categories as $category)
+                                    <option data-tokens="{{ $category->name }}" {{ !is_null($form) && $form->specialization === $category->name ? 'selected' : ''}}
+                                            value="{{ $category->name }}">
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <!-- Skill -->
-                            <div class="sidebar-widget">
-                                <h3>Skill</h3>
-                                <div class="keywords-container">
-                                    <div class="keyword-input-container">
-                                        <input type="text" class="keyword-input" placeholder="e.g. wordpress" name="skill" value="{{ $form->skill ?? '' }}"/>
-                                        <button class="keyword-input-button ripple-effect">
-                                            <i class="icon-material-outline-add"></i>
-                                        </button>
-                                    </div>
+                        <!-- Skill -->
+                        <div class="sidebar-widget">
+                            <h3>Skill</h3>
+                            <div class="keywords-container">
+                                <div class="keyword-input-container">
+                                    <input type="text" class="keyword-input" placeholder="e.g. Wordpress" name="skill" value="{{ $form->skill ?? '' }}"/>
+                                    <button class="keyword-input-button ripple-effect">
+                                        <i class="icon-material-outline-add"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <!-- Hourly Rate -->
-                            <div class="sidebar-widget">
-                                <h3 style="margin-bottom: 35px">Hourly Rate</h3>
-                                <!-- Range Slider -->
-                                <input class="range-slider" name="hourlyRates" type="text" value="" data-slider-currency="€"
-                                       data-slider-min="{{ $hourlyRateLimits->min_rate }}"
-                                       data-slider-max="{{ $hourlyRateLimits->max_rate }}" data-slider-step="5"
-                                       data-slider-value="[{{ $form->hourlyRates ?? $hourlyRateLimits->min_rate . ',' . $hourlyRateLimits->max_rate }}]"
-                                />
-                            </div>
+                        </div>
+                        <!-- Hourly Rate -->
+                        <div class="sidebar-widget">
+                            <h3 style="margin-bottom: 35px">Hourly Rate</h3>
+                            <!-- Range Slider -->
+                            <input class="range-slider" name="hourlyRates" type="text" value="" data-slider-currency="€"
+                                   data-slider-min="{{ $hourlyRateLimits->min_rate }}"
+                                   data-slider-max="{{ $hourlyRateLimits->max_rate }}" data-slider-step="5"
+                                   data-slider-value="[{{ $form->hourlyRates ?? $hourlyRateLimits->min_rate . ',' . $hourlyRateLimits->max_rate }}]"
+                            />
+                        </div>
 
-                            <div class="clearfix"></div>
-                            <!-- Success Rate-->
-                            <div class="sidebar-widget">
-                                <h3>Success Rate</h3>
-                                <!-- Range Slider -->
-                                <div class="slider slider-horizontal" title="Success rate of at least " data-tippy-placement="bottom">
+                        <div class="clearfix"></div>
+                        <!-- Success Rate-->
+                        <div class="sidebar-widget">
+                            <h3>Success Rate</h3>
+                            <!-- Range Slider -->
+                            <div class="slider slider-horizontal" title="Success rate of at least " data-tippy-placement="bottom">
 
-                                    <input class="range-slider-single" name="successRates" type="text" data-slider-min="0"
-                                           data-slider-max="100" data-slider-step="1"
-                                           data-slider-value="{{ $form->successRates ?? 75 }}" data-value="0" value="">
-                                </div>
+                                <input class="range-slider-single" name="successRates" type="text" data-slider-min="0"
+                                       data-slider-max="100" data-slider-step="1"
+                                       data-slider-value="{{ $form->successRates ?? 75 }}" data-value="0" value="">
                             </div>
-                            <div class="sidebar-widget">
-                                <h3>Rating</h3>
+                        </div>
+                        <div class="sidebar-widget">
+                            <h3>Rating</h3>
 
-                                <!-- Range Slider -->
-                                <div class="slider slider-horizontal" title="Rating of at least " data-tippy-placement="bottom">
-                                    <input class="range-slider-single" name="rated" type="text" data-slider-min="0"
-                                           data-slider-max="5" data-slider-step="0.5"
-                                           data-slider-value="{{ $form->rated ?? 3 }}" data-value="0" value="">
-                                </div>
+                            <!-- Range Slider -->
+                            <div class="slider slider-horizontal" title="Rating of at least " data-tippy-placement="bottom">
+                                <input class="range-slider-single" name="rated" type="text" data-slider-min="0"
+                                       data-slider-max="5" data-slider-step="0.5"
+                                       data-slider-value="{{ $form->rated ?? 3 }}" data-value="0" value="">
                             </div>
-                            <!-- Search Button -->
-                            <div class="sidebar-search-button-container">
-                                <button class="button ripple-effect button-sliding-icon"  type="submit" style="margin: -50px">Search
-                                    <i class="icon-material-outline-search"></i>
-                                </button>
-
-                            </div>
-                        </form>
+                        </div>
                     </div>
                     <!-- Sidebar Container / End -->
                     <!-- Search Button / End-->
+                    <div class="sidebar-search-button-container">
+                        <button class="col-xl-8 button ripple-effect button-sliding-icon" type="submit" style="float: right">Search
+                            <i class="icon-material-outline-search"></i>
+                        </button>
+                    </div>
+                    </form>
                 </div>
             </div>
             <!-- Full Page Sidebar / End -->
@@ -123,7 +120,7 @@
                         @endif
                         <div class="sort-by">
                             <span>Sort by:</span>
-                            <form action="{{ route('freelancer.search') }}" method="method">
+                            <form action="{{ route('freelancer.search') }}" method="get">
                                 @csrf
                                 <select class="selectpicker hide-tick" name="sortOption" onchange="this.form.submit()">
                                     <option @if(is_null($sortOption)) selected @endif disabled>Method</option>
@@ -159,7 +156,7 @@
                                                 <div class="verified-badge" title="Verified freelancer" data-tippy-placement="right"></div>
                                             @endif
                                             <a href={{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}><img
-                                                    src="{{ asset('images/freelancer/' . $freelancer->pic_url) }}" alt="Profile Pic"></a>
+                                                    src="{{ asset('images/user/' . $freelancer->pic_url) }}" alt="Profile Pic"></a>
                                         </div>
                                         <!-- Name -->
                                         <div class="freelancer-name">
@@ -189,14 +186,14 @@
                                 <div class="freelancer-details">
                                     <div class="freelancer-details-list">
                                         <ul>
-                                            <li>Location
+                                            <li>Recommended
                                                 <strong>
                                                     <i class="icon-material-outline-location-on"></i>
-                                                    {{ Str::limit($freelancer->country_name, 35) }}
+                                                    {{ round($freelancer->recommended * 100) }}%
                                                 </strong>
                                             </li>
-                                            <li>Rate <strong>{{ $freelancer->hourly_rate }}€ / hr</strong></li>
-                                            <li>Job Success <strong>{{ $freelancer->success_rate }}%</strong></li>
+                                            <li>Rate <strong>{{ $freelancer->hourly_rate }}€/hr</strong></li>
+                                            <li>Job Success <strong>{{ round($freelancer->success_rate * 100) }}%</strong></li>
                                         </ul>
                                     </div>
                                     <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}"

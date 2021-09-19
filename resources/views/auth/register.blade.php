@@ -40,11 +40,11 @@
                                     </ul>
                                 @endforeach
                             </div>
-                    @endif
-                    <!-- Form -->
+                        @endif
+                        <!-- Signup Form -->
                         <form method="post" id="register-account-form-main" action="{{ route('register') }}" enctype="multipart/form-data">
-                        @csrf
-                        <!-- Account Type -->
+                            @csrf
+                            <!-- Account Type -->
                             <div class="account-type">
                                 <div id="freelancer-account">
                                     <input type="radio" name="account-type" id="freelancer-radio"
@@ -60,7 +60,7 @@
                                             class="icon-material-outline-business-center"></i> Company</label>
                                 </div>
                             </div>
-
+                            <!-- Profile pic -->
                             <div class="row">
                                 <div class="col-4">
                                     <h4 style="margin-bottom: 10px">Profile Picture</h4>
@@ -72,13 +72,14 @@
                                         <input name="avatar-upload" id="avatar-upload" class="file-upload" type="file" accept="image/*"/>
                                     </div>
                                 </div>
+                                <!-- Firstname -->
                                 <div class="col-8" style="margin-top: 35px">
                                     <div class="input-with-icon-left">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="firstname" name="firstname" class="input-text with-border"
                                                placeholder="Firstname">
                                     </div>
-
+                                    <!-- Lastname -->
                                     <div class="input-with-icon-left" style="margin-top: 55px">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="lastname" name="lastname" class="input-text with-border"
@@ -150,6 +151,24 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-xl-12">
+                                <div class="section-headline margin-top-25 margin-bottom-12">
+                                    <h5>Legal requirements</h5>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" id="rgpdCheckbox" name="confirmRGPD">
+                                    <label for="rgpdCheckbox"><span class="checkbox-icon"></span> I agree with the <a href="#">terms and
+                                            services</a></label>
+                                </div>
+                                <br>
+                                <div class="checkbox">
+                                    <input type="checkbox" id="checkboxMature" name="checkboxMature">
+                                    <label for="checkboxMature"><span class="checkbox-icon"></span> I certify that I have more than 18 years
+                                        old</label>
+                                </div>
+                            </div>
+
                             <!-- Button -->
                             <button class="button full-width button-sliding-icon ripple-effect margin-top-10"
                                     type="submit"

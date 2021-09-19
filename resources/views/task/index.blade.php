@@ -119,7 +119,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- TODO: Fix select inputs taking height space -->
                 <div class="tasks-list-container margin-top-35">
                 @forelse($tasks as $task)
                     <!-- Task -->

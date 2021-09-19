@@ -23,8 +23,6 @@ class CreateFreelancersTable extends Migration
             $table->boolean('verified')->default(0);
             $table->string('CV_url')->nullable();
             $table->integer('success_rate')->nullable(); // TODO : Remove this. Use freelancers_jobs_done rating/note data
-
-            // TODO : Add main skills / specialization + other skills
         });
     }
 

@@ -98,7 +98,7 @@
 
                             </div>
 
-                            <button class="button ripple-effect button-sliding-icon" type="submit" style="float:right;">
+                            <button class="button ripple-effect button-sliding-icon" type="submit" style="float:right; width: 100px">
                                 Search
                                 <i class="icon-material-outline-search"></i>
                             </button>

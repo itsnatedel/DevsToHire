@@ -16,7 +16,7 @@
                                         alt="Freelancer's pic">
                                     @else
                                         <img
-                                            src="{{ asset('images/freelancer/' . $freelancer->pic_url) }}"
+                                            src="{{ asset('images/user/' . $freelancer->pic_url) }}"
                                             alt="Freelancer's pic">
                                     @endif
                                 </div>
@@ -194,8 +194,6 @@
                         <div class="sidebar-widget">
                             <h3>Attachments</h3>
                             <div class="attachments-container">
-                                <!-- TODO: add contracts & CVs https://templatelab.com/employment-contracts/-->
-
                                 <a href="{{ !is_null($freelancer->CV_url) ? route('freelancer.cv.download', [$freelancer->id, substr($freelancer->CV_url, 0, -4)]) : '' }}" class="attachment-box ripple-effect">
                                     <span>Curriculum Vitae
                                         @if(is_null($freelancer->CV_url))

@@ -30,8 +30,9 @@
 
         @if (Route::currentRouteName() !== 'freelancer.index'
             && Route::currentRouteName() !== 'freelancer.search'
-            && Route::currentRouteName() !== ('dashboard.settings')
-            && Route::currentRouteName() !== 'dashboard.task.create')
+            && Route::currentRouteName() !== 'dashboard.settings'
+            && Route::currentRouteName() !== 'dashboard.task.create'
+            && Route::currentRouteName() !== 'dashboard.index')
             @include('layouts.footer')
         @endif
     </main>

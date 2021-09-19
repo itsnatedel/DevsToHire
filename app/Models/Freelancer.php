@@ -55,6 +55,7 @@ class Freelancer extends Model
     /**
      * getFreelancersInfos method.
      * Retrieves the informations needed for the Freelancer@index view.
+     * TODO: Number of freelancer =\= total freelancers in Freelancer@index && Homepage ?
      */
     public static function getFreelancersInfos(Request $request = null, $sort = null): LengthAwarePaginator
     {
@@ -62,6 +63,7 @@ class Freelancer extends Model
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->join('ratings_freelancers as rfr', 'rfr.freelancer_id', '=', 'fr.id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
+            ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
             ->select(
                 'fr.id',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as full_name"),
@@ -70,7 +72,8 @@ class Freelancer extends Model
                 'cat.name as specialization',
                 'fr.verified',
                 'fr.hourly_rate',
-                'fr.success_rate', // TODO: use freelancer_jobs_done data
+                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) as success_rate'),
+                DB::raw('SUM(IF(frjb.recommended = 1, 1, 0)) / COUNT(frjb.id) as recommended'),
                 'lo.country_code',
                 'lo.country_name',
             )->groupBy('fr.id');
@@ -230,6 +233,7 @@ class Freelancer extends Model
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
             ->select(
+                'fr.*',
                 DB::raw('DATEDIFF(fr.joined_at, NOW()) as joined_at'),
                 'lo.country_name',
                 'lo.country_code',
@@ -256,13 +260,14 @@ class Freelancer extends Model
     private static function getFreelancerStats(int $id): object
     {
         $stats = DB::table('freelancer_jobs_done as frjb')
+            ->join('ratings_freelancers as rfr', 'rfr.freelancer_id', '=', 'frjb.freelancer_id')
             ->select(
-                DB::raw('SUM(IF(frjb.on_time = 1, 1, 0)) / COUNT(id) as on_time'),
-                DB::raw('SUM(IF(frjb.on_budget = 1, 1, 0)) / COUNT(id) as on_budget'),
-                DB::raw('SUM(IF(frjb.recommended = 1, 1, 0)) / COUNT(id) as recommended'),
-                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(id) as success'),
+                DB::raw('SUM(IF(frjb.on_time = 1, 1, 0)) / COUNT(frjb.id) as on_time'),
+                DB::raw('SUM(IF(frjb.on_budget = 1, 1, 0)) / COUNT(frjb.id) as on_budget'),
+                DB::raw('SUM(IF(frjb.recommended = 1, 1, 0)) / COUNT(frjb.id) as recommended'),
+                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) as success'),
                 DB::raw('COUNT(frjb.id) as total'),
-                DB::raw('SUM(frjb.rating) / COUNT(frjb.rating) as rating'))
+                DB::raw('SUM(rfr.note) / COUNT(rfr.id) as rating'))
             ->where('frjb.freelancer_id', '=', $id)
             ->first();
 

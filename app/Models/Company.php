@@ -49,8 +49,6 @@ class Company extends Model
         return $companies;
     }
 
-    // TODO: in company@index, add sort method (rating ?)
-
     /**
      * Searches all companies starting with a specific letter
      * @param string $letter

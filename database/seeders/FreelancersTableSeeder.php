@@ -25,11 +25,19 @@ class FreelancersTableSeeder extends Seeder
         $freelancers = [];
 
         for ($i = 0; $i < 1000; $i++) {
+
+            $randomInt = $faker->numberBetween(1, 30);
+
+            if ($randomInt < 10) {
+                $randomInt = '0' . $randomInt;
+            }
+
+
             $freelancers[] = [
                 'firstname'     => $faker->firstName(),
                 'lastname'      => $faker->lastName(),
                 'description'   => $text->realText(255),
-                'pic_url'       => 'user-avatar-small-0' . $faker->numberBetween(1, 3) . '.jpg',
+                'pic_url'       => 'user-avatar-big-' . $randomInt . '.jpg',
                 'hourly_rate'   => $faker->numberBetween(8, 70),
                 'success_rate'  => $faker->numberBetween(60, 100),
                 'verified'      => $faker->boolean(70),

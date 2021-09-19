@@ -153,7 +153,7 @@ class TaskController extends Controller
         $task = Task::getTaskInfo($taskId);
 
         if (!is_null($task->employer_id)) {
-            $company_rating = Company::getCompanyRating($company_id);
+            $company_rating = Company::getCompanyRating($task->employer_id);
         } else {
             $company_rating = 0;
         }

@@ -236,16 +236,15 @@
                                                 @endif
                                                 <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}">
                                                     <!-- If null -->
-                                                    @if (is_null($freelancer->remember_token))
+                                                    @if (is_null($freelancer->dir_url))
                                                         <img src="{{ asset('images/user/' . $freelancer->pic_url) }}"
-                                                             alt="Freelancer Avatar">
-                                                </a>
-                                                @else
+                                                             alt="Freelancer Avatar"/>
+                                                    @else
                                                     <img
-                                                        src="{{ asset('images/user/' . $freelancer->remember_token . '/avatar/' . $freelancer->pic_url) }}"
-                                                        alt="Freelancer Avatar">
-                                                    </a>
-                                                @endif
+                                                        src="{{ asset('images/user/' . $freelancer->dir_url . '/avatar/' . $freelancer->pic_url) }}"
+                                                        alt="Freelancer Avatar"/>
+                                                    @endif
+                                                </a>
                                             </div>
                                             <!-- Name -->
                                             <div class="freelancer-name">

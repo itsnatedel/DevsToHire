@@ -11,6 +11,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -129,6 +130,7 @@ class RegisterController extends Controller
             $userId = $this->retrieveUserId($data);
 
             if ($data['account-type'] === 2) {
+                // Fill the var with the form's input data
                 $freelancer = [
                     'firstname' => $user->firstname,
                     'lastname' => $user->lastname,
@@ -144,6 +146,7 @@ class RegisterController extends Controller
                     'category_id' => 1
                 ];
 
+                // Insert into the DDB
                 DB::table('freelancers')->insert($freelancer);
 
                 // Fill freelancer_id field in user info
@@ -252,16 +255,9 @@ class RegisterController extends Controller
      */
     protected function checkIfAvatarWasUploaded(Request $request)
     {
-        // Generating an unique UUID for the folder's name
-        $userUUID = Str::slug(time() . date('Y-m-d H:i:s'));
-
-        /**
-         * Creating the user's avatar dir
-         *
-         * No need to check if dir exists or not.
-         * The user always creates their dir when he finishes the registration process.
-         */
-        $directoriesCreated = $this->createPictureDirectories($userUUID);
+        // Generating an unique identifier for the folder's name
+        $dirIdentifier = Str::slug(time() . date('Y-m-d H:i:s'));
+        $directoriesCreated = $this->createPictureDirectories($dirIdentifier);
 
         if ($request->hasfile('avatar-upload')) {
             $avatar = $request->file('avatar-upload');
@@ -272,21 +268,21 @@ class RegisterController extends Controller
             if ($directoriesCreated) {
                 Image::make($avatar)
                     ->resize(72,72)
-                    ->save(public_path('/images/user/' . $userUUID . '/avatar/' . $filename));
+                    ->save(public_path('/images/user/' . $dirIdentifier . '/avatar/' . $filename));
             }
 
-            return [true, $filename, $userUUID];
+            return [true, $filename, $dirIdentifier];
         }
         // Case when user doesn't upload pic
         if ($directoriesCreated) {
             $placeholderPicPath = public_path('images/user/user-avatar-placeholder.png');
 
-            // Creating a 70x70 pic and uploads it
+            // Creating a dummy placeholder 72x72 pic and uploads it
             Image::make($placeholderPicPath)
                 ->resize(72, 72)
-                ->save(public_path('images/user/' . $userUUID . '/avatar/' . 'user-avatar-placeholder.png'));
+                ->save(public_path('images/user/' . $dirIdentifier . '/avatar/' . 'user-avatar-placeholder.png'));
 
-            return [true, 'user-avatar-placeholder.png', $userUUID];
+            return [true, 'user-avatar-placeholder.png', $dirIdentifier];
         }
 
         return false;
@@ -297,20 +293,20 @@ class RegisterController extends Controller
      *
      * Handles the creation of the directories used to store avatar pictures during the registration process
      *
-     * @param $UUID
+     * @param string $dirIdentifier Randomly generated slug
      *
-     * @return bool
-     * @throws RuntimeException
+     * @return bool true if directories' creation was sucessful
+     * @throws RuntimeException if any of the two directories weren't created
      */
-    protected function createPictureDirectories($UUID): bool
+    protected function createPictureDirectories(string $dirIdentifier): bool
     {
-        $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID;
-        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $UUID . '/avatar/';
-
+        $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dirIdentifier;
+        $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dirIdentifier . '/avatar/';
 
         if (!mkdir($userDirPath, 0755) && !is_dir($userDirPath)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $userDirPath));
         }
+
         if (!mkdir($avatarDirPath, 0755) && !is_dir($avatarDirPath)) {
             throw new \RuntimeException(sprintf('Directory "%s" was not created', $avatarDirPath));
         }
