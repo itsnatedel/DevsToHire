@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ModifyDashboardSettingsRequest;
+use App\Models\Category;
 use App\Models\Dashboard;
+use App\Models\Location;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class DashboardController extends Controller
 {
@@ -24,85 +31,64 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $user = User::where('id', Auth::id())->first();
+        $user->settings = Dashboard::getUserSettings($user);
+        $categories = Category::all('id', 'name');
+        $countries = Location::all('id', 'country_name');
+
+        return view('dashboard.settings', compact([
+            'user',
+            'categories',
+            'countries'
+        ]));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ModifyDashboardSettingsRequest $request
+     *
+     * @return string
      */
-    public function update(Request $request, $id)
+    public function update(ModifyDashboardSettingsRequest $request)
     {
-        //
+        $user = User::where('id', Auth::id())->first();
+        Dashboard::checkAndUpdateSettings($request->validated(), $user);
+
+        return redirect()->route('dashboard.settings');
+    }
+
+    public function createJob()
+    {
+        return view('dashboard.post-job');
+    }
+
+    public function createTask()
+    {
+        $categories = Category::all('id', 'name');
+        $locations  = Location::all('id', 'country_name');
+
+        return view('dashboard.post-task', compact([
+            'categories',
+            'locations'
+        ]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Application|Factory|View
-     */
-    public function settings()
-    {
-        $user = Auth::user();
-        $user->freelancerSettings = Dashboard::getUserSettings($user);
-
-        return view('dashboard.settings', compact([
-            'user',
-        ]));
     }
 
     /**

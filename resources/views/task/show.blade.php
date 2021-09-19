@@ -11,18 +11,31 @@
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image">
-                                    <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}">
-                                        <img src="{{ asset('images/companies/' . $task->pic_url) }}" alt="Employer Pic">
-                                    </a>
+                                    @if(!is_null($task->employer_id))
+                                        <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}">
+                                            <img src="{{ asset('images/companies/' . $task->pic_url) }}" alt="Employer Pic">
+                                        </a>
+                                    @else
+                                        <a href="{{ route('freelancer.show', [$task->freelancer_id, $task->company_slug]) }}">
+                                            <img src="{{ asset('images/user/' . $task->dir_url . '/avatar/' . $task->pic_url) }}" alt="Employer Pic">
+                                        </a>
+                                    @endif
                                 </div>
                                 <div class="header-details">
                                     <h3>{{ ucFirst($task->name) }}</h3>
                                     <h5>About the Employer</h5>
                                     <ul>
                                         <li>
+                                            @if(!is_null($task->employer_id))
                                             <a href="{{ route('company.show', [$task->employer_id, $task->company_slug]) }}"><i
                                                     class="icon-material-outline-business"></i>
-                                                {{ $task->company_name }}</a></li>
+                                                {{ $task->company_name }}</a>
+                                            @else
+                                                <a href="{{ route('freelancer.show', [$task->freelancer_id, $task->company_slug]) }}"><i
+                                                        class="icon-material-outline-business"></i>
+                                                    {{ $task->company_name }}</a>
+                                            @endif
+                                        </li>
                                         <li>
                                             <div class="star-rating" data-rating="{{ $company_rating }}"></div>
                                         </li>
@@ -66,7 +79,7 @@
                         <p>{{ $task->description }}</p>
                     </div>
 
-                    <!-- TODO: Task Atachments -->
+                    <!-- TODO: Task Attachments -->
                     <div class="single-page-section">
                         <h3>Attachments</h3>
                         <div class="attachments-container">

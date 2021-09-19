@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveTaskRequest;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Location;
 use App\Models\Task;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
@@ -22,12 +27,18 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks              = Task::getTasks();
-        $fixedRates         = Task::getFixedRatesLimits();
-        $hourlyRates        = Task::getHourlyRatesLimits();
-        $categories         = Category::all(['id', 'name']);
-        $locations          = Location::all(['id', 'country_name']);
-        $skills             = DB::table('skills')->get('skill');
+        $tasks = Task::getTasks();
+        $fixedRates = Task::getFixedRatesLimits();
+        $hourlyRates = Task::getHourlyRatesLimits();
+
+        foreach ($tasks as $task) {
+            $task->skills = Task::getSkills($task->id);
+        }
+
+        // Populate form inputs
+        $categories = Category::all(['id', 'name']);
+        $locations = Location::all(['id', 'country_name']);
+        $skills = DB::table('skills')->get('skill');
 
         return view('task.index',
             compact([
@@ -42,19 +53,26 @@ class TaskController extends Controller
 
     /**
      * Gather the tasks & search depending on the request's data
+     *
      * @param Request $request
+     *
      * @return Application|Factory|View
      */
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $tasks = empty($request->sortBy)
             ? Task::getTasks($request)
             : Task::getTasks($request, true);
 
-        $fixedRates         = Task::getFixedRatesLimits();
-        $hourlyRates        = Task::getHourlyRatesLimits();
-        $categories         = Category::all(['id', 'name']);
-        $locations          = Location::all(['id', 'country_name']);
-        $skills             = DB::table('skills')->get('skill');
+        foreach ($tasks as $task) {
+            $task->skills = Task::getSkills($task->id);
+        }
+
+        $fixedRates = Task::getFixedRatesLimits();
+        $hourlyRates = Task::getHourlyRatesLimits();
+        $categories = Category::all(['id', 'name']);
+        $locations = Location::all(['id', 'country_name']);
+        $skills = DB::table('skills')->get('skill');
 
         return view('task.index', compact([
             'tasks',
@@ -67,40 +85,81 @@ class TaskController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create()
-    {
-        return view('dashboard.post-task');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return Response
+     * @param SaveTaskRequest $request
+     *
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(SaveTaskRequest $request): RedirectResponse
     {
-        //
+        $dir = User::where('freelancer_id', Auth::user()->freelancer_id)->get('dir_url')->first()->dir_url;
+
+        $dueDate = Carbon::now();
+
+        $request['taskDuration'] === 'days'
+            ? $dueDate->addDays((int)$request['qtyInput'])
+            : $dueDate->addMonths((int)$request['qtyInput']);
+
+        $dueDate = $dueDate->toDateString();
+
+        $taskId = DB::table('tasks')
+            ->insertGetId([
+                'name' => $request['taskTitle'],
+                'description' => $request['description'],
+                'budget_min' => (int)$request['budget_min'],
+                'budget_max' => (int)$request['budget_max'],
+                'location_id' => $request['location'],
+                'type' => ucfirst($request['radio']),
+                'dir_url' => $dir,
+                'due_date' => $dueDate,
+                'category_id' => $request['category']
+            ]);
+
+        if ($request->has('files')) {
+            Task::uploadFile($taskId, Auth::user()->dir_url);
+        }
+
+        if (Auth::user()->role_id === 2) {
+            DB::table('tasks')
+                ->where('id', $taskId)
+                ->update(['freelancer_id' => Auth::user()->freelancer_id]);
+        }
+
+        if (Auth::user()->role_id === 3) {
+            DB::table('tasks')
+                ->where('id', $taskId)
+                ->update(['freelancer_id' => Auth::user()->company_id]);
+        }
+
+        DB::table('skills_tasks')
+            ->insert([
+                'task_id' => $taskId,
+                'skills' => json_encode([$request['skills']])
+            ]);
+
+        return redirect()->route('dashboard.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $company_id
      * @param int $taskId
      *
      * @return Application|Factory|View
      */
-    public function show(int $company_id, int $taskId)
+    public function show(int $taskId)
     {
-        $task           = Task::getTaskInfo($taskId);
-        $company_rating = Company::getCompanyRating($company_id);
-        $location       = Location::find($task->location_id);
-        $skills         = Task::getSkills($taskId);
+        $task = Task::getTaskInfo($taskId);
+
+        if (!is_null($task->employer_id)) {
+            $company_rating = Company::getCompanyRating($task->employer_id);
+        } else {
+            $company_rating = 0;
+        }
+
+        $location = Location::find($task->location_id);
+        $skills = Task::getSkills($taskId);
 
         return view('task.show', compact([
             'task',
@@ -113,7 +172,8 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function edit($id)
@@ -125,7 +185,8 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param int     $id
+     *
      * @return Response
      */
     public function update(Request $request, $id)
@@ -136,7 +197,8 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy($id)
@@ -147,7 +209,8 @@ class TaskController extends Controller
     /**
      * Dashboard task manage
      */
-    public function manage() {
+    public function manage()
+    {
         return view('dashboard.manage-tasks');
     }
 }

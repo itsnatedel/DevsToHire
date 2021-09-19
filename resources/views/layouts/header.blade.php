@@ -90,22 +90,6 @@
                                 </ul>
                             </li>
                         @endif
-                        <li><a href="#">Pages</a>
-                            <ul class="dropdown-nav">
-                                <li><a href="{{ route('blog.index') }}">Blog</a></li>
-                                <li><a href="{{ route('premium.index') }}">Pricing Plans</a></li>
-                                <li><a href="{{ route('checkout.index') }}">Checkout Page</a></li>
-                                <li><a href="{{ route('invoice.show', 4) }}">Invoice Template</a></li>
-                                <li><a href="pages-user-interface-elements.html">User Interface Elements</a>
-                                </li>
-                                <li><a href="pages-icons-cheatsheet.html">Icons Cheatsheet</a></li>
-                                <li><a href="{{ route('login') }}">Login</a></li>
-                                <li><a href="{{ route('register') }}">Register</a></li>
-                                <li><a href="{{ route('error-404') }}">404 Page</a></li>
-                                <li><a href="{{ route('contact') }}">Contact</a></li>
-                            </ul>
-                        </li>
-
                     </ul>
                 </nav>
                 <div class="clearfix"></div>

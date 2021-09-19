@@ -64,11 +64,16 @@ Route::group(['prefix' => 'freelancers'], function () {
         ->where('id', '[0-9]+')
         ->where('fullname', '[a-z-]+')
         ->name('freelancer.show');
-    Route::post('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
+    Route::get('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
+    Route::get('/{id}/{cv}', [FreelancerController::class, 'downloadCV'])
+        ->where('id', '[0-9]+')
+        ->where('cv', '[a-z0-9-]+')
+        ->name('freelancer.cv.download');
 });
 
 /* Invoice Routes */
 Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->where('id', '[0-9]+')->name('invoice.show');
+Route::get('/invoice/{invoiceId}', [InvoiceController::class, 'download'])->where('id', '[a-Z0-9]+')->name('invoice.download');
 
 /* Job Routes */
 Route::group(['prefix' => 'jobs'], function () {
@@ -100,12 +105,12 @@ Route::get('/plans', [PremiumController::class, 'index'])->name('premium.index')
 /* Task Routes */
 Route::group(['prefix' => 'tasks'], function () {
     Route::get('/', [TaskController::class, 'index'])->name('task.index');
-    Route::get('/{company_id}/{task_id}/{slug}', [TaskController::class, 'show'])
-        ->where('company_id', '[0-9]+')
+    Route::get('/{task_id}/{slug}', [TaskController::class, 'show'])
         ->where('task_id', '[0-9]+')
         ->where('slug', '[a-z-]+')
         ->name('task.show');
     Route::get('/search', [TaskController::class, 'search'])->name('task.search');
+    Route::post('/create', [TaskController::class, 'store'])->name('task.store');
 });
 
 /* Dashboard Routes */
@@ -120,7 +125,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
     Route::get('/reviews', [DashboardController::class, 'reviews'])->name('dashboard.reviews');
 
     /* Settings */
-    Route::get('/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+    Route::get('/settings', [DashboardController::class, 'edit'])->name('dashboard.settings');
+    Route::post('/settings/update', [DashboardController::class, 'update'])->name('dashboard.settings.update');
 
     /* Messages */
     Route::get('/messages', [DashboardController::class, 'messages'])->name('dashboard.messages');
@@ -130,8 +136,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
 
     /* Task */
     Route::get('/manage/task', [TaskController::class, 'manage'])->name('dashboard.task.manage');
-    Route::get('/manage/bidders', [TaskController::class, 'manage'])->name('dashboard.task.manage');
-    Route::get('/task/create', [TaskController::class, 'create'])->name('dashboard.task.create');
+    Route::get('/manage/bidders', [TaskController::class, 'manage'])->name('dashboard.bidders.manage');
+    Route::get('/task/create', [DashboardController::class, 'createTask'])->name('dashboard.task.create');
 
     /* Bids */
     Route::get('/manage/bidders', [BidController::class, 'manage'])->name('dashboard.bid.manage');
@@ -139,5 +145,5 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
 
     /* Job */
     Route::get('/manage/job', [JobController::class, 'manage'])->name('dashboard.job.manage');
-    Route::get('/job/create', [JobController::class, 'create'])->name('dashboard.job.create');
+    Route::get('/job/create', [DashboardController::class, 'createJob'])->name('dashboard.job.create');
 });

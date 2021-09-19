@@ -64,7 +64,8 @@ class CheckoutController extends Controller
             $request->user()->newSubscription('default', $plan->stripe_yearly_id)->create($request->token);
         }
 
-        return redirect()->route('order.success');
+        return redirect()
+            ->route('order.success');
     }
 
 }

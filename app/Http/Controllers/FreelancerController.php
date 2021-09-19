@@ -9,8 +9,11 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FreelancerController extends Controller
 {
@@ -79,9 +82,16 @@ class FreelancerController extends Controller
      * Show the form for creating a new resource.
      *
      */
-    public function create()
+    public function downloadCV($freelancerId, $CV_id): BinaryFileResponse
     {
-        //
+        $freelancer = Freelancer::where('id', $freelancerId)->first();
+        $freelancer->dir_url = DB::table('users as u')
+            ->select('u.dir_url')
+            ->where('u.freelancer_id', '=', $freelancerId)
+            ->first()
+            ->dir_url;
+
+        return response()->download(public_path('images/user/' . $freelancer->dir_url . '/files/' . $CV_id . '.pdf'));
     }
 
     /**
@@ -113,10 +123,10 @@ class FreelancerController extends Controller
         $user = User::where('freelancer_id', $id)->first();
 
         if (!is_null($user)
-            && !is_null($user->remember_token)
+            && !is_null($user->dir_url)
             && !is_null($user->pic_url)
             && !is_null($user->can_be_rated)) {
-            $freelancer->uuid       = $user->remember_token;
+            $freelancer->dir_url    = $user->dir_url;
             $freelancer->pic_url    = $user->pic_url;
             $freelancer->canBeRated = $user->can_be_rated;
         }

@@ -18,10 +18,8 @@
             <div class="dashboard-nav">
                 <div class="dashboard-nav-inner">
                     <ul data-submenu-title="Start">
-                        @if(Auth::check() && Auth::user()->role_id === 3)
                         <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                 Dashboard</a></li>
-                        @endif
                         <li><a href="{{ route('dashboard.messages') }}"><i
                                     class="icon-material-outline-question-answer"></i> Messages <span
                                     class="nav-tag">2</span></a></li>
@@ -38,17 +36,16 @@
                                             class="nav-tag">3</span></a></li>
                                 @if(Auth::check() && Auth::user()->role_id === 3)
                                 <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a></li>
-                                @endif
+
                                 <li><a href="{{ route('dashboard.job.create') }}">Post a Job</a></li>
+                                @endif
                             </ul>
                         </li>
                         <li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
                             <ul>
                                 <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks <span
                                             class="nav-tag">2</span></a></li>
-                                @if(Auth::check() && Auth::user()->role_id === 3)
                                 <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
-                                @endif
 
                                 <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids <span
                                             class="nav-tag">4</span></a></li>
@@ -61,7 +58,6 @@
                         <li class="active"><a href="{{ route('dashboard.settings') }}"><i
                                     class="icon-material-outline-settings"></i> Settings</a></li>
                     </ul>
-
                 </div>
             </div>
             <!-- Navigation / End -->

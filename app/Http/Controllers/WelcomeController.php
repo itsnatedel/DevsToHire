@@ -50,6 +50,7 @@ class WelcomeController extends Controller
         if (is_null($request->type)) {
             return back()->withFail('Please select a type of job or task !');
         }
+
         $taskOrJob = Welcome::isTaskOrJob($request);
 
         if (!is_bool($taskOrJob)) {
@@ -68,6 +69,11 @@ class WelcomeController extends Controller
 
             if ($taskOrJob === 'task') {
                 $tasks              = Welcome::searchJobsOrTasks($request, $taskOrJob);
+
+                foreach ($tasks as $task) {
+                    $task->skills = Task::getSkills($task->id);
+                }
+
                 $fixedRates         = Task::getFixedRatesLimits();
                 $hourlyRates        = Task::getHourlyRatesLimits();
                 $categories         = Category::all(['id', 'name']);

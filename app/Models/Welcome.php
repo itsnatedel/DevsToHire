@@ -54,7 +54,7 @@ class Welcome extends Model
      */
     public static function getFeaturedFreelancers(): Collection
     {
-        return DB::table('premium_users as pu')
+        return DB::table('users as u')
             ->select(DB::raw('DISTINCT fr.id'),
                 'fr.pic_url',
                 'fr.verified',
@@ -64,10 +64,8 @@ class Welcome extends Model
                 'lo.country_name',
                 'fr.hourly_rate',
                 'fr.success_rate',
-                'u.remember_token',
-                'u.pic_url')
-            ->join('freelancers as fr', 'fr.id', '=', 'pu.user_id')
-            ->join('users as u', 'u.id', '=', 'fr.id')
+                'u.dir_url')
+            ->join('freelancers as fr', 'fr.id', '=', 'u.id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->inRandomOrder()
@@ -224,8 +222,6 @@ class Welcome extends Model
             ->select('id')
             ->where('cat.id', '=', $categoryId)
             ->first();
-
-
     }
 
     private static function setType($request)

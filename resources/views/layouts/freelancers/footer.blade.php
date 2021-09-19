@@ -1,7 +1,7 @@
 <!-- Footer -->
 <div class="small-footer margin-top-15">
     <div class="small-footer-copyrights">
-        © 2019 <strong>Hireo</strong>. All Rights Reserved.
+        © 2021 <strong>DevsToHire</strong>. All Rights Reserved.
     </div>
     <ul class="footer-social-links">
         <li>

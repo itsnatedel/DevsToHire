@@ -35,7 +35,8 @@ class TasksTableSeeder extends Seeder
                 'created_at'    => $faker->dateTimeBetween('-30 days', '-1 day'),
                 'due_date'      => $faker->dateTimeBetween('-1 day', '+12 weeks'),
                 'employer_id'   => $faker->numberBetween(1, 400),
-                'category_id'   => $faker->numberBetween(1, 8)
+                'category_id'   => $faker->numberBetween(1, 8),
+                'location_id'   => $faker->numberBetween(1, 98),
             ];
         }
 
