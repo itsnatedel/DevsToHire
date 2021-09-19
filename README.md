@@ -47,4 +47,4 @@ To get the project up and running, make sure to follow these steps :
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-DevsToHire is an open-sourced application licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DevsToHire is an application licensed under the [MIT license](https://opensource.org/licenses/MIT).
