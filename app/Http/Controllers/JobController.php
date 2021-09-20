@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Job;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class JobController extends Controller
 {
@@ -20,8 +19,8 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::getAllJobsAndCompanyInfo();
-        $countries = Job::getCountries();
+        $jobs       = Job::getAllJobsAndCompanyInfo();
+        $countries  = Job::getCountries();
         $categories = Category::all();
 
         return view('job.index', [
@@ -32,7 +31,7 @@ class JobController extends Controller
     }
 
     /**
-     * Handles the search criterias and fetches the corresponding jobs.
+     * Handles the search criteria and fetches the corresponding jobs.
      * @param Request $request
      * @return Application|Factory|View
      */

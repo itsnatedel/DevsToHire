@@ -30,87 +30,90 @@
         ================================================== -->
         <div class="container">
             <div class="row">
-
                 <div class="col-xl-12">
-
-                    <!-- Billing Cycle  -->
-                    <div class="billing-cycle-radios margin-bottom-70">
-                        <div class="radio billed-monthly-radio">
-                            <input id="radio-5" name="radio-payment-type" type="radio" checked>
-                            <label for="radio-5"><span class="radio-label"></span> Billed Monthly</label>
-                        </div>
-
-                        <div class="radio billed-yearly-radio">
-                            <input id="radio-6" name="radio-payment-type" type="radio">
-                            <label for="radio-6"><span class="radio-label"></span> Billed Yearly <span
-                                    class="small-label">Save 10%</span></label>
-                        </div>
+                    <!-- Section Headline -->
+                    <div class="section-headline centered margin-top-0 margin-bottom-35">
+                        <h3>Membership Plans</h3>
                     </div>
+                    <div class="col-xl-12">
+                        <!-- Billing Cycle  -->
+                        <form action="{{ route('checkout.index') }}" method="get">
+                            <div class="billing-cycle-radios margin-bottom-70">
+                                <div class="radio billed-monthly-radio">
+                                    <input id="radio-5" name="payment_type" value="monthly" type="radio" checked>
+                                    <label for="radio-5"><span class="radio-label"></span> Billed Monthly</label>
+                                </div>
 
-                    <!-- Pricing Plans Container -->
-                    <div class="pricing-plans-container">
-
-                        <!-- Plan -->
-                        <div class="pricing-plan">
-                            <h3>Basic Plan</h3>
-                            <p class="margin-top-10">One time fee for one listing or task highlighted in search
-                                results.</p>
-                            <div class="pricing-plan-label billed-monthly-label"><strong>$19</strong>/ monthly</div>
-                            <div class="pricing-plan-label billed-yearly-label"><strong>$205</strong>/ yearly</div>
-                            <div class="pricing-plan-features">
-                                <strong>Features of Basic Plan</strong>
-                                <ul>
-                                    <li>1 Listing</li>
-                                    <li>30 Days Visibility</li>
-                                    <li>Highlighted in Search Results</li>
-                                </ul>
+                                <div class="radio billed-yearly-radio">
+                                    <input id="radio-6" name="payment_type" value="yearly" type="radio">
+                                    <label for="radio-6"><span class="radio-label"></span> Billed Yearly <span
+                                                class="small-label">Save 10%</span></label>
+                                </div>
                             </div>
-                            <a href="pages-checkout-page.html" class="button full-width margin-top-20">Buy Now</a>
-                        </div>
+                            <!-- Pricing Plans Container -->
+                            <div class="pricing-plans-container">
+                            @foreach($premiumPlans as $plan)
+                                <!-- Plan -->
+                                    @if($plan->title === 'Standard')
+                                        <div class="pricing-plan recommended">
+                                            <div class="recommended-badge">Recommended</div>
+                                            @else
+                                                <div class="pricing-plan">
+                                                    @endif
+                                                    <h3>{{ $plan->title }} Plan</h3>
+                                                    <p class="margin-top-10">{{ $plan->description }}</p>
+                                                    <div class="pricing-plan-label billed-monthly-label">
+                                                        <strong>{{ $plan->monthly_price }}€</strong>/ monthly
+                                                    </div>
+                                                    <div class="pricing-plan-label billed-yearly-label">
+                                                        <strong>{{ $plan->yearly_price }}€</strong>/ yearly
+                                                    </div>
+                                                    <div class="pricing-plan-features">
+                                                        <strong>Features of our {{ $plan->title }} Plan</strong>
+                                                        <ul class="list-2" style="margin-left: 25px">
+                                                            <li>
+                                                                {{ $plan->listing }}
+                                                                @if ($plan->listing == 1 && $plan->listing !== 'Unlimited')
+                                                                    Listing
+                                                                @else
+                                                                    Listings
+                                                                @endif
+                                                            </li>
+                                                            <li>{{ $plan->visibility_days }} Days Visibility</li>
+                                                            @if(!$loop->first)
+                                                                <li>{{ $plan->highlighted }}</li>
+                                                            @endif
+                                                        </ul>
+                                                    </div>
+                                                    @if($loop->first)
+                                                        <button type="submit" name="plan_id"
+                                                                class="button full-width margin-top-50"
+                                                                value="{{ $loop->iteration }}">
+                                                            Buy Now
+                                                        </button>
 
-                        <!-- Plan -->
-                        <div class="pricing-plan recommended">
-                            <div class="recommended-badge">Recommended</div>
-                            <h3>Standard Plan</h3>
-                            <p class="margin-top-10">One time fee for one listing or task highlighted in search
-                                results.</p>
-                            <div class="pricing-plan-label billed-monthly-label"><strong>$49</strong>/ monthly</div>
-                            <div class="pricing-plan-label billed-yearly-label"><strong>$529</strong>/ yearly</div>
-                            <div class="pricing-plan-features">
-                                <strong>Features of Standard Plan</strong>
-                                <ul>
-                                    <li>5 Listings</li>
-                                    <li>60 Days Visibility</li>
-                                    <li>Highlighted in Search Results</li>
-                                </ul>
+                                                    @else
+                                                        <button type="submit" name="plan_id"
+                                                                value="{{ $loop->iteration }}"
+                                                                class="button full-width margin-top-20">
+                                                            Buy Now
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                                @endforeach
+                                        </div>
                             </div>
-                            <a href="pages-checkout-page.html" class="button full-width margin-top-20">Buy Now</a>
-                        </div>
-
-                        <!-- Plan -->
-                        <div class="pricing-plan">
-                            <h3>Extended Plan</h3>
-                            <p class="margin-top-10">One time fee for one listing or task highlighted in search
-                                results.</p>
-                            <div class="pricing-plan-label billed-monthly-label"><strong>$99</strong>/ monthly</div>
-                            <div class="pricing-plan-label billed-yearly-label"><strong>$1069</strong>/ yearly</div>
-                            <div class="pricing-plan-features">
-                                <strong>Features of Extended Plan</strong>
-                                <ul>
-                                    <li>Unlimited Listings Listing</li>
-                                    <li>90 Days Visibility</li>
-                                    <li>Highlighted in Search Results</li>
-                                </ul>
-                            </div>
-                            <a href="pages-checkout-page.html" class="button full-width margin-top-20">Buy Now</a>
-                        </div>
+                        </form>
                     </div>
-
                 </div>
-
             </div>
         </div>
-        <div class="margin-top-80"></div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="margin-top-80"></div>
     </div>
     <!-- Wrapper / End -->
 @endsection

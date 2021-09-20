@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ModifyDashboardSettingsRequest;
-use App\Models\Category;
-use App\Models\Dashboard;
-use App\Models\Location;
 use App\Models\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Dashboard;
 use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
+use App\Http\Requests\ModifyDashboardSettingsRequest;
 
 class DashboardController extends Controller
 {
@@ -25,8 +22,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
-
         return view('dashboard.index');
     }
 

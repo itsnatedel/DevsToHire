@@ -101,7 +101,7 @@
                                     </a>
                                 @endforeach
                             @else
-                                <p style="margin-top: 10px; padding: 10px">This employer currently doesn't have any
+                                <p style="margin-top: 10px; padding: 10px">This employer doesn't currently have any
                                     opened position available.</p>
                             @endif
                         </div>
@@ -115,7 +115,7 @@
                         <div class="listings-container compact-list-layout">
                         @forelse($tasks as $task)
                             <!-- Job Listing -->
-                                <a href="{{ route('task.show', [$company->id, $task->task_id, Str::slug($task->name)]) }}"
+                                <a href="{{ route('task.show', [$task->task_id, Str::slug($task->name)]) }}"
                                    class="job-listing">
                                     <!-- Job Listing Details -->
                                     <div class="job-listing-details">

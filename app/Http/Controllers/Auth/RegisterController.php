@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\FreelancerController;
+use Carbon\Carbon;
+use App\Models\User;
+use RuntimeException;
 use App\Models\Company;
 use App\Models\Freelancer;
-use App\Models\Location;
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Intervention\Image\Facades\Image;
-use RuntimeException;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -77,6 +73,8 @@ class RegisterController extends Controller
                 'country' => ['required'],
                 'hourlyRate' => ['required'],
                 'avatar-upload' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,svg', 'max:5192'],
+                'checkboxMature' => 'required',
+                'checkboxRGPD' => 'required'
             ]);
         }
 
@@ -95,6 +93,8 @@ class RegisterController extends Controller
             'avatar-upload' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,svg', 'max:5192'],
             'company-name' => ['sometimes', 'string', 'min:0', 'max:255', 'unique:companies,name'],
             'company-description' => ['sometimes', 'min: 0', 'max:255'],
+            'checkboxMature' => 'required',
+            'checkboxRGPD' => 'required'
         ]);
     }
 
@@ -225,25 +225,6 @@ class RegisterController extends Controller
     }
 
     /**
-     * retrieveUserId method.
-     *
-     * Fetches the id of the newly created user.
-     *
-     * @param array $data
-     *
-     * @return mixed
-     */
-    protected function retrieveUserId(array $data)
-    {
-        return DB::table('users as u')
-            ->select('u.id')
-            ->where('u.email', '=', $data['email'])
-            ->where('role_id', '=', $data['account-type'])
-            ->first()
-            ->id;
-    }
-
-    /**
      * checkIfAvatarWasUploaded method.
      *
      * Checks if the user uploaded a profile pic during registration.
@@ -312,5 +293,24 @@ class RegisterController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * retrieveUserId method.
+     *
+     * Fetches the id of the newly created user.
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    protected function retrieveUserId(array $data)
+    {
+        return DB::table('users as u')
+            ->select('u.id')
+            ->where('u.email', '=', $data['email'])
+            ->where('role_id', '=', $data['account-type'])
+            ->first()
+            ->id;
     }
 }

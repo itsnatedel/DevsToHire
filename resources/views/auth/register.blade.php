@@ -77,24 +77,23 @@
                                     <div class="input-with-icon-left">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="firstname" name="firstname" class="input-text with-border"
-                                               placeholder="Firstname">
+                                               placeholder="Firstname" value="{{ old('firstname') }}">
                                     </div>
                                     <!-- Lastname -->
                                     <div class="input-with-icon-left" style="margin-top: 55px">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="lastname" name="lastname" class="input-text with-border"
-                                               placeholder="Lastname">
+                                               placeholder="Lastname" value="{{ old('lastname') }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="input-with-icon-left">
                                 <i class="icon-material-baseline-mail-outline"></i>
                                 <input type="text" class="input-text with-border" name="email"
-                                       id="email-register" placeholder="Email Address" required/>
+                                       id="email-register" placeholder="Email Address" required value="{{ old('email') }}"/>
                             </div>
 
                             <div class="bootstrap-select" style="margin-bottom: 15px;">
-                                <!-- TODO: Fix select taking extra space below page -->
                                 <select class="form-control selectpicker with-border" id="select-country"
                                         data-live-search="true" aria-expanded="false" name="country" data-size="5">
                                     <option disabled selected>Your Country</option>
@@ -121,14 +120,14 @@
                             </div>
                             <div class="form-group" id="description-field">
                                 <label for="description">Description</label>
-                                <textarea name="description" class="form-control" id="description" rows="5"
-                                          placeholder="Write something about yourself..."></textarea>
+                                <textarea name="description" class="form-control"
+                                          id="description" rows="5" placeholder="Write something about yourself..."></textarea>
                             </div>
 
                             <div class="freelancer-fields" id="freelancer-fields">
                                 <label for="hourlyRate">Desired Hourly Rate (in €)</label>
                                 <input id="hourlyRate" name="hourlyRate" class="range-slider-single" type="text" data-slider-min="1" data-slider-max="100" data-slider-step="1"
-                                       data-slider-value="50" data-value="50" value="50" style="display: none;">
+                                       data-slider-value="50" data-value="50" value="{{ old('hourlyRate') }}" style="display: none;">
                             </div>
 
                             <div class="company-fields" id="company-fields" style="display: none">
@@ -136,13 +135,13 @@
                                     <div class="input-with-icon-left col-12">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="company-name" name="company-name" class="input-text with-border"
-                                               placeholder="Company name">
+                                               placeholder="Company name" value="{{ old('company-name') }}">
                                     </div>
 
                                     <div class="input-with-icon-left col-12">
                                         <i class="icon-feather-user"></i>
                                         <input type="text" id="company-speciality" name="company-speciality" class="input-text with-border"
-                                               placeholder="Company Speciality (e.g. Dynamic WebApps)">
+                                               placeholder="Company Speciality (e.g. Dynamic WebApps)" value="{{ old('company-speciality') }}">
                                     </div>
                                     <div class="form-group col-12" id="description-field">
                                         <label for="company-description">Company's description</label>
@@ -157,8 +156,8 @@
                                     <h5>Legal requirements</h5>
                                 </div>
                                 <div class="checkbox">
-                                    <input type="checkbox" id="rgpdCheckbox" name="confirmRGPD">
-                                    <label for="rgpdCheckbox"><span class="checkbox-icon"></span> I agree with the <a href="#">terms and
+                                    <input type="checkbox" id="checkboxRGPD" name="checkboxRGPD">
+                                    <label for="checkboxRGPD"><span class="checkbox-icon"></span> I agree with the <a href="{{ route('terms') }}">terms and
                                             services</a></label>
                                 </div>
                                 <br>

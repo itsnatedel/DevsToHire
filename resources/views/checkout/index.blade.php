@@ -91,10 +91,9 @@
                         </div>
                         <!-- Checkbox -->
                         <div class="checkbox margin-top-30">
-                            <!--TODO: REQUIRED -->
                             <input type="checkbox" id="two-step" name="two-step">
-                            <label for="two-step"><span class="checkbox-icon"></span> I agree to the <a href="#">Terms and
-                                    Conditions</a> and the <a href="#">Automatic Renewal Terms</a></label>
+                            <label for="two-step"><span class="checkbox-icon"></span> I agree to the <a href="{{ route('terms') }}">Terms and
+                                    Conditions</a> and the <a href="{{ route('renewal') }}">Automatic Renewal Terms</a></label>
                         </div>
 
                         <!-- Payment Methods Accordion / End -->

@@ -1,19 +1,20 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BidController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PremiumController;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FreelancerController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PremiumController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\WelcomeController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,15 @@ Route::get('/contact-us', function () {
     return view('contact');
 })->name('contact');
 
+Route::post('/contact-us', [Controller::class, 'sendContactForm'])->name('sendContactForm');
+
+Route::get('/terms-of-use', function () {
+    return view('terms');
+})->name('terms');
+
+Route::get('/automatic-renewal-terms', function () {
+    return view('renewal');
+})->name('renewal');
 /* Auth routes */
 Auth::routes();
 
@@ -67,7 +77,7 @@ Route::group(['prefix' => 'freelancers'], function () {
     Route::get('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
     Route::get('/{id}/{cv}', [FreelancerController::class, 'downloadCV'])
         ->where('id', '[0-9]+')
-        ->where('cv', '[a-z0-9-]+')
+        ->where('cv', '[a-z0-9-.]+')
         ->name('freelancer.cv.download');
 });
 
@@ -111,6 +121,10 @@ Route::group(['prefix' => 'tasks'], function () {
         ->name('task.show');
     Route::get('/search', [TaskController::class, 'search'])->name('task.search');
     Route::post('/create', [TaskController::class, 'store'])->name('task.store');
+    Route::get('/{taskId}/{fileUrl}', [TaskController::class, 'downloadBrief'])
+        ->where('taskId', '[0-9]+')
+        ->where('fileUrl', '[a-z0-9-.]+')
+        ->name('task.brief.download');
 });
 
 /* Dashboard Routes */

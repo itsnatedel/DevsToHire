@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SaveTaskRequest;
-use App\Models\Category;
-use App\Models\Company;
-use App\Models\Location;
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Company;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Freelancer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\SaveTaskRequest;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TaskController extends Controller
 {
@@ -101,19 +103,20 @@ class TaskController extends Controller
             ? $dueDate->addDays((int)$request['qtyInput'])
             : $dueDate->addMonths((int)$request['qtyInput']);
 
-        $dueDate = $dueDate->toDateString();
+        $dueDate = $dueDate->toDateTimeString();
 
         $taskId = DB::table('tasks')
             ->insertGetId([
-                'name' => $request['taskTitle'],
-                'description' => $request['description'],
-                'budget_min' => (int)$request['budget_min'],
-                'budget_max' => (int)$request['budget_max'],
-                'location_id' => $request['location'],
-                'type' => ucfirst($request['radio']),
-                'dir_url' => $dir,
-                'due_date' => $dueDate,
-                'category_id' => $request['category']
+                'name'          => $request['taskTitle'],
+                'description'   => $request['description'],
+                'budget_min'    => (int)$request['budget_min'],
+                'budget_max'    => (int)$request['budget_max'],
+                'location_id'   => $request['location'],
+                'type'          => ucfirst($request['radio']),
+                'dir_url'       => $dir,
+                'due_date'      => $dueDate,
+                'created_at'    => Carbon::now()->toDateTimeString(),
+                'category_id'   => $request['category']
             ]);
 
         if ($request->has('files')) {
@@ -168,17 +171,16 @@ class TaskController extends Controller
             'skills'
         ]));
     }
-
+    
     /**
-     * Show the form for editing the specified resource.
+     * Downloads the project brief file uploaded by the task's owner
      *
-     * @param int $id
-     *
-     * @return Response
      */
-    public function edit($id)
+    public function downloadBrief($taskId, $fileUrl): BinaryFileResponse
     {
-        //
+        $task = Task::where('id', $taskId)->first();
+        
+        return response()->download(public_path('images/user/' . $task->dir_url . '/files/' . $fileUrl));
     }
 
     /**

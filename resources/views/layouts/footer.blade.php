@@ -15,7 +15,7 @@
                         <div class="footer-rows-left">
                             <div class="footer-row">
                                 <div class="footer-row-inner footer-logo">
-                                    <img src="{{ asset('images/logo2.png') }}" alt="">
+                                    <img src="{{ asset('images/logo2.png') }}" alt="Logo">
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,6 @@
                             <li><a href="{{ route('dashboard.candidates') }}"><span>Browse Candidates</span></a></li>
                             <li><a href="{{ route('dashboard.job.create') }}"><span>Post a Job</span></a></li>
                             <li><a href="{{ route('dashboard.task.create') }}"><span>Post a Task</span></a></li>
-                            <li><a href="{{ route('premium.index') }}"><span>Plans & Pricing</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -114,9 +113,9 @@
                     <div class="footer-links">
                         <h3>Helpful Links</h3>
                         <ul>
+                            <li><a href="{{ route('premium.index') }}"><span>Plans & Pricing</span></a></li>
                             <li><a href="{{ route('contact') }}"><span>Contact</span></a></li>
-                            <li><a href="#"><span>Privacy Policy</span></a></li>
-                            <li><a href="#"><span>Terms of Use</span></a></li>
+                            <li><a href="{{ route('terms') }}"><span>Terms of Use</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -126,8 +125,13 @@
                     <div class="footer-links">
                         <h3>Account</h3>
                         <ul>
-                            <li><a href="{{ route('login') }}"><span>Log In</span></a></li>
-                            <li><a href="{{ route('dashboard.index') }}"><span>My Account</span></a></li>
+                            @guest
+                                <li><a href="{{ route('login') }}"><span>Log In</span></a></li>
+                                <li><a href="{{ route('register') }}"><span>Register</span></a></li>
+                            @endguest
+                            @auth
+                                <li><a href="{{ route('dashboard.index') }}"><span>My Account</span></a></li>
+                            @endauth
                         </ul>
                     </div>
                 </div>
@@ -151,7 +155,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-12">
-                    © 2019 <strong>DevsToHire</strong>. All Rights Reserved.
+                    © 2021 <strong>DevsToHire</strong>. All Rights Reserved.
                 </div>
             </div>
         </div>
