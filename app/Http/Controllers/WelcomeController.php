@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Freelancer;
 use App\Models\Job;
-use App\Models\Location;
-use App\Models\Premium;
 use App\Models\Task;
 use App\Models\Welcome;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Models\Category;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class WelcomeController extends Controller
 {
@@ -24,14 +22,14 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-        $countJobs = count(Job::all('id'));
-        $countFreelancers = count(Freelancer::all('id'));
-        $countTasks = count(Task::all('id'));
-        $tasks = Welcome::getRecentTasks();
-        $categories = Welcome::getCountJobsCategories(Category::all());
-        $featuredJobs = Welcome::getFeaturedJobs();
-        $featuredFreelancers = Welcome::getFeaturedFreelancers();
-        $premiumPlans = Premium::all();
+        $countJobs              = DB::table('jobs')->count('id');
+        $countFreelancers       = DB::table('freelancers')->count('id');
+        $countTasks             = DB::table('tasks')->count('id');;
+        $tasks                  = Welcome::getRecentTasks();
+        $categories             = Welcome::jobsPerCategory(DB::table('categories')->get());
+        $featuredJobs           = Welcome::getFeaturedJobs();
+        $featuredFreelancers    = Welcome::getFeaturedFreelancers();
+        $premiumPlans           = DB::table('premium')->get();
 
         return view('welcome', compact([
             'countJobs',
@@ -44,7 +42,12 @@ class WelcomeController extends Controller
             'premiumPlans'
         ]));
     }
-
+    
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     */
     public function search(Request $request)
     {
         if (is_null($request->type)) {

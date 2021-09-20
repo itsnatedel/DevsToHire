@@ -83,7 +83,19 @@
                     <div class="single-page-section">
                         <h3>Attachments</h3>
                         <div class="attachments-container">
-                            <a href="#" class="attachment-box ripple-effect"><span>Project Brief</span><i>PDF</i></a>
+
+                            @if(!is_null($task->dir_url) && !is_null($task->file_url))
+                            <a href="{{ route('task.brief.download', [
+                                    $task->id, $task->file_url
+                                ]) }}" class="attachment-box ripple-effect">
+                                <span>Project Brief</span>
+                                <i>PDF</i>
+                            </a>
+                            @else
+                                <div class="attachment-box ripple-effect">
+                                    <span>Project Brief - None uploaded</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

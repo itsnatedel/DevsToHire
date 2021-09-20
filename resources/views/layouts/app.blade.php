@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'DevsToHire') }}</title>
 
     <!-- Scripts -->
     <script src="https://use.fontawesome.com/c3bd807fb1.js"></script>
@@ -26,13 +26,18 @@
     <main class="py-4">
         @include('layouts.header')
 
+        @if(Route::currentRouteName() === 'contact-us')
+            <link rel = "stylesheet" href = "https://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+        @endif
+
         @yield('content')
 
         @if (Route::currentRouteName() !== 'freelancer.index'
             && Route::currentRouteName() !== 'freelancer.search'
             && Route::currentRouteName() !== 'dashboard.settings'
             && Route::currentRouteName() !== 'dashboard.task.create'
-            && Route::currentRouteName() !== 'dashboard.index')
+            && Route::currentRouteName() !== 'dashboard.index'
+            && Route::currentRouteName() !== 'terms')
             @include('layouts.footer')
         @endif
     </main>
@@ -42,14 +47,14 @@
 <script>
     (function () {
         let userAvatar = document.getElementById('user-avatar');
-        let dropDownuserAvatar = document.getElementById('dropdown-user-avatar');
+        let dropDownUserAvatar = document.getElementById('dropdown-user-avatar');
         let setStatusOnline = document.getElementById('set-status-online');
         let setStatusOffline = document.getElementById('set-status-offline');
 
         if (sessionStorage.getItem('activityStatus') === 'online') {
             // Removing offline status in class
             userAvatar.classList.remove('status-offline');
-            dropDownuserAvatar.classList.remove('status-offline');
+            dropDownUserAvatar.classList.remove('status-offline');
 
             // Switching current status
             setStatusOffline.classList.remove('current-status');
@@ -57,11 +62,11 @@
 
             // Adding online status in class
             userAvatar.classList.add('status-online');
-            dropDownuserAvatar.classList.add('status-online');
+            dropDownUserAvatar.classList.add('status-online');
         } else {
             // Removing online status in class
             userAvatar.classList.remove('status-online');
-            dropDownuserAvatar.classList.remove('status-online');
+            dropDownUserAvatar.classList.remove('status-online');
 
             // Switching current status
             setStatusOnline.classList.remove('current-status');
@@ -69,7 +74,7 @@
 
             // Adding offline status in class
             userAvatar.classList.add('status-offline');
-            dropDownuserAvatar.classList.add('status-offline');
+            dropDownUserAvatar.classList.add('status-offline');
         }
     })();
 </script>
@@ -105,26 +110,26 @@
     let setStatusOnline = document.getElementById('set-status-online');
     let setStatusOffline = document.getElementById('set-status-offline');
     let userAvatar = document.getElementById('user-avatar');
-    let dropDownuserAvatar = document.getElementById('dropdown-user-avatar');
+    let dropDownUserAvatar = document.getElementById('dropdown-user-avatar');
 
     setStatusOnline.addEventListener('click', () => {
         userAvatar.classList.remove('status-offline');
-        dropDownuserAvatar.classList.remove('status-offline');
+        dropDownUserAvatar.classList.remove('status-offline');
 
         sessionStorage.setItem('activityStatus', 'online');
 
         userAvatar.classList.add('status-online');
-        dropDownuserAvatar.classList.add('status-online');
+        dropDownUserAvatar.classList.add('status-online');
     });
 
     setStatusOffline.addEventListener('click', () => {
         userAvatar.classList.remove('status-online');
-        dropDownuserAvatar.classList.remove('status-online');
+        dropDownUserAvatar.classList.remove('status-online');
 
         sessionStorage.setItem('activityStatus', 'offline');
 
         userAvatar.classList.add('status-offline');
-        dropDownuserAvatar.classList.add('status-offline');
+        dropDownUserAvatar.classList.add('status-offline');
 
     })
 </script>

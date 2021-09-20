@@ -85,6 +85,5 @@ class UserController extends Controller
     /** Register */
     public function register($id)
     {
-        //
     }
 }

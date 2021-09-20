@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\Builder;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Psy\Util\Str;
-use Ramsey\Uuid\Uuid;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Task extends Model
 {
@@ -30,26 +29,6 @@ class Task extends Model
     ];
 
     /**
-     * Relation Task -> Company
-     *
-     * @return BelongsTo
-     */
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    /**
-     * Relation Task -> Category
-     *
-     * @return BelongsTo
-     */
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    /**
      * getTasks method.
      * Gets all tasks and returns it, paginated.
      *
@@ -63,8 +42,8 @@ class Task extends Model
         $query = DB::table('tasks as ta')
             ->select(
                 'ta.*',
-                DB::raw('DATEDIFF(ta.created_at, NOW()) as date_posted'),
-                DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date')
+                DB::raw('DATEDIFF(NOW(), ta.created_at) as date_posted'),
+                DB::raw('DATEDIFF(NOW(), ta.due_date) as end_date')
             );
 
         if ($request !== null && !$sort) {
@@ -85,73 +64,6 @@ class Task extends Model
         }
 
         return $tasks;
-    }
-
-    /**
-     *                 'co.id as company_id',
-     * 'co.name as company_name',
-     * 'co.location_id',
-     * 'co.slug as company_slug',
-     * 'co.verified',
-     * 'co.pic_url'
-     *
-     * getTaskInfo method.
-     * Retrives data of the corresponding task
-     *
-     * @param int $id Task id
-     *
-     * @return Model|Builder|object|null
-     */
-    public static function getTaskInfo(int $id)
-    {
-        $task = DB::table('tasks as ta')
-            ->select(
-                'ta.*',
-                DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date'),
-                'ta.location_id'
-            );
-
-        if (is_null(Task::where('id', $id)->get('employer_id')->first()->employer_id)) {
-            $task->join('freelancers as fr', 'fr.id', '=', 'ta.freelancer_id')
-                ->addSelect(
-                    'ta.freelancer_id as company_id',
-                    DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as company_name"),
-                    'fr.verified',
-                    'fr.pic_url'
-                );
-        } else {
-            $task->join('companies as co', 'co.id', '=', 'ta.employer_id')
-                ->addSelect(
-                    'co.id as company_id',
-                    'co.name as company_name',
-                    'co.slug as company_slug',
-                    'co.verified',
-                    'co.pic_url'
-                );
-        }
-
-        $task = $task->where('ta.id', '=', $id)
-            ->first();
-
-
-        if (is_null($task->employer_id)) {
-            $task->company_slug = \Illuminate\Support\Str::slug($task->company_name);
-        }
-
-        return $task;
-    }
-
-    public static function getFreelancerSkills(int $id): array
-    {
-        $skillsSet = DB::table('skills_freelancers as skfr')
-            ->select('skills')
-            ->where('freelancer_id', '=', $id)
-            ->first();
-
-        return is_null($skillsSet)
-            ? ['None']
-            : Controller::curateSkills($skillsSet->skills);
-
     }
 
     /**
@@ -213,6 +125,34 @@ class Task extends Model
     }
 
     /**
+     * getMaxFixedRate method.
+     * Returns the highest Fixed Rate (tasks.budget_max)
+     * -> to populate Fixed Price slider
+     */
+    public static function getFixedRatesLimits()
+    {
+        return DB::table('tasks as ta')
+            ->selectRaw('MAX(ta.budget_max) as max_rate')
+            ->selectRaw('MIN(ta.budget_min) as min_rate')
+            ->where('ta.type', '=', 'Fixed')
+            ->first();
+    }
+
+    /**
+     * getHourlyRatesLimits method.
+     * Returns the highest Hourly Rate (tasks.budget_max)
+     * -> to populate Hourly Rate slider
+     */
+    public static function getHourlyRatesLimits()
+    {
+        return DB::table('tasks as ta')
+            ->selectRaw('MAX(ta.budget_max) as max_rate')
+            ->selectRaw('MIN(ta.budget_min) as min_rate')
+            ->where('ta.type', '=', 'Hourly')
+            ->first();
+    }
+
+    /**
      * sortTasks method.
      * Sorts the list of tasks depending on user's request
      *
@@ -262,31 +202,66 @@ class Task extends Model
     }
 
     /**
-     * getMaxFixedRate method.
-     * Returns the highest Fixed Rate (tasks.budget_max)
-     * -> to populate Fixed Price slider
+     * removeDashesFromDates method.
+     * Removes the dash from the date generated by the DATEDIFF() func. from MYSQL.
+     *
+     * @param $task
+     *
+     * @return mixed
      */
-    public static function getFixedRatesLimits()
+    private static function removeDashesFromDates($task)
     {
-        return DB::table('tasks as ta')
-            ->selectRaw('MAX(ta.budget_max) as max_rate')
-            ->selectRaw('MIN(ta.budget_min) as min_rate')
-            ->where('ta.type', '=', 'Fixed')
-            ->first();
+        $task->due_date = str_replace('-', '', $task->date_posted);
+        $task->end_date = str_replace('-', '', $task->end_date);
+
+        return $task;
     }
 
     /**
-     * getHourlyRatesLimits method.
-     * Returns the highest Hourly Rate (tasks.budget_max)
-     * -> to populate Hourly Rate slider
+     * getTaskInfo method.
+     * Retrieves data of the corresponding task
+     *
+     * @param int $id Task id
+     *
+     * @return Model|Builder|object|null
      */
-    public static function getHourlyRatesLimits()
+    public static function getTaskInfo(int $id)
     {
-        return DB::table('tasks as ta')
-            ->selectRaw('MAX(ta.budget_max) as max_rate')
-            ->selectRaw('MIN(ta.budget_min) as min_rate')
-            ->where('ta.type', '=', 'Hourly')
+        $task = DB::table('tasks as ta')
+            ->select(
+                'ta.*',
+                DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date'),
+                'ta.location_id'
+            );
+
+        if (is_null(Task::where('id', $id)->get('employer_id')->first()->employer_id)) {
+            $task->join('freelancers as fr', 'fr.id', '=', 'ta.freelancer_id')
+                ->addSelect(
+                    'ta.freelancer_id as company_id',
+                    DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as company_name"),
+                    'fr.verified',
+                    'fr.pic_url'
+                );
+        } else {
+            $task->join('companies as co', 'co.id', '=', 'ta.employer_id')
+                ->addSelect(
+                    'co.id as company_id',
+                    'co.name as company_name',
+                    'co.slug as company_slug',
+                    'co.verified',
+                    'co.pic_url'
+                );
+        }
+
+        $task = $task->where('ta.id', '=', $id)
             ->first();
+
+
+        if (is_null($task->employer_id)) {
+            $task->company_slug = \Illuminate\Support\Str::slug($task->company_name);
+        }
+
+        return $task;
     }
 
     /**
@@ -306,26 +281,11 @@ class Task extends Model
         $skills = DB::table('skills_tasks as st')
             ->select('st.skills')
             ->where('st.task_id', '=', $id)
-            ->first()
-            ->skills;
-
-        return Controller::curateSkills($skills);
-    }
-
-    /**
-     * removeDashesFromDates method.
-     * Removes the dash from the date generated by the DATEDIFF() func. from MYSQL.
-     *
-     * @param $task
-     *
-     * @return mixed
-     */
-    private static function removeDashesFromDates($task)
-    {
-        $task->due_date = str_replace('-', '', $task->date_posted);
-        $task->end_date = str_replace('-', '', $task->end_date);
-
-        return $task;
+            ->first();
+    
+        return is_null($skills)
+            ? ['None']
+            : Controller::curateSkills($skills->skills);
     }
 
     /**
@@ -354,5 +314,25 @@ class Task extends Model
 
 
         return true;
+    }
+
+    /**
+     * Relation Task -> Company
+     *
+     * @return BelongsTo
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Relation Task -> Category
+     *
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 }
