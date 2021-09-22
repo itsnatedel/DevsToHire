@@ -2,22 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\Password;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Filesystem\Filesystem;
+use App\Http\Requests\StoreJobRequest;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Dashboard extends Model
 {
     use HasFactory;
-
-    public static function getUserSettings(User $user): User
+	
+	/**
+	 * @param \App\Models\User $user
+	 *
+	 * @return \App\Models\User
+	 */
+	public static function getUserSettings(User $user): User
     {
         //dd($user->role_id);
         if ($user->role_id === 2) {
@@ -180,7 +185,7 @@ class Dashboard extends Model
 
         return true;
     }
-
+	
     /**
      * handleFileUpload method.
      * Uploads & store the CV/Contract files
@@ -211,4 +216,89 @@ class Dashboard extends Model
 
         return true;
     }
+	
+	/**
+	 * @method createJobOffer
+	 * Stores the job offer
+	 *
+	 * @param \App\Http\Requests\StoreJobRequest $request
+	 *
+	 * @return int
+	 */
+	public static function createJobOffer(StoreJobRequest $request): int
+	{
+		$isLocal = isset($request->locally) && $request->locally === 'on';
+		
+		$fileUrl = self::getFileUrl($request);
+		self::storeJobFile($request, $fileUrl);
+		
+		return DB::table('jobs')
+			->insertGetId([
+				'title'         => $request->jobTitle,
+				'description'   => $request->description,
+				'salary_low'    => $request->salary_min,
+				'salary_high'   => $request->salary_max,
+				'remote'        => $request->remote,
+				'only_locally'  => $isLocal,
+				'type'          => $request->jobType,
+				'company_id'    => $request->employerId,
+				'category_id'   => $request->category,
+				'slug'          => Str::slug($request->jobTitle),
+				'location_id'   => $request->country,
+				'file_url'      => $fileUrl,
+				'created_at'    => Carbon::now()->toDateTimeString()
+			]);
+	}
+	
+	/**
+	 * @method getFileUrl
+	 * Generates an UUID for the filename
+	 * @param \App\Http\Requests\StoreJobRequest $request
+	 *
+	 * @return string
+	 */
+	private static function getFileUrl(StoreJobRequest $request): string
+	{
+		$fileName = Uuid::uuid4() . '.' . $request->file('projectFile')->extension();
+		
+		return $fileName;
+	}
+	
+	/**
+	 * @method storeJobFile
+	 * Handles the upload of the job's file
+	 * @param \App\Http\Requests\StoreJobRequest $request
+	 * @param string                             $fileName
+	 *
+	 * @return bool
+	 */
+	private static function storeJobFile(StoreJobRequest $request, string $fileName): bool
+	{
+		$userDir = DB::table('users')
+			->select('dir_url')
+			->where('company_id', '=', $request->employerId)
+			->first()
+			->dir_url;
+		
+		$request->file('projectFile')->move(public_path('images/user/' . $userDir . '/files'), $fileName);
+		
+		return true;
+	}
+	
+	/**
+	 * @method setJobSkills
+	 * @param \App\Http\Requests\StoreJobRequest $request
+	 * @param int                                $jobId
+	 *
+	 * @return bool
+	 */
+	public static function setJobSkills(StoreJobRequest $request, int $jobId): bool
+	{
+		return DB::table('skills_jobs')
+			->insert([
+				'skills'        => json_encode($request->skills),
+				'job_id'        => $jobId,
+				'employer_id'   => $request->employerId
+			]);
+	}
 }

@@ -3,11 +3,10 @@
 namespace Database\Seeders;
 
 use Faker\Factory as Faker;
-use Faker\Provider\en_US\Company;
-use Faker\Provider\en_US\Text;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
+use Faker\Provider\en_US\Company;
+use Illuminate\Support\Facades\DB;
 
 class JobsTableSeeder extends Seeder
 {
@@ -39,8 +38,8 @@ class JobsTableSeeder extends Seeder
                 'remote'        => $faker->randomElement(['Work At Home', 'Temporarily', 'No']),
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
-                'open'          => $faker->boolean(40),
                 'featured'      => $faker->boolean(40),
+                'only_locally'      => $faker->boolean(40),
             ];
         }
 

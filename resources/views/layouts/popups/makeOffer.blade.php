@@ -14,7 +14,8 @@
                     <h3>Discuss your project with David</h3>
                 </div>
                 <!-- Form -->
-                <form method="post">
+                <form method="post" action="#" id="makeOfferForm">
+                    @csrf
                     <div class="input-with-icon-left">
                         <i class="icon-material-outline-account-circle"></i>
                         <input type="text" class="input-text with-border" name="name" id="name"
@@ -23,12 +24,12 @@
 
                     <div class="input-with-icon-left">
                         <i class="icon-material-baseline-mail-outline"></i>
-                        <input type="text" class="input-text with-border" name="emailaddress" id="emailaddress"
+                        <input type="text" class="input-text with-border" name="email" id="emailaddress"
                                placeholder="Email Address"/>
                     </div>
-                    <textarea name="textarea" cols="10" placeholder="Message" class="with-border"></textarea>
+                    <textarea name="message" cols="10" placeholder="Message" class="with-border"></textarea>
                     <div class="uploadButton margin-top-25">
-                        <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload"
+                        <input class="uploadButton-input" name="file" type="file" accept="image/*, application/pdf" id="upload"
                                multiple/>
                         <label class="uploadButton-button ripple-effect" for="upload">Add Attachments</label>
                         <span class="uploadButton-file-name">Allowed file types: zip, pdf, png, jpg <br> Max. files size: 50 MB.</span>

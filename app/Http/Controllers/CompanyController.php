@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class CompanyController extends Controller
 {
@@ -71,7 +71,7 @@ class CompanyController extends Controller
         $openedPositions = Company::getOpenPositions($id);
         $tasks = Company::getOpenTasks($id);
 
-        $ratings = isset($request) && $request->isMethod('post')
+        $ratings = $request->isMethod('post')
             ? Company::getRatings($id, $request->sortBy)
             : Company::getRatings($id);
 

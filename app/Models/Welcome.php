@@ -1,4 +1,5 @@
 <?php
+/** @noinspection ALL */
 declare(strict_types = 1);
 
 namespace App\Models;
@@ -35,7 +36,6 @@ class Welcome extends Model
             ->join('companies as co', 'co.id', '=', 'jo.id')
             ->join('locations as lo', 'co.location_id', '=', 'lo.id')
             ->where('featured', '=', 1)
-            ->where('open', '=', 1)
             ->inRandomOrder()
             ->limit(5)
             ->get();
@@ -125,15 +125,13 @@ class Welcome extends Model
                 'ta.employer_id',
                 'ta.category_id',
                 'lo.country_name as country',
-                'co.id as company_id',
                 'skta.skills')
-            ->join('companies as co', 'co.id', '=', 'ta.employer_id')
-            ->join('locations as lo', 'lo.id', '=', 'co.location_id')
+            ->join('locations as lo', 'lo.id', '=', 'ta.location_id')
             ->join('skills_tasks as skta', 'skta.task_id', '=', 'ta.id')
-            ->limit(4)
-            ->orderBy('task_created_at')
+            ->limit(5)
+            ->orderBy('ta.created_at', 'desc')
             ->get();
-
+		
         foreach ($tasks as $task) {
             if (is_null($task->skills)) {
                 $task->skills = ['None'];

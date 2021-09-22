@@ -1,5 +1,4 @@
-<!-- Apply for a job popup
-================================================== -->
+<!-- Apply for a job popup -->
 <div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
 
     <!--Tabs -->
@@ -16,32 +15,38 @@
 
                 <!-- Welcome Text -->
                 <div class="welcome-text">
-                    <h3>Send your CV to get a chance of being selected for this job!</h3>
+                    <h3>Let <strong>{{ $job->name }}</strong> know you're interested in getting this job!</h3>
                 </div>
 
                 <!-- Form -->
-                <form method="post" id="apply-now-form">
-
+                <form method="post" id="apply-now-form" action="{{ route('apply.job', $job->id) }}" enctype="multipart/form-data">
+                    @csrf
                     <div class="input-with-icon-left">
+                        <input type="hidden" value="{{ Auth::user()->id }}" name="candidateId">
                         <i class="icon-material-outline-account-circle"></i>
-                        <input type="text" class="input-text with-border" name="name" id="name" placeholder="First and Last Name" required/>
+                        <input type="text" class="input-text with-border" name="name" id="name" placeholder="First and Last Name"
+                               @auth
+                                       value="{{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
+                               @endauth
+                               required/>
                     </div>
 
                     <div class="input-with-icon-left">
                         <i class="icon-material-baseline-mail-outline"></i>
-                        <input type="text" class="input-text with-border" name="emailaddress" id="emailaddress" placeholder="Email Address" required/>
+                        <input type="text" class="input-text with-border" name="email" id="emailaddress" placeholder="Email Address"
+                               @auth
+                               value="{{ Auth::user()->email }}"
+                               @endauth
+                               required/>
                     </div>
 
-                    <div class="uploadButton">
-                        <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload-cv" />
-                        <label class="uploadButton-button ripple-effect" for="upload-cv">Select File</label>
-                        <span class="uploadButton-file-name">Upload your CV / resume relevant file. <br> Max. file size: 50 MB.</span>
-                    </div>
+                    <button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit"
+                            form="apply-now-form">Apply Now <i class="icon-material-outline-arrow-right-alt"></i>
+                    </button>
 
                 </form>
 
                 <!-- Button -->
-                <button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit" form="apply-now-form">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></button>
 
             </div>
 

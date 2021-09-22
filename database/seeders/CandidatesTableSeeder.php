@@ -22,10 +22,11 @@ class CandidatesTableSeeder extends Seeder
         $faker = Factory::create();
         $candidates = [];
 
-        for($i = 0; $i < 20; $i++) {
+        for($i = 0; $i < 50; $i++) {
             $candidates[] = [
-                'user_id'   => $faker->numberBetween(6, 21),
-                'job_id'    => $faker->numberBetween(1, 60)
+                'user_id'   => $faker->numberBetween(1, 50),
+                'employer_id'   => $faker->numberBetween(1, 21),
+                'job_id'    => $faker->numberBetween(1, 200)
             ];
         }
 

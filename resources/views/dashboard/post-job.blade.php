@@ -5,8 +5,8 @@
     <div id="wrapper">
         <!-- Dashboard Container -->
         <div class="dashboard-container">
-            @include('layouts.dashboard.sidebar')
-            <!-- Dashboard Content
+        @include('layouts.dashboard.sidebar')
+        <!-- Dashboard Content
             ================================================== -->
             <div class="dashboard-content-container" data-simplebar>
                 <div class="dashboard-content-inner">
@@ -18,8 +18,8 @@
                         <!-- Breadcrumbs -->
                         <nav id="breadcrumbs" class="dark">
                             <ul>
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Dashboard</a></li>
+                                <li><a href="{{ route('homepage') }}">Home</a></li>
+                                <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                                 <li>Post a Job</li>
                             </ul>
                         </nav>
@@ -34,257 +34,180 @@
 
                                 <!-- Headline -->
                                 <div class="headline">
-                                    <h3><i class="icon-feather-folder-plus"></i> Job Submission Form</h3>
+                                    <h3><i class="icon-feather-folder-plus"></i>Job Submission Form</h3>
                                 </div>
-
-                                <div class="content with-padding padding-bottom-10">
-                                    <div class="row">
-
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Job Title</h5>
-                                                <input type="text" class="with-border">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Job Type</h5>
-                                                <select class="selectpicker with-border" data-size="7"
-                                                        title="Select Job Type">
-                                                    <option>Full Time</option>
-                                                    <option>Freelance</option>
-                                                    <option>Part Time</option>
-                                                    <option>Internship</option>
-                                                    <option>Temporary</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Job Category</h5>
-                                                <select class="selectpicker with-border" data-size="7"
-                                                        title="Select Category">
-                                                    <option>Accounting and Finance</option>
-                                                    <option>Clerical & Data Entry</option>
-                                                    <option>Counseling</option>
-                                                    <option>Court Administration</option>
-                                                    <option>Human Resources</option>
-                                                    <option>Investigative</option>
-                                                    <option>IT and Computers</option>
-                                                    <option>Law Enforcement</option>
-                                                    <option>Management</option>
-                                                    <option>Miscellaneous</option>
-                                                    <option>Public Relations</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Location</h5>
-                                                <div class="input-with-icon">
-                                                    <div id="autocomplete-container">
-                                                        <input id="autocomplete-input" class="with-border" type="text"
-                                                               placeholder="Type Address">
-                                                    </div>
-                                                    <i class="icon-material-outline-location-on"></i>
+                                <form action="{{ route('dashboard.job.store') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="employerId" value="{{ Auth::user()->company_id }}">
+                                    <div class="content with-padding padding-bottom-10">
+                                        <div class="row">
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Job Title</h5>
+                                                    <input name="jobTitle" type="text" class="with-border" value="{{ old('jobTitle') }}" placeholder="Senior Laravel Developer">
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Job Type</h5>
+                                                    <select name="jobType" class="selectpicker with-border" data-size="5"
+                                                            title="Select Job Type">
+                                                        <option disabled>Job Type</option>
+                                                        @foreach($types as $type)
+                                                            <option data-tokens="{{ $type->type }}"
+                                                                    value="{{ $type->type }}">
+                                                                {{ $type->type }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Salary</h5>
-                                                <div class="row">
-                                                    <div class="col-xl-6">
-                                                        <div class="input-with-icon">
-                                                            <input class="with-border" type="text" placeholder="Min">
-                                                            <i class="currency">USD</i>
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Job Field</h5>
+                                                    <select class="form-control selectpicker with-border"
+                                                            data-live-search="true"
+                                                            name="category" data-size="5"
+                                                            title="Search a category">
+                                                        <option disabled>Categories</option>
+                                                        @foreach($categories as $category)
+                                                            <option data-tokens="{{ $category->name }}"
+                                                                    value="{{ $category->id }}">
+                                                                {{ $category->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Job Location</h5>
+                                                    <div class="input-with-icon">
+                                                        <div id="autocomplete-container">
+                                                            <select class="form-control selectpicker with-border"
+                                                                    id="select-country" data-size="5"
+                                                                    data-live-search="true" title="Search for a country"
+                                                                    name="country" aria-expanded="false">
+                                                                <option disabled>Countries</option>
+                                                                @foreach($countries as $country)
+                                                                    <option data-tokens="{{ $country->country_name }}"
+                                                                            {{ $country->id === Auth::user()->location_id ? 'selected' : '' }}
+                                                                            value="{{ $country->id }}">
+                                                                        {{ $country->country_name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <i class="icon-material-outline-location-on"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Yearly Salary</h5>
+                                                    <div class="row">
+                                                        <div class="col-xl-6">
+                                                            <div class="input-with-icon">
+                                                                <input name="salary_min" class="with-border" type="text"
+                                                                       value="{{ old('salary_min') }}" placeholder="Min">
+                                                                <i class="currency">EUR</i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <div class="input-with-icon">
+                                                                <input name="salary_max" class="with-border" type="text"
+                                                                       value="{{ old('salary_max') }}" placeholder="Max">
+                                                                <i class="currency">EUR</i>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xl-6">
-                                                        <div class="input-with-icon">
-                                                            <input class="with-border" type="text" placeholder="Max">
-                                                            <i class="currency">USD</i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Tags <span>(optional)</span>
+                                                        <i class="help-icon"
+                                                            data-tippy-placement="right"
+                                                            title="Maximum of 10 tags">
+                                                        </i>
+                                                    </h5>
+                                                    <div class="keywords-container">
+                                                        <div class="keyword-input-container">
+                                                            <input name="skills" type="text"
+                                                                   class="keyword-input with-border"
+                                                                   value="{{ old('skills') }}"
+                                                                   placeholder="e.g. Senior PHP, Junior Laravel"
+                                                                   data-tippy-placement="top"
+                                                                   title="Separate different skills with a comma">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-xl-4">
-                                            <div class="submit-field">
-                                                <h5>Tags <span>(optional)</span> <i class="help-icon"
-                                                                                    data-tippy-placement="right"
-                                                                                    title="Maximum of 10 tags"></i></h5>
-                                                <div class="keywords-container">
-                                                    <div class="keyword-input-container">
-                                                        <input type="text" class="keyword-input with-border"
-                                                               placeholder="e.g. job title, responsibilites"/>
-                                                        <button class="keyword-input-button ripple-effect"><i
-                                                                class="icon-material-outline-add"></i></button>
+                                            <div class="col-xl-4">
+                                                <div class="submit-field">
+                                                    <h5>Work remotely ?</h5>
+                                                    <select class="form-control selectpicker with-border"
+                                                            data-live-search="true"
+                                                            name="remote" data-size="5"
+                                                            title="Select a work environment">
+                                                        <option disabled>Remote Work</option>
+                                                        @foreach($remotes as $remote)
+                                                            <option data-tokens="{{ $remote->remote }}"
+                                                                    value="{{ $remote->remote }}">
+                                                                {{ $remote->remote }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-8">
+                                                <div class="submit-field">
+                                                    <h5>Job Requirements</h5>
+                                                    <div class="checkbox">
+                                                        <input type="checkbox" id="locally" name="locally">
+                                                        <label for="locally" title="Leave unchecked if you want your job offer to be available internationally" data-tippy-placement="bottom">
+                                                            <span class="checkbox-icon"></span>
+                                                            I want my job offer to be restricted to the chosen job location
+                                                        </label>
                                                     </div>
-                                                    <div class="keywords-list"><!-- keywords go here --></div>
-                                                    <div class="clearfix"></div>
                                                 </div>
-
                                             </div>
-                                        </div>
 
-                                        <div class="col-xl-12">
-                                            <div class="submit-field">
-                                                <h5>Job Description</h5>
-                                                <textarea cols="30" rows="5" class="with-border"></textarea>
-                                                <div class="uploadButton margin-top-30">
-                                                    <input class="uploadButton-input" type="file"
-                                                           accept="image/*, application/pdf" id="upload" multiple/>
-                                                    <label class="uploadButton-button ripple-effect" for="upload">Upload
-                                                        Files</label>
-                                                    <span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
+                                            <div class="col-xl-12">
+                                                <div class="submit-field">
+                                                    <h5>Job Description</h5>
+                                                    <textarea name="description" value="{{ old('description') }}" cols="30" rows="5" class="with-border"></textarea>
+                                                    <div class="uploadButton margin-top-30">
+                                                        <input name="projectFile" class="uploadButton-input" type="file"
+                                                               accept="application/pdf" id="upload"/>
+                                                        <label class="uploadButton-button ripple-effect" for="upload">
+                                                            Upload Project File</label>
+                                                        <span class="uploadButton-file-name">Document that might be helpful in describing your job offer</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <button type="submit" class="button ripple-effect big margin-top-30"><i
+                                                    class="icon-feather-plus"></i> Post a Job Offer
+                                        </button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-
-                        <div class="col-xl-12">
-                            <a href="#" class="button ripple-effect big margin-top-30"><i class="icon-feather-plus"></i>
-                                Post a Job</a>
-                        </div>
-
                     </div>
                     <!-- Row / End -->
-
-                    <!-- Footer -->
-                    <div class="dashboard-footer-spacer"></div>
-                    <div class="small-footer margin-top-15">
-                        <div class="small-footer-copyrights">
-                            © 2019 <strong>Hireo</strong>. All Rights Reserved.
-                        </div>
-                        <ul class="footer-social-links">
-                            <li>
-                                <a href="#" title="Facebook" data-tippy-placement="top">
-                                    <i class="icon-brand-facebook-f"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Twitter" data-tippy-placement="top">
-                                    <i class="icon-brand-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="Google Plus" data-tippy-placement="top">
-                                    <i class="icon-brand-google-plus-g"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" title="LinkedIn" data-tippy-placement="top">
-                                    <i class="icon-brand-linkedin-in"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-                    <!-- Footer / End -->
-
+                    @include('layouts.dashboard.footer')
                 </div>
             </div>
             <!-- Dashboard Content / End -->
 
         </div>
         <!-- Dashboard Container / End -->
-
     </div>
-    <!-- Wrapper / End -->
-    <!-- Chart.js // documentation: http://www.chartjs.org/docs/latest/ -->
-    <script src="js/chart.min.js"></script>
-    <script>
-        Chart.defaults.global.defaultFontFamily = "Nunito";
-        Chart.defaults.global.defaultFontColor = '#888';
-        Chart.defaults.global.defaultFontSize = '14';
-
-        const ctx = document.getElementById('chart').getContext('2d');
-
-        const chart = new Chart(ctx, {
-            type: 'line',
-
-            // The data for our dataset
-            data: {
-                labels: ["January", "February", "March", "April", "May", "June"],
-                // Information about the dataset
-                datasets: [{
-                    label: "Views",
-                    backgroundColor: 'rgba(42,65,232,0.08)',
-                    borderColor: '#2a41e8',
-                    borderWidth: "3",
-                    data: [196, 132, 215, 362, 210, 252],
-                    pointRadius: 5,
-                    pointHoverRadius: 5,
-                    pointHitRadius: 10,
-                    pointBackgroundColor: "#fff",
-                    pointHoverBackgroundColor: "#fff",
-                    pointBorderWidth: "2",
-                }]
-            },
-            // Configuration options
-            options: {
-                layout: {
-                    padding: 10,
-                },
-                legend: {display: false},
-                title: {display: false},
-                scales: {
-                    yAxes: [{
-                        scaleLabel: {
-                            display: false
-                        },
-                        gridLines: {
-                            borderDash: [6, 10],
-                            color: "#d8d8d8",
-                            lineWidth: 1,
-                        },
-                    }],
-                    xAxes: [{
-                        scaleLabel: {display: false},
-                        gridLines: {display: false},
-                    }],
-                },
-
-                tooltips: {
-                    backgroundColor: '#333',
-                    titleFontSize: 13,
-                    titleFontColor: '#fff',
-                    bodyFontColor: '#fff',
-                    bodyFontSize: 13,
-                    displayColors: false,
-                    xPadding: 10,
-                    yPadding: 10,
-                    intersect: false
-                }
-            },
-        });
-    </script>
-    <!-- Google Autocomplete -->
-    <script>
-        function initAutocomplete() {
-            var options = {
-                types: ['(cities)'],
-                // componentRestrictions: {country: "us"}
-            };
-
-            var input = document.getElementById('autocomplete-input');
-            var autocomplete = new google.maps.places.Autocomplete(input, options);
-
-            if ($('.submit-field')[0]) {
-                setTimeout(function () {
-                    $(".pac-container").prependTo("#autocomplete-container");
-                }, 300);
-            }
-        }
-    </script>
 @endsection

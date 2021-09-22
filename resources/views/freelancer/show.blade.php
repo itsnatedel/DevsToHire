@@ -3,7 +3,7 @@
     <!-- Wrapper -->
     <div id="wrapper">
     <!-- Titlebar -->
-        <div class="single-page-header freelancer-header" data-background-image="{{ asset('images/companies/backgro.jpeg')}}">
+        <div class="single-page-header freelancer-header" data-background-image="{{ asset('images/adobestock_229479916.png')}}">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -21,7 +21,7 @@
                                     @endif
                                 </div>
                                 <div class="header-details">
-                                    <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span>{{ $freelancer->speciality }}</span></h3>
+                                    <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span>{{ $freelancer->info->speciality }}</span></h3>
                                     <ul>
                                         @if($freelancer->canBeRated || round($freelancer->info->stats->rating) > 0)
                                         <li>
@@ -194,7 +194,10 @@
                         <div class="sidebar-widget">
                             <h3>Attachments</h3>
                             <div class="attachments-container">
-                                <a href="{{ !is_null($freelancer->CV_url) ? route('freelancer.cv.download', [$freelancer->id, substr($freelancer->CV_url, 0, -4)]) : '' }}" class="attachment-box ripple-effect">
+                                <a href="{{ !is_null($freelancer->CV_url)
+                                    ? route('freelancer.cv.download', [$freelancer->id, substr($freelancer->CV_url, 0, -4)])
+                                    : '' }}"
+                                   class="attachment-box ripple-effect">
                                     <span>Curriculum Vitae
                                         @if(is_null($freelancer->CV_url))
                                             - None submitted
@@ -251,7 +254,7 @@
         <!-- Spacer / End-->
     </div>
     <!-- Wrapper / End -->
-    @include('layouts.popups.makeOffer')
+    @include('layouts.popups.applyJob')
     <script>
         // Snackbar for copy to clipboard button
         $('.copy-url-button').click(function () {

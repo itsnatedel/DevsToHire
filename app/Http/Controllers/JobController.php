@@ -7,6 +7,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Foundation\Application;
 
@@ -90,13 +92,44 @@ class JobController extends Controller
      */
     public function show(int $id, string $slug)
     {
-        $job = Job::getAllDataOfJob($id, $slug);
-        $relatedJobs = Job::getRelatedJobs($job);
-        $category = Job::getCategoryName($job->category_id);
-
-        return view('job.show')->with(compact('job', 'relatedJobs', 'category'));
+        $job            = Job::getAllDataOfJob($id, $slug);
+        $relatedJobs    = Job::getRelatedJobs($job);
+        $category       = Job::getCategoryName($job->category_id);
+		$alreadyApplied = Job::checkIfUserApplied($id, Auth::id());
+		$companyRating  = Job::getCompanyRating($id);
+		
+        return view('job.show', compact([
+	        'job',
+	        'relatedJobs',
+	        'category',
+	        'alreadyApplied',
+	        'companyRating'
+        ]));
     }
-
+	
+	
+	/**
+	 * @method cancelJobApplication
+	 * Cancels the job's application
+	 *
+	 * @param \Illuminate\Http\Request $request
+	 *
+	 * @return RedirectResponse
+	 * @throws \Illuminate\Validation\ValidationException
+	 */
+	public function cancelJobApplication(Request $request): RedirectResponse
+	{
+		$this->validate($request, [
+			'freelancerId' => 'required|integer',
+			'jobId' => 'required|integer'
+		]);
+		
+		if (Job::cancelApplication($request->jobId, $request->freelancerId)) {
+			return back()->with('success', 'Your application was successfully canceled !');
+		}
+		
+		return back()->with('fail', 'There was an unexpected error, please try again.');
+	}
     /**
      * Retrieves all jobs from a specific category
      *

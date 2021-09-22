@@ -29,7 +29,6 @@
                                 </li>
                             </ul>
                         </li>
-
                         <!-- Auth check for employer status -->
                         @if (Auth::check() && Auth::user()->role_id === 3)
                             <li><a href="#">For Employers</a>
@@ -90,6 +89,8 @@
                                 </ul>
                             </li>
                         @endif
+                        <li style="transform: translateY(2px)"><a href="{{ route('premium.index') }}">Pricing</a></li>
+                        <li style="transform: translateY(2px)"><a href="{{ route('contact') }}">Contact</a></li>
                     </ul>
                 </nav>
                 <div class="clearfix"></div>
@@ -151,13 +152,16 @@
                                     </div>
                                 </div>
 
+
                                 <ul class="user-menu-small-nav">
                                     @if(Auth::user()->role_id === 2)
                                     <li>
+                                        @if(!is_null(Auth::user()->freelancer_id))
                                         <a href="{{ route('freelancer.show', [Auth::user()->freelancer_id, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">
                                             <i class="icon-material-outline-dashboard"></i>
                                             My Profile
                                         </a>
+                                            @endif
                                     </li>
                                     @elseif(Auth::user()->role_id === 3)
                                         <li>
