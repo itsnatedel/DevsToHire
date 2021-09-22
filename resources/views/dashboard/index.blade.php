@@ -286,7 +286,6 @@
 <!-- Dashboard Container / End -->
 </div>
 <!-- Wrapper / End -->
-@include('layouts.popups.applyJob')
 
 <!-- Chart.js // documentation: http://www.chartjs.org/docs/latest/ -->
 <script src="js/chart.min.js"></script>

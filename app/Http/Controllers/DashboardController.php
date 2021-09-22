@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Dashboard;
-use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\Factory;
+use App\Http\Requests\StoreJobRequest;
 use Illuminate\Contracts\Foundation\Application;
 use App\Http\Requests\ModifyDashboardSettingsRequest;
 
@@ -58,13 +60,41 @@ class DashboardController extends Controller
 
         return redirect()->route('dashboard.settings');
     }
-
-    public function createJob()
+	
+	/**
+	 * Shows the job creation form and populates the select fields
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function createJob()
     {
-        return view('dashboard.post-job');
+		$types      = DB::table('jobs')->select('type')->distinct()->get();
+		$categories = DB::table('categories')->select('id', 'name')->get();
+		$countries  = DB::table('locations')->select('id', 'country_name')->get();
+		$remotes     = DB::table('jobs')->select('remote')->distinct()->get();
+		
+        return view('dashboard.post-job', compact([
+			'types',
+	        'categories',
+	        'countries',
+	        'remotes'
+        ]));
     }
-
-    public function createTask()
+	
+	/**
+	 * @param \App\Http\Requests\StoreJobRequest $request
+	 */
+	public function storeJob(StoreJobRequest $request)
+	{
+		$jobId = Dashboard::createJobOffer($request);
+		Dashboard::setJobSkills($request, $jobId);
+		
+		return redirect()->route('job.show', [$jobId, Str::slug($request->jobTitle)]);
+	}
+	
+	/**
+	 * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+	 */
+	public function createTask()
     {
         $categories = Category::all('id', 'name');
         $locations  = Location::all('id', 'country_name');
@@ -73,17 +103,6 @@ class DashboardController extends Controller
             'categories',
             'locations'
         ]));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**

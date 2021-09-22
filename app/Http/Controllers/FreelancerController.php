@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Freelancer;
@@ -94,18 +93,6 @@ class FreelancerController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param User $user
-     * @param int  $userId
-     *
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param int $id Freelancer id
@@ -114,19 +101,15 @@ class FreelancerController extends Controller
      */
     public function show(int $id)
     {
-        $freelancer         = Freelancer::find($id);
+	    $freelancer         = DB::table('freelancers')->where('id', $id)->first();
         $freelancer->skills = Freelancer::getFreelancerSkills($id);
         $freelancer->info   = Freelancer::getSingleFreelancerInfos($id);
         $freelancer->jobs   = Freelancer::getSingleFreelancerJobs($id);
-
-        $user = User::where('freelancer_id', $id)->first();
-
-        if (!is_null($user)
-            && !is_null($user->dir_url)
-            && !is_null($user->pic_url)
-            && !is_null($user->can_be_rated)) {
+		
+        $user = DB::table('users')->select('dir_url', 'can_be_rated')->where('id', $id)->first();
+		
+        if (!is_null($user)) {
             $freelancer->dir_url    = $user->dir_url;
-            $freelancer->pic_url    = $user->pic_url;
             $freelancer->canBeRated = $user->can_be_rated;
         }
 

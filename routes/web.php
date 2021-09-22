@@ -8,6 +8,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PopUpController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PremiumController;
@@ -91,6 +92,7 @@ Route::group(['prefix' => 'jobs'], function () {
     Route::get('/category/{id}', [JobController::class, 'category'])->where('id', '[0-9]+')->name('job.category');
     Route::get('/{id}/{slug}', [JobController::class, 'show'])->where('id', '[0-9]+')->name('job.show');
     Route::get('/search', [JobController::class, 'search'])->name('job.search');
+    Route::post('/cancel-job-application', [JobController::class, 'cancelJobApplication'])->name('cancel.job.apply');
 });
 
 /* Bid Routes */
@@ -119,6 +121,7 @@ Route::group(['prefix' => 'tasks'], function () {
         ->where('task_id', '[0-9]+')
         ->where('slug', '[a-z-]+')
         ->name('task.show');
+	
     Route::get('/search', [TaskController::class, 'search'])->name('task.search');
     Route::post('/create', [TaskController::class, 'store'])->name('task.store');
     Route::get('/{taskId}/{fileUrl}', [TaskController::class, 'downloadBrief'])
@@ -160,4 +163,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
     /* Job */
     Route::get('/manage/job', [JobController::class, 'manage'])->name('dashboard.job.manage');
     Route::get('/job/create', [DashboardController::class, 'createJob'])->name('dashboard.job.create');
+    Route::post('/job/store', [DashboardController::class, 'storeJob'])->name('dashboard.job.store');
 });
+
+/** PopUps routes */
+Route::post('apply/job/{jobId}', [PopUpController::class, 'applyJob'])->name('apply.job');

@@ -304,7 +304,7 @@
                         <div class="tasks-list-container compact-list margin-top-35">
                             <!-- Task -->
                             @foreach($tasks as $task)
-                                <a href="{{ route('task.show', [$task->company_id, $task->id, Str::slug($task->name)]) }}"
+                                <a href="{{ route('task.show', [$task->id, Str::slug($task->name)]) }}"
                                    class="task-listing">
                                     <!-- Job Listing Details -->
                                     <div class="task-listing-details">

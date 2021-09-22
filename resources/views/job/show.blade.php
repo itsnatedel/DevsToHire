@@ -26,9 +26,15 @@
                                                 {{ $job->name }}
                                             </a>
                                         </li>
-                                        <li>
-                                            <div class="star-rating" data-rating="4.9"></div>
-                                        </li>
+                                        @if(!is_null($companyRating->rating))
+                                            <li>
+                                                <div class="star-rating" data-rating="{{ $companyRating->rating }}"></div>
+                                            </li>
+                                        @else
+                                            <li>
+                                                <mark>This company hasn't been rated yet.</mark>
+                                            </li>
+                                        @endif
                                         <li>
                                             <img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($job->country_code) . '.svg') }}"
@@ -47,7 +53,7 @@
                                 <div class="salary-box">
                                     <div class="salary-type">Annual Salary</div>
                                     <div
-                                        class="salary-amount">{{ $job->salary_low . ' € - ' . $job->salary_high . ' €' }}</div>
+                                            class="salary-amount">{{ $job->salary_low . ' € - ' . $job->salary_high . ' €' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -125,10 +131,36 @@
                 <!-- Sidebar -->
                 <div class="col-xl-4 col-lg-4">
                     <div class="sidebar-container">
+                        @if(Session::has('success'))
+                            <div class="notification success closeable">
+                                <p>{{ Session::get('success') }}</p>
+                                <a class="close"></a>
+                            </div>
+                        @endif
+                        @if($alreadyApplied)
+                            <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
+                                        class="icon-material-outline-arrow-right-alt"></i></a>
+                        @else
+                            <div>
+                                <form action="{{ route('cancel.job.apply') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="freelancerId" value="{{ Auth::id() }}">
+                                    <input type="hidden" name="jobId" value="{{ $job->id }}">
 
-                        <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
-                                class="icon-material-outline-arrow-right-alt"></i></a>
-                        <!-- Sidebar Widget -->
+                                    <button class="button full-width margin-bottom-20" type="submit">Cancel your
+                                        application
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                        @if($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div>
+                                    <mark class="color">{{ $error }}</mark>
+                                </div>
+                        @endforeach
+                    @endif
+                    <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
                             <div class="job-overview">
                                 <div class="job-overview-headline">Job Summary</div>

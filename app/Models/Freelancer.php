@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Freelancer extends Model
 {
@@ -30,27 +28,6 @@ class Freelancer extends Model
         'lastname',
         'description',
     ];
-
-
-    /**
-     * Relation Freelancer -> Bid
-     *
-     * @return HasMany
-     */
-    public function bids(): HasMany
-    {
-        return $this->hasMany(Bid::class);
-    }
-
-    /**
-     * Relation Freelancer -> User
-     *
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     /**
      * getFreelancersInfos method.
@@ -208,7 +185,7 @@ class Freelancer extends Model
      */
     public static function getFreelancerSkills(int $id): array
     {
-        $skillsSet = DB::table('skills_freelancers as skfr')
+        $skillsSet = DB::table('skills_freelancers')
             ->select('skills')
             ->where('freelancer_id', '=', $id)
             ->first();
@@ -221,7 +198,6 @@ class Freelancer extends Model
 
     /**
      * getSingleFreelancerInfos method.
-     *
      * Retrieves data used to populate a freelancer profile
      * @param int $id Freelancer id
      *
@@ -233,7 +209,6 @@ class Freelancer extends Model
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
             ->select(
-                'fr.*',
                 DB::raw('DATEDIFF(fr.joined_at, NOW()) as joined_at'),
                 'lo.country_name',
                 'lo.country_code',
@@ -250,7 +225,6 @@ class Freelancer extends Model
 
     /**
      * getFreelancerStats method.
-     *
      * Retrieves some statistics of a freelancer.
      *
      * @param int $id Freelancer id
@@ -305,5 +279,25 @@ class Freelancer extends Model
             )
             ->where('fjd.freelancer_id', '=', $id)
             ->get();
+    }
+
+    /**
+     * Relation Freelancer -> Bid
+     *
+     * @return HasMany
+     */
+    public function bids(): HasMany
+    {
+        return $this->hasMany(Bid::class);
+    }
+
+    /**
+     * Relation Freelancer -> User
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
