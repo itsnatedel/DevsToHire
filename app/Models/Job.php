@@ -391,6 +391,12 @@ class Job extends Model
 		return false;
 	}
 	
+	/**
+	 * @method getCompanyRating
+	 * @param int $id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|object|null
+	 */
 	public static function getCompanyRating(int $id)
 	{
 		$companyId = DB::table('jobs')
