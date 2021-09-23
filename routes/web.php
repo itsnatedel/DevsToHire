@@ -168,3 +168,4 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
 
 /** PopUps routes */
 Route::post('apply/job/{jobId}', [PopUpController::class, 'applyJob'])->name('apply.job');
+Route::post('/make-offer/{freelancerId}/{userId}', [PopUpController::class, 'makeOffer'])->name('make.offer');
