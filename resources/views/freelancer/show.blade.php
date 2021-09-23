@@ -10,7 +10,7 @@
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image freelancer-avatar">
-                                    @if(!is_null($freelancer->dir_url) && !is_null($freelancer->pic_url))
+                                    @if(isset($freelancer->dir_url) && !is_null($freelancer->dir_url) && !is_null($freelancer->pic_url))
                                     <img
                                         src="{{ asset('images/user/' . $freelancer->dir_url . '/avatar/' . $freelancer->pic_url) }}"
                                         alt="Freelancer's pic">
@@ -23,7 +23,7 @@
                                 <div class="header-details">
                                     <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span>{{ $freelancer->info->speciality }}</span></h3>
                                     <ul>
-                                        @if($freelancer->canBeRated || round($freelancer->info->stats->rating) > 0)
+                                        @if(round($freelancer->info->stats->rating) > 0)
                                         <li>
                                             <div class="star-rating" data-rating="{{ round($freelancer->info->stats->rating) }}"></div>
                                         </li>
@@ -124,9 +124,24 @@
                             <div class="overview-item"><strong>{{ $freelancer->info->joined_at . ' ago'}}</strong><span>Joined</span></div>
                         </div>
 
+                        @if(Session::has('success'))
+                            <div class="notification success closeable">
+                                <p>{{ Session::get('success') }}</p>
+                                <a class="close"></a>
+                            </div>
+                        @endif
+
                         <!-- Button -->
                         <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">Make an
                             Offer <i class="icon-material-outline-arrow-right-alt"></i></a>
+
+                        @if($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div>
+                                    <mark class="color">{{ $error }}</mark>
+                                </div>
+                            @endforeach
+                        @endif
 
                         <!-- Freelancer Indicators -->
                         <div class="sidebar-widget">
@@ -252,15 +267,7 @@
         <!-- Spacer -->
         <div class="margin-top-15"></div>
         <!-- Spacer / End-->
+        @include('layouts.popups.makeOffer')
     </div>
     <!-- Wrapper / End -->
-    @include('layouts.popups.applyJob')
-    <script>
-        // Snackbar for copy to clipboard button
-        $('.copy-url-button').click(function () {
-            Snackbar.show({
-                text: 'Copied to clipboard!',
-            });
-        });
-    </script>
 @endsection
