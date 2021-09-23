@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Requests\MakeOfferRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PopUp extends Model
@@ -16,7 +19,7 @@ class PopUp extends Model
 	 *
 	 * @param $jobId
 	 *
-	 * @return \Illuminate\Database\Query\Builder
+	 * @return mixed
 	 */
 	public static function getEmployerId($jobId)
 	{
@@ -44,5 +47,57 @@ class PopUp extends Model
 				'job_id'        => $jobId,
 				'employer_id'   => $employerId
 			]);
+	}
+	
+	/**
+	 * @method storeOffer
+	 * @param \App\Http\Requests\MakeOfferRequest $request
+	 * @param int                                 $freelancerId
+	 * @param int                                 $userId
+	 *
+	 * @return bool
+	 */
+	public static function storeOffer(MakeOfferRequest $request, int $freelancerId, int $userId): bool
+	{
+		$fileName = self::getFileUrl($request);
+		self::storeOfferFile($request, $fileName, Auth::user()->dir_url);
+		
+		return DB::table('offers')
+			->insert([
+				'message'       => $request->message,
+				'file_url'      => $fileName,
+				'offeror_name'  => $request->name,
+				'offeror_email' => $request->email,
+				'freelancer_id' => $freelancerId,
+				'user_id'       => $userId
+			]);
+	}
+	
+	/**
+	 * @method getFileUrl
+	 * Generates an UUID for the filename
+	 *
+	 * @param \App\Http\Requests\MakeOfferRequest $request
+	 *
+	 * @return string
+	 */
+	private static function getFileUrl(MakeOfferRequest $request): string
+	{
+		return Uuid::uuid4() . '.' . $request->file('offerFile')->extension();
+	}
+	
+	/**
+	 * @param \App\Http\Requests\MakeOfferRequest $request
+	 * @param string                              $fileName
+	 * @param string                              $userDir
+	 *
+	 * @return bool
+	 */
+	private static function storeOfferFile(MakeOfferRequest $request, string $fileName, string $userDir): bool
+	{
+		 $request->file('offerFile')
+			->move(public_path('images/user/' . $userDir . '/files'), $fileName);
+		 
+		 return true;
 	}
 }
