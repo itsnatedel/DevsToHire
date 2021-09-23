@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Ramsey\Uuid\Uuid;
+use RuntimeException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -300,7 +301,7 @@ class Task extends Model
 
         if (!is_dir($filesDirPath)) {
             if (!mkdir($filesDirPath, 0755)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $filesDirPath));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $filesDirPath));
             }
         }
 
