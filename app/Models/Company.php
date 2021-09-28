@@ -218,7 +218,7 @@ class Company extends Model
             ->select('rc.note',
                 'rc.comment',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) AS full_name"),
-                DB::raw("DATEDIFF(rc.when, NOW()) as rating_when"))
+                DB::raw('DATEDIFF(rc.when, NOW()) as rating_when'))
             ->where('rc.company_id', '=', $company_id)
             ->limit(5);
 

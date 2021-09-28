@@ -7,73 +7,48 @@
             <li><a href="#tab">Make an Offer</a></li>
         </ul>
         <div class="popup-tabs-container">
-            <!-- Tab -->
-            <div class="popup-tab-content" id="tab">
-                <!-- Welcome Text -->
-                <div class="welcome-text">
-                    <h3>Discuss your project with David</h3>
-                </div>
-                <!-- Form -->
-                <form method="post" action="#" id="makeOfferForm">
-                    @csrf
-                    <div class="input-with-icon-left">
-                        <i class="icon-material-outline-account-circle"></i>
-                        <input type="text" class="input-text with-border" name="name" id="name"
-                               placeholder="First and Last Name"/>
-                    </div>
-
-                    <div class="input-with-icon-left">
-                        <i class="icon-material-baseline-mail-outline"></i>
-                        <input type="text" class="input-text with-border" name="email" id="emailaddress"
-                               placeholder="Email Address"/>
-                    </div>
-                    <textarea name="message" cols="10" placeholder="Message" class="with-border"></textarea>
-                    <div class="uploadButton margin-top-25">
-                        <input class="uploadButton-input" name="file" type="file" accept="image/*, application/pdf" id="upload"
-                               multiple/>
-                        <label class="uploadButton-button ripple-effect" for="upload">Add Attachments</label>
-                        <span class="uploadButton-file-name">Allowed file types: zip, pdf, png, jpg <br> Max. files size: 50 MB.</span>
-                    </div>
-                </form>
-                <!-- Button -->
-                <button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit">Make
-                    an Offer <i class="icon-material-outline-arrow-right-alt"></i></button>
-            </div>
             <!-- Login -->
             <div class="popup-tab-content" id="loginn">
                 <!-- Welcome Text -->
                 <div class="welcome-text">
-                    <h3>Discuss Your Project With Tom</h3>
+                    <h3>Discuss your project with {{ $freelancer->firstname }}</h3>
                 </div>
 
                 <!-- Form -->
-                <form method="post" id="make-an-offer-form">
+                <form method="post" action="{{ route('make.offer', [$freelancer->id, Auth::id()]) }}" id="make-an-offer-form" enctype="multipart/form-data">
+                    @csrf
 
+                    <input type="hidden" name="userId" value="{{ Auth::id() }}">
                     <div class="input-with-icon-left">
                         <i class="icon-material-outline-account-circle"></i>
-                        <input type="text" class="input-text with-border" name="name2" id="name2"
-                               placeholder="First and Last Name" required/>
+                        <input type="text" class="input-text with-border" name="name" id="name"
+                               placeholder="First and Last Name"
+                               value="{{ old('name')
+                                    ?? ucfirst(Auth::user()->firstname) . ' ' . ucfirst(Auth::user()->lastname) }}"
+                               required/>
                     </div>
 
                     <div class="input-with-icon-left">
                         <i class="icon-material-baseline-mail-outline"></i>
-                        <input type="text" class="input-text with-border" name="emailaddress2" id="emailaddress2"
-                               placeholder="Email Address" required/>
+                        <input type="text" class="input-text with-border" name="email" id="email"
+                               placeholder="Email Address" value="{{ old('email') ?? Auth::user()->email }}" required/>
                     </div>
 
-                    <textarea name="textarea" cols="10" placeholder="Message" class="with-border"></textarea>
+                    <textarea name="message" cols="10" placeholder="Message" class="with-border"></textarea>
 
                     <div class="uploadButton margin-top-25">
-                        <input class="uploadButton-input" type="file" accept="image/*, application/pdf"
-                               id="upload-cv" multiple/>
+                        <input class="uploadButton-input" name="offerFile" type="file" accept="application/pdf"
+                               id="upload-cv" />
                         <label class="uploadButton-button" for="upload-cv">Add Attachments</label>
-                        <span class="uploadButton-file-name">Allowed file types: zip, pdf, png, jpg <br> Max. files size: 50 MB.</span>
+                        <span class="uploadButton-file-name">Allowed file types: pdf <br> Max. files size: 50 MB.</span>
                     </div>
+
+                    <!-- Button -->
+                    <button class="button full-width button-sliding-icon ripple-effect" type="submit"
+                            form="make-an-offer-form">Make an Offer
+                        <i class="icon-material-outline-arrow-right-alt"></i>
+                    </button>
                 </form>
-                <!-- Button -->
-                <button class="button full-width button-sliding-icon ripple-effect" type="submit"
-                        form="make-an-offer-form">Make an Offer <i
-                        class="icon-material-outline-arrow-right-alt"></i></button>
             </div>
         </div>
     </div>
