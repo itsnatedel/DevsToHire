@@ -22,7 +22,7 @@
                 <form method="post" id="apply-now-form" action="{{ route('apply.job', $job->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="input-with-icon-left">
-                        <input type="hidden" value="{{ Auth::user()->id }}" name="candidateId">
+                        @auth <input type="hidden" value="{{ Auth::id() }}" name="candidateId"> @endauth
                         <i class="icon-material-outline-account-circle"></i>
                         <input type="text" class="input-text with-border" name="name" id="name" placeholder="First and Last Name"
                                @auth

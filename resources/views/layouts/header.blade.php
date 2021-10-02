@@ -36,7 +36,7 @@
                                     <li><a href="{{ route('freelancer.index') }}">Find a Freelancer</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('company.show', [Auth::user()->company_id, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">Your Company Profile</a>
+                                        <a href="{{ route('company.show', [Auth::user()->company_id ?? 1, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">Your Company Profile</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('dashboard.job.create') }}">Post a Job</a>
@@ -165,7 +165,7 @@
                                     </li>
                                     @elseif(Auth::user()->role_id === 3)
                                         <li>
-                                            <a href="{{ route('company.show', [Auth::user()->company_id, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">
+                                            <a href="{{ route('company.show', [Auth::user()->company_id ?? 1, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">
                                                 <i class="icon-material-outline-dashboard"></i>
                                                 My Company Profile
                                             </a>
