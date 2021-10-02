@@ -2,16 +2,17 @@
 
 namespace App\Models;
 
-use Ramsey\Uuid\Uuid;
-use RuntimeException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
+use RuntimeException;
 
 class Task extends Model
 {
@@ -315,6 +316,57 @@ class Task extends Model
 
 
         return true;
+    }
+    
+    /**
+     * @method getBids
+     * @param int $taskId
+     *
+     * @return Collection
+     */
+    public static function getBids (int $taskId)
+    {
+        $bids =  DB::table('bids as b')
+            ->join('users as u', 'u.freelancer_id', '=', 'b.bidder_id')
+            ->join('locations as lo', 'lo.id', '=', 'u.location_id')
+            ->select(
+                'b.id',
+                'b.bidder_id',
+                'b.minimal_rate',
+                'b.delivery_time',
+                'b.time_period',
+                'u.firstname',
+                'u.lastname',
+                'u.dir_url',
+                'u.pic_url',
+                'lo.country_name',
+                'lo.country_code')
+            ->where('b.task_id', '=', $taskId)
+            ->get();
+
+        foreach ($bids as $bid) {
+            $bid->rating = self::getBidderRating($bid);
+        }
+        
+        return $bids;
+    }
+    
+    /**
+     * @method getBidderRating
+     * @param mixed $bid
+     *
+     * @return false|mixed
+     */
+    private static function getBidderRating ($bid)
+    {
+        $rating = DB::table('ratings_freelancers as rafr')
+            ->select( DB::raw('SUM(rafr.note) / COUNT(rafr.id) as rating'))
+            ->where('rafr.freelancer_id', '=', $bid->bidder_id)
+            ->first();
+        
+        return is_null($rating)
+            ? false
+            : $rating->rating;
     }
 
     /**

@@ -41,6 +41,11 @@
                                 @endforeach
                             </div>
                         @endif
+                        @if(Session::has('fail'))
+                            <div class="notification error closeable">
+                                <p>{{ Session::get('fail') }}</p>
+                            </div>
+                        @endif
                         <!-- Signup Form -->
                         <form method="post" id="register-account-form-main" action="{{ route('register') }}" enctype="multipart/form-data">
                             @csrf
@@ -93,15 +98,10 @@
                                        id="email-register" placeholder="Email Address" required value="{{ old('email') }}"/>
                             </div>
 
-                            <div class="bootstrap-select" style="margin-bottom: 15px;">
-                                <select class="form-control selectpicker with-border" id="select-country"
-                                        data-live-search="true" aria-expanded="false" name="country" data-size="5">
-                                    <option disabled selected>Your Country</option>
-                                    @foreach($countries as $country)
-                                        <option data-tokens="{{ $country->name }}"
-                                                value="{{ $country->code }}">{{ $country->name }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="input-with-icon-left">
+                                <i class="icon-material-outline-location-on"></i>
+                                <input type="text" class="input-text with-border" name="country"
+                                       id="country-register" placeholder="Your country" required value="{{ old('country') }}"/>
                             </div>
 
                             <div class="row">

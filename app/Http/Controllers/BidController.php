@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlaceBidRequest;
+use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class BidController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -19,7 +27,7 @@ class BidController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,7 +38,7 @@ class BidController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -41,7 +49,7 @@ class BidController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -52,7 +60,7 @@ class BidController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
@@ -64,7 +72,7 @@ class BidController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -75,7 +83,7 @@ class BidController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
@@ -86,7 +94,8 @@ class BidController extends Controller
      * Dashboard Manage Bidders
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     *
+     * @return Application|Factory|View
      */
     public function manage($id)
     {
@@ -97,20 +106,43 @@ class BidController extends Controller
      * Dashboard Manage My Bids
      *
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     *
+     * @return Application|Factory|View
      */
     public function activeBids($id)
     {
         return view('dashboard.my-bids');
     }
-
+    
     /**
      * Handles bid's placement
-     * @param $id Task's id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     *
+     * @param PlaceBidRequest $request
+     * @param int             $taskId
+     *
+     * @return RedirectResponse
      */
-    public function placeBid($id)
+    public function placeBid(PlaceBidRequest $request, int $taskId) : RedirectResponse
     {
-        // Goes to db and inserts a bid
+        if (is_null($request->bidderId)) {
+            return redirect()->back()->withFail('You must be signed in to bid on a task !');
+        }
+        
+        if (is_null($request->bidderRole) || $request->bidderRole === 3) {
+            return redirect()->back()->withFail('You must be a freelancer to bid on a task !');
+        }
+        
+        $bid = [
+            'minimal_rate'  => $request->rate,
+            'delivery_time' => $request->timespan,
+            'time_period'   => $request->duration,
+            'created_at'    => Carbon::now()->toDateTimeString(),
+            'task_id'       => $taskId,
+            'bidder_id'     => $request->bidderId,
+        ];
+        
+        DB::table('bids')->insert($bid);
+        
+        return redirect()->back()->with('success', 'Your bid has been placed !');
     }
 }

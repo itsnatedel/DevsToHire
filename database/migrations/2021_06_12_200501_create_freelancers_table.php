@@ -1,10 +1,10 @@
 <?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-class CreateFreelancersTable extends Migration
+    
+    use Illuminate\Database\Migrations\Migration;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
+    
+    class CreateFreelancersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,6 @@ class CreateFreelancersTable extends Migration
             $table->integer('hourly_rate');
             $table->boolean('verified')->default(0);
             $table->string('CV_url')->nullable();
-            $table->integer('success_rate')->nullable(); // TODO : Remove this. Use freelancers_jobs_done rating/note data
         });
     }
 

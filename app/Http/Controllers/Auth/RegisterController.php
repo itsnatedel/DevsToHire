@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use RuntimeException;
 use App\Models\Company;
 use App\Models\Freelancer;
@@ -97,19 +98,20 @@ class RegisterController extends Controller
             'checkboxRGPD' => 'required'
         ]);
     }
-
+    
     /**
      * Create a new user instance after a valid registration.
      *
      * @param array $data
      *
+     * @return RedirectResponse
      */
     protected function create(array $data)
     {
         // 2 = Freelancer / 3 = Company
         $data = $this->setRoleId($data);
-        $data = $this->setLocationId($data);
-
+        $data['country'] = $this->setLocationId($data);
+        
         $avatarPicture = $this->checkIfAvatarWasUploaded(app('request'));
 
         if ($avatarPicture[0] === true) {
@@ -140,7 +142,6 @@ class RegisterController extends Controller
                     'verified' => 0,
                     'CV_url' => null,
                     'user_id' => $userId,
-                    'success_rate' => 0,
                     'location_id' => $user->location_id,
                     'joined_at' => Carbon::now(),
                     'category_id' => 1
@@ -203,7 +204,7 @@ class RegisterController extends Controller
 
         return $data;
     }
-
+    
     /**
      * setLocationId method.
      *
@@ -211,17 +212,20 @@ class RegisterController extends Controller
      *
      * @param array $data
      *
-     * @return array
+     * @return array|false
      */
-    protected function setLocationId(array $data): array
+    protected function setLocationId(array $data)
     {
-        $data['country'] = DB::table('locations')
+        $countryId = DB::table('locations')
             ->select('id')
-            ->where('country_code', '=', $data['country'])
-            ->first()
-            ->id;
+            ->where('country_name', 'LIKE', '%' . $data['country'] . '%')
+            ->first();
 
-        return $data;
+        if (is_null($countryId)) {
+            return 1;
+        }
+    
+        return $countryId->id;
     }
 
     /**

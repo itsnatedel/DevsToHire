@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use App\Models\Category;
+use App\Models\Job;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
 
 class JobController extends Controller
 {
@@ -37,7 +37,7 @@ class JobController extends Controller
      * @param Request $request
      * @return Application|Factory|View
      */
-    public function search(Request $request) {
+    final public function search(Request $request): View {
         // User selected a sort method
         if (isset($request->sortBy) && in_array($request->sortBy, ['newest', 'oldest', 'random'])) {
             $jobs = Job::getAllJobsAndCompanyInfo($request, true, false);
@@ -95,7 +95,7 @@ class JobController extends Controller
         $job            = Job::getAllDataOfJob($id, $slug);
         $relatedJobs    = Job::getRelatedJobs($job);
         $category       = Job::getCategoryName($job->category_id);
-		$alreadyApplied = Job::checkIfUserApplied($id, Auth::id());
+		$alreadyApplied = Job::checkUserApplied($id, Auth::id());
 		$companyRating  = Job::getCompanyRating($id);
 		
         return view('job.show', compact([

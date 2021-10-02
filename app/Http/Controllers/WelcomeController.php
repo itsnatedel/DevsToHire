@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
-use App\Models\Task;
-use App\Models\Welcome;
 use App\Models\Category;
-use App\Models\Location;
+use App\Models\Job;
+use App\Models\Welcome;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
 
 class WelcomeController extends Controller
 {
@@ -44,9 +42,9 @@ class WelcomeController extends Controller
     }
     
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     * @return Application|Factory|View|void
      */
     public function search(Request $request)
     {
@@ -59,38 +57,22 @@ class WelcomeController extends Controller
         if (!is_bool($taskOrJob)) {
             if ($taskOrJob === 'job') {
                 $jobs       = Welcome::searchJobsOrTasks($request, $taskOrJob);
-                // To populate select inputs in sidebar
+                
+                // Populate select inputs in sidebar
                 $countries  = Job::getCountries();
                 $categories = Category::all();
 
                 return view('job.index', [
-                    'jobs' => $jobs,
-                    'countries' => $countries,
-                    'categories' => $categories
+                    'jobs'          => $jobs,
+                    'countries'     => $countries,
+                    'categories'    => $categories
                 ]);
             }
 
             if ($taskOrJob === 'task') {
-                $tasks              = Welcome::searchJobsOrTasks($request, $taskOrJob);
+                $tasks = Welcome::searchJobsOrTasks($request, $taskOrJob);
 
-                foreach ($tasks as $task) {
-                    $task->skills = Task::getSkills($task->id);
-                }
-
-                $fixedRates         = Task::getFixedRatesLimits();
-                $hourlyRates        = Task::getHourlyRatesLimits();
-                $categories         = Category::all(['id', 'name']);
-                $locations          = Location::all(['id', 'country_name']);
-                $skills             = DB::table('skills')->get('skill');
-
-                return view('task.index', compact([
-                    'tasks',
-                    'categories',
-                    'locations',
-                    'skills',
-                    'fixedRates',
-                    'hourlyRates'
-                ]));
+                return Controller::getTasksDetails($tasks);
             }
         } else {
             return back()->withFail('No match found, try again !');

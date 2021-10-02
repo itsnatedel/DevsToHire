@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Models;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Welcome extends Model
 {
@@ -70,7 +70,7 @@ class Welcome extends Model
     public static function getFeaturedFreelancers(): Collection
     {
         return DB::table('users as u')
-            ->select(DB::raw('DISTINCT fr.id'),
+            ->select(DB::raw('fr.id'),
                 'fr.pic_url',
                 'fr.verified',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as fullName"),
@@ -78,13 +78,15 @@ class Welcome extends Model
                 'cat.name as speciality',
                 'lo.country_name',
                 'fr.hourly_rate',
-                'fr.success_rate',
+                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) *100 as success'),
                 'u.dir_url')
             ->join('freelancers as fr', 'fr.id', '=', 'u.id')
+            ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
+            ->groupBy('fr.id')
             ->inRandomOrder()
-            ->limit(6)
+            ->limit(8)
             ->get();
     }
 

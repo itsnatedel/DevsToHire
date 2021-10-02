@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactForm;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request as Request;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Task;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request as Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class Controller extends BaseController
 {
@@ -101,5 +109,33 @@ class Controller extends BaseController
             ->send(new ContactForm($details));
         
         return back()->with('success', 'Thanks for contacting us !');
+    }
+    
+    /**
+     * @method getTasksDetails
+     * @param LengthAwarePaginator $tasks
+     *
+     * @return Application|Factory|View
+     */
+    public static function getTasksDetails (LengthAwarePaginator $tasks)
+    {
+        foreach ($tasks as $task) {
+            $task->skills = Task::getSkills($task->id);
+        }
+    
+        $fixedRates     = Task::getFixedRatesLimits();
+        $hourlyRates    = Task::getHourlyRatesLimits();
+        $categories     = Category::all(['id', 'name']);
+        $locations      = Location::all(['id', 'country_name']);
+        $skills         = DB::table('skills')->get('skill');
+    
+        return view('task.index', compact([
+            'tasks',
+            'categories',
+            'locations',
+            'skills',
+            'fixedRates',
+            'hourlyRates'
+        ]));
     }
 }

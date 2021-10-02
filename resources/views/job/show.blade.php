@@ -137,22 +137,30 @@
                                 <a class="close"></a>
                             </div>
                         @endif
-                        @if($alreadyApplied)
-                            <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
-                                        class="icon-material-outline-arrow-right-alt"></i></a>
-                        @else
-                            <div>
-                                <form action="{{ route('cancel.job.apply') }}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="freelancerId" value="{{ Auth::id() }}">
-                                    <input type="hidden" name="jobId" value="{{ $job->id }}">
 
-                                    <button class="button full-width margin-bottom-20" type="submit">Cancel your
-                                        application
-                                    </button>
-                                </form>
-                            </div>
-                        @endif
+                        @auth
+                            @if(!$alreadyApplied)
+                                <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
+                                            class="icon-material-outline-arrow-right-alt"></i></a>
+                            @else
+                                <div>
+                                    <form action="{{ route('cancel.job.apply') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="freelancerId" value="{{ Auth::id() }}">
+                                        <input type="hidden" name="jobId" value="{{ $job->id }}">
+
+                                        <button class="button full-width margin-bottom-20" type="submit">Cancel your
+                                            application
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        @endauth
+                            @guest
+                                <a href="{{ route('login') }}" class="apply-now-button">Register to apply to his offer
+                                    <i class="icon-material-outline-arrow-right-alt"></i>
+                                </a>
+                            @endguest
                         @if($errors->any())
                             @foreach ($errors->all() as $error)
                                 <div>

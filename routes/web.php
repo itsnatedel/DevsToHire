@@ -1,32 +1,32 @@
 <?php
-
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BidController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PopUpController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PremiumController;
-use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FreelancerController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+    
+    use App\Http\Controllers\BidController;
+    use App\Http\Controllers\BlogController;
+    use App\Http\Controllers\CheckoutController;
+    use App\Http\Controllers\CompanyController;
+    use App\Http\Controllers\Controller;
+    use App\Http\Controllers\DashboardController;
+    use App\Http\Controllers\FreelancerController;
+    use App\Http\Controllers\InvoiceController;
+    use App\Http\Controllers\JobController;
+    use App\Http\Controllers\OrderController;
+    use App\Http\Controllers\PopUpController;
+    use App\Http\Controllers\PremiumController;
+    use App\Http\Controllers\TaskController;
+    use App\Http\Controllers\WelcomeController;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Route;
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Web Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here is where you can register web routes for your application. These
+    | routes are loaded by the RouteServiceProvider within a group which
+    | contains the "web" middleware group. Now create something great!
+    |
+    */
 
 /* Homepage Route */
 Route::get('/', [WelcomeController::class, 'index'])->name('homepage');
@@ -96,7 +96,7 @@ Route::group(['prefix' => 'jobs'], function () {
 });
 
 /* Bid Routes */
-Route::get('/bid/place/{id}', [BidController::class, 'placeBid'])->where('id', '[0-9]+')->name('bid.place');
+Route::post('/bid/place/{taskId}', [BidController::class, 'placeBid'])->where('id', '[0-9]+')->name('bid.place');
 
 /* Order Routes */
 Route::group(['prefix' => 'order'], function () {

@@ -271,7 +271,7 @@
                                                         {{ Str::limit($freelancer->country_name, 10, '.') }}</strong>
                                                 </li>
                                                 <li>Rate <strong>{{ $freelancer->hourly_rate }} €/h</strong></li>
-                                                <li>Job Success <strong>{{ $freelancer->success_rate }}%</strong></li>
+                                                <li>Job Success <strong>{{ round($freelancer->success) }}%</strong></li>
                                             </ul>
                                         </div>
                                         <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->fullName)]) }}"

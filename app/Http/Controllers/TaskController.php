@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use App\Http\Requests\SaveTaskRequest;
+use App\Models\Category;
+use App\Models\Company;
+use App\Models\Location;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Company;
-use App\Models\Category;
-use App\Models\Location;
-use App\Models\Freelancer;
+use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\SaveTaskRequest;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TaskController extends Controller
@@ -65,25 +64,8 @@ class TaskController extends Controller
         $tasks = empty($request->sortBy)
             ? Task::getTasks($request)
             : Task::getTasks($request, true);
-
-        foreach ($tasks as $task) {
-            $task->skills = Task::getSkills($task->id);
-        }
-
-        $fixedRates = Task::getFixedRatesLimits();
-        $hourlyRates = Task::getHourlyRatesLimits();
-        $categories = Category::all(['id', 'name']);
-        $locations = Location::all(['id', 'country_name']);
-        $skills = DB::table('skills')->get('skill');
-
-        return view('task.index', compact([
-            'tasks',
-            'categories',
-            'locations',
-            'skills',
-            'fixedRates',
-            'hourlyRates'
-        ]));
+        
+        return Controller::getTasksDetails($tasks);
     }
 
     /**
@@ -161,14 +143,19 @@ class TaskController extends Controller
             $company_rating = 0;
         }
 
-        $location = Location::find($task->location_id);
+        $location = DB::table('locations')
+            ->select('country_code', 'country_name')
+            ->where('id', '=', $task->location_id)->first();
+        
+        $bids = Task::getBids($taskId);
         $skills = Task::getSkills($taskId);
 
         return view('task.show', compact([
             'task',
             'company_rating',
             'location',
-            'skills'
+            'skills',
+            'bids'
         ]));
     }
     
