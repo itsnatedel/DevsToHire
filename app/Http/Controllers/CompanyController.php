@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RateCompanyRequest;
 use App\Models\Company;
+use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -82,16 +86,45 @@ class CompanyController extends Controller
             'ratings'           => $ratings
         ]);
     }
-
+    
     /**
-     * Show the form for editing the specified resource.
+     * @param RateCompanyRequest $request
+     * @param int                $companyId
      *
-     * @param  int  $id
-     * @return Response
+     * @return RedirectResponse
      */
-    public function edit($id)
+    public function rate (RateCompanyRequest $request, int $companyId) : RedirectResponse
     {
-        //
+        $isOldEmployee = Company::isOldEmployee($request->freelancerId, $companyId);
+        $hasAlreadyRated = Company::hasRatedCompany($request->freelancerId, $companyId);
+        
+        if (!$isOldEmployee) {
+            return redirect()
+                ->back()
+                ->with('fail', 'You must have been hired by this company to rate it !');
+        }
+        
+        if ($hasAlreadyRated) {
+            return redirect()
+                ->back()
+                ->with('fail', 'You cannot rate a company more than once !');
+        }
+        
+        $rating = [
+            'freelancer_id'     => $request->freelancerId,
+            'company_id'        => $companyId,
+            'note'              => $request->rating,
+            'reviewTitle'       => $request->reviewTitle,
+            'freelancer_name'   => $request->name,
+            'comment'           => $request->comment,
+        ];
+        
+        DB::table('ratings_companies')
+            ->insert($rating);
+        
+        return redirect()
+            ->back()
+            ->with('success', 'You\'ve successfully rated this company !');
     }
 
     /**

@@ -23,11 +23,13 @@ class RatingsCompaniesTableSeeder extends Seeder
 
         for ($i = 0; $i < 2000; $i++) {
             $ratings[] = [
-                'company_id'    => $faker->numberBetween(1, 400),
-                'freelancer_id' => $faker->numberBetween(1, 800),
-                'note'          => $faker->numberBetween(1, 5),
-                'comment'       => $faker->realText(120, 3),
-                'when'          => $faker->dateTimeBetween('-30 days', '-1 day'),
+                'company_id'            => $faker->numberBetween(1, 400),
+                'reviewTitle'           => $faker->text(255),
+                'freelancer_name'       => $faker->firstName . ' ' . $faker->lastName,
+                'freelancer_id'         => $faker->numberBetween(1, 800),
+                'note'                  => $faker->numberBetween(1, 5),
+                'comment'               => $faker->realText(80, 4),
+                'when'                  => $faker->dateTimeBetween('-30 days', '-1 day'),
             ];
         }
 

@@ -16,6 +16,7 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->string('slug', 255);
             $table->longText('description');
             $table->integer('budget_min')->default(10);
             $table->integer('budget_max')->default(2500);

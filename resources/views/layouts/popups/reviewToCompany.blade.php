@@ -11,11 +11,13 @@
             <div class="popup-tab-content" id="tab">
                 <!-- Welcome Text -->
                 <div class="welcome-text">
-                    <h3>What is it like to work at Acodia?</h3>
-
+                    <h3>What is it like to work at {{ $company->name }}?</h3>
                     <!-- Form -->
-                    <form method="post" id="leave-company-review-form">
+                    <form method="post" action="{{ route('company.rate', $company->id) }}" id="leave-company-review-form">
+                        @csrf
                         <!-- Leave Rating -->
+                            <input type="hidden" name="freelancerId" value="{{ Auth::user()->freelancer_id ?? Auth::id()  }}">
+                            <input type="hidden" name="roleId" value="{{ Auth::user()->role_id ?? null  }}">
                         <div class="clearfix"></div>
                         <div class="leave-rating-container">
                             <div class="leave-rating margin-bottom-5">
@@ -38,22 +40,27 @@
                                 <div class="input-with-icon-left" title="Leave blank to add review anonymously"
                                      data-tippy-placement="bottom">
                                     <i class="icon-material-outline-account-circle"></i>
-                                    <input type="text" class="input-text with-border" name="name" id="name"
-                                           placeholder="First and Last Name"/>
+                                    <input type="text" class="input-text with-border"
+                                           name="name" id="name"
+                                           value="{{ old('name') ?? Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
+                                           placeholder="First and Last Name"
+
+                                    />
                                 </div>
                             </div>
 
                             <div class="col-xl-12">
                                 <div class="input-with-icon-left">
                                     <i class="icon-material-outline-rate-review"></i>
-                                    <input type="text" class="input-text with-border" name="reviewtitle"
-                                           id="reviewtitle"
-                                           placeholder="Review Title" required/>
+                                    <input type="text" class="input-text with-border" name="reviewTitle"
+                                           id="reviewTitle"
+                                           placeholder="Review Title"
+                                           value="{{ old('reviewTitle') }}" required/>
                                 </div>
                             </div>
                         </div>
 
-                        <textarea class="with-border" placeholder="Review" name="message" id="message" cols="7"
+                        <textarea class="with-border" placeholder="Review" name="comment" id="message" cols="7"
                                   required></textarea>
                     </form>
                     <!-- Button -->

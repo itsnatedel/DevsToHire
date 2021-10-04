@@ -66,6 +66,7 @@ Route::group(['prefix' => 'companies'], function () {
     Route::get('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.show');
     Route::post('/{id}/{slug}', [CompanyController::class, 'show'])->where('id', '[0-9]+')->name('company.ratings.search');
     Route::get('/{letter}', [CompanyController::class, 'search'])->where('letter', '[a-z]')->name('company.search');
+    Route::post('/rate/{companyId}', [CompanyController::class, 'rate'])->where('companyId', '[0-9]+')->name('company.rate');
 });
 
 /* Freelancer Routes */

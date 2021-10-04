@@ -1,10 +1,10 @@
 <?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-class CreateRatingsCompaniesTable extends Migration
+    
+    use Illuminate\Database\Migrations\Migration;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
+    
+    class CreateRatingsCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,6 @@ class CreateRatingsCompaniesTable extends Migration
     {
         Schema::create('ratings_companies', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('freelancer_id');
-            $table->foreign('freelancer_id')->references('id')->on('freelancers')->constraigned();
-
-            $table->foreignId('company_id');
-            $table->foreign('company_id')->references('id')->on('companies')->constraigned();
-
             $table->enum('note', [
                 1,
                 2,
@@ -30,6 +23,16 @@ class CreateRatingsCompaniesTable extends Migration
                 5])->default(1);
             $table->longText('comment')->nullable();
             $table->timestamp('when')->default(now());
+            $table->string('reviewTitle', 255);
+            $table->string('freelancer_name', 255);
+            
+            $table->foreignId('freelancer_id');
+            $table->foreign('freelancer_id')->references('id')->on('freelancers')->constraigned();
+
+            $table->foreignId('company_id');
+            $table->foreign('company_id')->references('id')->on('companies')->constraigned();
+
+
         });
     }
 

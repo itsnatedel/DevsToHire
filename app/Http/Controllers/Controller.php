@@ -138,4 +138,35 @@ class Controller extends BaseController
             'hourlyRates'
         ]));
     }
+    
+    /**
+     * @method resourceExists
+     * Looks up for a match for a job/task with a given id and a slug
+     *
+     * @param string $contentType The kind of content has been requested
+     * @param int    $id
+     * @param string $slug
+     *
+     * @return bool true if a match has been found, false otherwise.
+     */
+    public static function resourceExists (string $contentType, int $id, string $slug) : bool
+    {
+        $query = null;
+        
+        if ($contentType === 'job') {
+            $query = DB::table('jobs');
+        }
+        
+        if ($contentType === 'task') {
+            $query = DB::table('tasks');
+        }
+        
+        $match = $query
+            ->select('id')
+            ->where('id', '=', $id)
+            ->where('slug', 'LIKE', '%' . $slug . '%')
+            ->get();
+        
+        return sizeof($match) > 0;
+    }
 }

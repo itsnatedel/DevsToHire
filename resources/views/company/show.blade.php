@@ -156,6 +156,25 @@
                     <div class="sidebar-container">
                         <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
+                            @if(Session::has('fail'))
+                                <div class="notification error closeable">
+                                    <p>{{ Session::get('fail') }}</p>
+                                    <a class="close"></a>
+                                </div>
+                            @endif
+                            @if(Session::has('success'))
+                                <div class="notification success closeable">
+                                    <p>{{ Session::get('success') }}</p>
+                                    <a class="close"></a>
+                                </div>
+                            @endif
+                            @if($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div>
+                                        <p>{{ $error }}</p>
+                                    </div>
+                                @endforeach
+                            @endif
                             <!-- Bookmark Button -->
                             <button class="bookmark-button margin-bottom-15">
                                 <span class="bookmark-icon"></span>
@@ -210,9 +229,17 @@
                                     @endforelse
                                 </ul>
                                 <div class="centered-button margin-top-35">
-                                    <a href="#small-dialog" class="popup-with-zoom-anim button button-sliding-icon">Leave
-                                        a
-                                        Review <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                    @auth
+                                        <a href="#small-dialog" class="popup-with-zoom-anim button button-sliding-icon">
+                                            Leave a Review <i class="icon-material-outline-arrow-right-alt"></i>
+                                        </a>
+                                    @endauth
+                                    @guest
+                                            <a href="{{ route('login') }}" class="button button-sliding-icon">
+                                                Login to leave a review
+                                                <i class="icon-material-outline-arrow-right-alt"></i>
+                                            </a>
+                                    @endguest
                                 </div>
                             </div>
                             <!-- Boxed List / End -->
@@ -226,5 +253,7 @@
         <!-- Spacer / End-->
     </div>
     <!-- Wrapper / End -->
-    @include('layouts.popups.reviewToCompany')
+    @auth
+        @include('layouts.popups.reviewToCompany')
+    @endauth
 @endsection
