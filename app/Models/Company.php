@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Company extends Model
 {
@@ -286,7 +286,46 @@ class Company extends Model
 
         return $ratings;
     }
-
+    
+    /**
+     * @method isOldEmployee
+     * Checks if the freelancer has done at least one job for the company
+     *
+     * @param int $freelancerId
+     * @param int $companyId
+     *
+     * @return bool
+     */
+    public static function isOldEmployee (int $freelancerId, int $companyId) : bool
+    {
+        $jobsDone = DB::table('freelancer_jobs_done')
+            ->select('id')
+            ->where('freelancer_id', '=', $freelancerId)
+            ->where('employer_id', '=', $companyId)
+            ->get();
+        
+        return sizeof($jobsDone) > 0;
+    }
+    
+    /**
+     * @method hasRatedCompany
+     * Checks if the freelancer has already rated the company
+     * @param int $freelancerId
+     * @param int $companyId
+     *
+     * @return bool
+     */
+    public static function hasRatedCompany (int $freelancerId, int $companyId) : bool
+    {
+        $rating = DB::table('ratings_companies')
+            ->select('id')
+            ->where('freelancer_id', '=', $freelancerId)
+            ->where('company_id', '=', $companyId)
+            ->get();
+        
+        return sizeof($rating) !== 0;
+    }
+    
     /**
      * Relation Company -> User
      * @return BelongsTo

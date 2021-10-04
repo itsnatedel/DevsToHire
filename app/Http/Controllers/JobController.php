@@ -88,10 +88,17 @@ class JobController extends Controller
      *
      * @param int $id
      * @param string $slug
-     * @return Application|Factory|View
+     *
+     * @return Application|Factory|View|RedirectResponse
      */
     public function show(int $id, string $slug)
     {
+        $jobExists = Controller::resourceExists('job', $id, $slug);
+    
+        if (!$jobExists) {
+            return redirect()->route('error-404')->with('message', 'No job matches the given query parameters.');
+        }
+        
         $job            = Job::getAllDataOfJob($id, $slug);
         $relatedJobs    = Job::getRelatedJobs($job);
         $category       = Job::getCategoryName($job->category_id);

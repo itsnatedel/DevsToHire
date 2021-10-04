@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 use Faker\Provider\en_US\Text as Text;
 use Faker\Provider\en_US\Company as Company;
+use Illuminate\Support\Str;
 
 class TasksTableSeeder extends Seeder
 {
@@ -27,8 +28,10 @@ class TasksTableSeeder extends Seeder
         $company = new Company($faker);
 
         for ($i = 0; $i < 500; $i++) {
+            $name = $company->bs();
             $tasks[] = [
-                'name'          => $company->bs(),
+                'name'          => $name,
+                'slug'          => Str::slug($name),
                 'description'   => $text->realText(255),
                 'budget_min'    => $faker->numberBetween(10, 50),
                 'type'          => $faker->randomElement(['Fixed', 'Hourly']),

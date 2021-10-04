@@ -166,7 +166,7 @@
                                 </div>
                             </li>
                             @empty
-                                <p>No one has put a bid on this task so far, be the first !</p>
+                                <p class="margin-top-15">No one has put a bid on this task so far, be the first !</p>
                             @endforelse
                         </ul>
                     </div>
@@ -177,6 +177,12 @@
                     <div class="sidebar-container">
                         @if($task->end_date > 1)
                             <div class="countdown green margin-bottom-35">{{ $task->end_date }} days left</div>
+                            @if(Session::has('fail'))
+                                <div class="notification error closeable">
+                                    <p>{{ Session::get('fail') }}</p>
+                                    <a class="close"></a>
+                                </div>
+                            @endif
                             <div class="sidebar-widget">
                                 <div class="bidding-widget">
                                     <div class="bidding-headline"><h3>Bid on this job!</h3></div>
@@ -240,12 +246,6 @@
                                             </button>
                                         </form>
                                     </div>
-                                    @if(Session::has('fail'))
-                                        <div class="notification error closeable">
-                                            <p>{{ Session::get('fail') }}</p>
-                                            <a class="close"></a>
-                                        </div>
-                                    @endif
                                     @guest
                                         <div class="bidding-signup">Don't have an account?
                                             <a href="{{ route('register') }}" class="sign-in">Sign Up</a>
