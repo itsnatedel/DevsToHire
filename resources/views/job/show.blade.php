@@ -28,7 +28,7 @@
                                         </li>
                                         @if(!is_null($companyRating->rating))
                                             <li>
-                                                <div class="star-rating" data-rating="{{ $companyRating->rating }}"></div>
+                                                <div class="star-rating" data-rating="{{ round($companyRating->rating) }}"></div>
                                             </li>
                                         @else
                                             <li>
@@ -157,7 +157,7 @@
                             @endif
                         @endauth
                             @guest
-                                <a href="{{ route('login') }}" class="apply-now-button">Register to apply to his offer
+                                <a href="{{ route('login') }}" class="apply-now-button">Register to apply to this offer
                                     <i class="icon-material-outline-arrow-right-alt"></i>
                                 </a>
                             @endguest

@@ -132,17 +132,23 @@
                         @endif
 
                         <!-- Button -->
-                        <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">Make an
-                            Offer <i class="icon-material-outline-arrow-right-alt"></i></a>
+                        @auth
+                            <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">
+                                Make an Offer
+                                <i class="icon-material-outline-arrow-right-alt"></i>
+                            </a>
 
-                        @if($errors->any())
-                            @foreach ($errors->all() as $error)
-                                <div>
-                                    <mark class="color">{{ $error }}</mark>
-                                </div>
-                            @endforeach
-                        @endif
-
+                            @if($errors->any())
+                                @foreach ($errors->all() as $error)
+                                    <div>
+                                        <mark class="color">{{ $error }}</mark>
+                                    </div>
+                                @endforeach
+                            @endif
+                        @endauth
+                        @guest
+                            <a href="{{ route('login') }}" class="apply-now-button">Login to make an offer !</a>
+                        @endguest
                         <!-- Freelancer Indicators -->
                         <div class="sidebar-widget">
                             <div class="freelancer-indicators">
@@ -267,7 +273,9 @@
         <!-- Spacer -->
         <div class="margin-top-15"></div>
         <!-- Spacer / End-->
+        @auth
         @include('layouts.popups.makeOffer')
+        @endauth
     </div>
     <!-- Wrapper / End -->
 @endsection
