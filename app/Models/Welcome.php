@@ -33,7 +33,7 @@ class Welcome extends Model
                 'co.name as company',
                 'co.pic_url as pic',
                 'lo.country_name as country')
-            ->join('companies as co', 'co.id', '=', 'jo.id')
+            ->join('companies as co', 'co.id', '=', 'jo.company_id')
             ->join('locations as lo', 'co.location_id', '=', 'lo.id')
             ->where('featured', '=', 1)
             ->inRandomOrder()
@@ -158,7 +158,6 @@ class Welcome extends Model
     public static function searchJobsOrTasks(Request $request, string $jobOrTask): LengthAwarePaginator
     {
         if (!is_null($request->searchCountry)) {
-
             $locationId = self::checkIfLocationExists($request->searchCountry);
 
             if (!is_null($locationId)) {
@@ -176,7 +175,6 @@ class Welcome extends Model
 
         if (!is_null($request->type)) {
             self::setType($request);
-
         }
 
         if ($jobOrTask === 'job') {
