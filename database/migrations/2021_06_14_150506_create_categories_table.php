@@ -14,6 +14,7 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('icon', 255);
             $table->string('name', 80);

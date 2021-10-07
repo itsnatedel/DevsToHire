@@ -14,6 +14,7 @@
     public function up()
     {
         Schema::create('freelancers', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('firstname', 90);
             $table->string('lastname', 90);

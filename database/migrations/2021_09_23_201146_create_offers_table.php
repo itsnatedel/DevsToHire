@@ -14,6 +14,7 @@ class CreateOffersTable extends Migration
     public function up()
     {
         Schema::create('offers', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->timestamp('created_at')->default(now());
 			$table->text('message');

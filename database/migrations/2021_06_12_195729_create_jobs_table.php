@@ -14,6 +14,7 @@ class CreateJobsTable extends Migration
     public function up()
     {
         Schema::create('jobs', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->timestamps();
             $table->string('title', 255);

@@ -15,6 +15,7 @@ class CreateFreelancerJobsDone extends Migration
     public function up()
     {
         Schema::create('freelancer_jobs_done', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->dateTime('done_at')->default(Carbon::now());
             $table->text('title');

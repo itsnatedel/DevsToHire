@@ -14,6 +14,7 @@ class UpdateUserstable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->boolean('can_be_rated')->default(0);
 
             $table->string('dir_url', 150)->nullable();

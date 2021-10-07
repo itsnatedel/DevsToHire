@@ -14,6 +14,7 @@ class CreateCandidatesTable extends Migration
     public function up()
     {
         Schema::create('candidates', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('employer_id');

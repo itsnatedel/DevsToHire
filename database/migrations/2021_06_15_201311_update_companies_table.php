@@ -14,6 +14,7 @@ class UpdateCompaniesTable extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->foreignId('location_id');
             $table->foreign('location_id')->references('id')->on('locations')
                 ->onDelete('restrict')->onUpdate('cascade');

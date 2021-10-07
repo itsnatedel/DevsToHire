@@ -14,6 +14,7 @@ class CreateSkillsTasksTable extends Migration
     public function up()
     {
         Schema::create('skills_tasks', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
 
             $table->foreignId('task_id');

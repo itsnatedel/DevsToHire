@@ -14,6 +14,7 @@ class CreateLocationsTable extends Migration
     public function up()
     {
         Schema::create('locations', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('country_code', 2);
             $table->string('country_name', 80);

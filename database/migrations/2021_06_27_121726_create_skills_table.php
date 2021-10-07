@@ -14,6 +14,7 @@ class CreateSkillsTable extends Migration
     public function up()
     {
         Schema::create('skills', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('skill', 20);
         });

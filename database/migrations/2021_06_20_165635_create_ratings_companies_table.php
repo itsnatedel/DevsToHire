@@ -14,6 +14,7 @@
     public function up()
     {
         Schema::create('ratings_companies', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->enum('note', [
                 1,

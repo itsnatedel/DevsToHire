@@ -14,6 +14,7 @@ class UpdateFreelancersTable extends Migration
     public function up()
     {
         Schema::table('freelancers', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->foreignId('location_id');
             $table->foreign('location_id')->references('id')->on('locations')
                 ->onDelete('restrict')->onUpdate('cascade');

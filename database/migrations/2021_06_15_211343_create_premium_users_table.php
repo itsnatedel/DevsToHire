@@ -14,6 +14,7 @@ class CreatePremiumUsersTable extends Migration
     public function up()
     {
         Schema::create('premium_users', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->timestamp('date_bought');
             $table->foreignId('user_id');

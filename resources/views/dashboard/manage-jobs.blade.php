@@ -17,8 +17,8 @@
                         <!-- Breadcrumbs -->
                         <nav id="breadcrumbs" class="dark">
                             <ul>
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Dashboard</a></li>
+                                <li><a href="{{ route('homepage') }}">Home</a></li>
+                                <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                                 <li>Manage Jobs</li>
                             </ul>
                         </nav>
@@ -38,132 +38,50 @@
 
                                 <div class="content">
                                     <ul class="dashboard-box-list">
-                                        <li>
-                                            <!-- Job Listing -->
-                                            <div class="job-listing">
+                                        @forelse($jobs as $job)
+                                            <li>
+                                                <!-- Job Listing -->
+                                                <div class="job-listing">
+                                                    <!-- Job Listing Details -->
+                                                    <div class="job-listing-details">
+                                                        <!-- Details -->
+                                                        <div class="job-listing-description">
+                                                            <h3 class="job-listing-title">
+                                                                <a href="{{ route('job.show', [$job->id, $job->slug]) }}">{{ $job->title }}</a>
+                                                            </h3>
 
-                                                <!-- Job Listing Details -->
-                                                <div class="job-listing-details">
-
-                                                    <!-- Logo -->
-                                                    <!-- 											<a href="#" class="job-listing-company-logo">
-                                                                                                    <img src="images/company-logo-05.png" alt="">
-                                                                                                </a> -->
-
-                                                    <!-- Details -->
-                                                    <div class="job-listing-description">
-                                                        <h3 class="job-listing-title"><a href="#">Frontend React
-                                                                Developer</a> <span
-                                                                class="dashboard-status-button green">Pending Approval</span>
-                                                        </h3>
-
-                                                        <!-- Job Listing Footer -->
-                                                        <div class="job-listing-footer">
-                                                            <ul>
-                                                                <li><i class="icon-material-outline-date-range"></i>
-                                                                    Posted on 10 July, 2019
-                                                                </li>
-                                                                <li><i class="icon-material-outline-date-range"></i>
-                                                                    Expiring on 10 August, 2019
-                                                                </li>
-                                                            </ul>
+                                                            <!-- Job Listing Footer -->
+                                                            <div class="job-listing-footer">
+                                                                <ul>
+                                                                    <li><i class="icon-material-outline-date-range"></i>
+                                                                        {{ $job->created_at }}
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Buttons -->
-                                            <div class="buttons-to-right always-visible">
-                                                <a href="dashboard-manage-candidates.html" class="button ripple-effect"><i
-                                                        class="icon-material-outline-supervisor-account"></i> Manage
-                                                    Candidates <span class="button-info">0</span></a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Edit"
-                                                   data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Remove"
-                                                   data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <!-- Job Listing -->
-                                            <div class="job-listing">
-
-                                                <!-- Job Listing Details -->
-                                                <div class="job-listing-details">
-
-                                                    <!-- Details -->
-                                                    <div class="job-listing-description">
-                                                        <h3 class="job-listing-title"><a href="#">Full Stack PHP
-                                                                Developer</a> <span
-                                                                class="dashboard-status-button yellow">Expiring</span>
-                                                        </h3>
-
-                                                        <!-- Job Listing Footer -->
-                                                        <div class="job-listing-footer">
-                                                            <ul>
-                                                                <li><i class="icon-material-outline-date-range"></i>
-                                                                    Posted on 28 June, 2019
-                                                                </li>
-                                                                <li><i class="icon-material-outline-date-range"></i>
-                                                                    Expiring on 28 July, 2019
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-
+                                                <!-- Buttons -->
+                                                <div class="buttons-to-right always-visible">
+                                                    <form action="{{ route('dashboard.candidates', $job->id) }}" method="get">
+                                                        <input type="hidden" name="jobId" value="{{ $job->id }}">
+                                                        <button class="button ripple-effect">
+                                                            Manage
+                                                            Candidates <span class="button-info">{{ $job->candidates }}</span>
+                                                        </button>
+                                                    </form>
+                                                    <div class="margin-top-15">
+                                                    <!-- Make sure no candidates before deleting -->
+                                                    <a href="#small-dialog" id="{{ $job->id }}" class="button red popup-with-zoom-anim deleteButtons">
+                                                        Delete
+                                                    </a>
                                                 </div>
-                                            </div>
+                                            </li>
 
-                                            <!-- Buttons -->
-                                            <div class="buttons-to-right always-visible">
-                                                <a href="dashboard-manage-candidates.html" class="button ripple-effect"><i
-                                                        class="icon-material-outline-supervisor-account"></i> Manage
-                                                    Candidates <span class="button-info">3</span></a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Edit"
-                                                   data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Remove"
-                                                   data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <!-- Job Listing -->
-                                            <div class="job-listing">
-
-                                                <!-- Job Listing Details -->
-                                                <div class="job-listing-details">
-
-                                                    <!-- Details -->
-                                                    <div class="job-listing-description">
-                                                        <h3 class="job-listing-title"><a href="#">Node.js Developer</a>
-                                                            <span class="dashboard-status-button red">Expired</span>
-                                                        </h3>
-
-                                                        <!-- Job Listing Footer -->
-                                                        <div class="job-listing-footer">
-                                                            <ul>
-                                                                <li><i class="icon-material-outline-date-range"></i>
-                                                                    Posted on 16 May, 2019
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Buttons -->
-                                            <div class="buttons-to-right always-visible">
-                                                <a href="dashboard-manage-candidates.html" class="button ripple-effect"><i
-                                                        class="icon-material-outline-supervisor-account"></i> Manage
-                                                    Candidates <span class="button-info">7</span></a>
-                                                <a href="#" class="button dark ripple-effect"><i
-                                                        class="icon-feather-rotate-ccw"></i> Refresh</a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Edit"
-                                                   data-tippy-placement="top"><i class="icon-feather-edit"></i></a>
-                                                <a href="#" class="button gray ripple-effect ico" title="Remove"
-                                                   data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
-                                            </div>
-                                        </li>
+                                        @empty
+                                            <p class="padding-top-30 padding-left-30 padding-bottom-30" >You have no active job offer !</p>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>
@@ -177,5 +95,17 @@
         </div>
         <!-- Dashboard Container / End -->
     </div>
+    <script>
+        let deleteButtons = document.getElementsByClassName('deleteButtons');
+
+        for(let btn of deleteButtons) {
+            btn.addEventListener('click', () => {
+                document.getElementById('jobId').setAttribute('value', btn.getAttribute('id'));
+            });
+        }
+    </script>
     <!-- Wrapper / End -->
+    @auth
+        @include('layouts.popups.delete')
+    @endauth
 @endsection
