@@ -12,7 +12,6 @@
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Contracts\View\View;
     use Illuminate\Http\RedirectResponse;
-    use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Str;
@@ -36,10 +35,10 @@
          */
         public function edit ()
         {
-            $user           = User::where('id', Auth::id())->first();
-            $user           = Dashboard::getUserSettings($user);
-            $categories     = Category::all('id', 'name');
-            $countries      = Location::all('id', 'country_name');
+            $user = User::where('id', Auth::id())->first();
+            $user = Dashboard::getUserSettings($user);
+            $categories = Category::all('id', 'name');
+            $countries = Location::all('id', 'country_name');
             
             return view('dashboard.settings', compact([
                 'user',
@@ -59,13 +58,8 @@
         {
             $user = User::where('id', Auth::id())->first();
             Dashboard::checkAndUpdateSettings($request->validated(), $user);
-    
+            
             return redirect()->route('dashboard.settings');
-        }
-    
-        public function removeAttachments (Request $request)
-        {
-            dd($request, Auth::user());
         }
         
         /**
@@ -113,6 +107,23 @@
                 'categories',
                 'locations'
             ]));
+        }
+        
+        public function manageJobs ()
+        {
+            if (Auth::user()->role_id === 3) {
+                $companyId = DB::table('companies')
+                    ->select('id')->where('user_id', '=', Auth::id())
+                    ->first()
+                    ->id;
+                $jobs = Dashboard::getActiveJobs($companyId);
+                
+                return view('dashboard.manage-jobs', compact([
+                    'jobs'
+                ]));
+            }
+            
+            return redirect()->route('error-404')->with('message', 'You are not authorized to access this page !');
         }
         
         /**

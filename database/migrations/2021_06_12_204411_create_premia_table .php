@@ -14,6 +14,7 @@ class CreatePremiaTable extends Migration
     public function up()
     {
         Schema::create('premium', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('title', 20);
             $table->string('monthly_identifier')->unique;

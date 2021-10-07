@@ -14,6 +14,7 @@ class CreateRatingsFreelancersTable extends Migration
     public function up()
     {
         Schema::create('ratings_freelancers', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
 
             $table->foreignId('company_id');

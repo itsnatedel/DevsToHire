@@ -14,6 +14,7 @@ class CreateBidsTable extends Migration
     public function up()
     {
         Schema::create('bids', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->integer('minimal_rate');
             $table->integer('delivery_time');

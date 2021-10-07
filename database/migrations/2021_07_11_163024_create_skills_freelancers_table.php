@@ -14,6 +14,7 @@ class CreateSkillsFreelancersTable extends Migration
     public function up()
     {
         Schema::create('skills_freelancers', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
 
             $table->foreignId('freelancer_id');

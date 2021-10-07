@@ -163,9 +163,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
     Route::get('/my-active-bids', [BidController::class, 'activeBids'])->name('dashboard.bid.active');
 
     /* Job */
-    Route::get('/manage/job', [JobController::class, 'manage'])->name('dashboard.job.manage');
+    Route::get('/manage/job', [DashboardController::class, 'manageJobs'])->name('dashboard.job.manage');
     Route::get('/job/create', [DashboardController::class, 'createJob'])->name('dashboard.job.create');
     Route::post('/job/store', [DashboardController::class, 'storeJob'])->name('dashboard.job.store');
+    Route::post('/job/delete', [JobController::class, 'delete'])->name('dashboard.job.delete');
 });
 
 /** PopUps routes */

@@ -14,6 +14,7 @@ class UpdateFreelancerJobsDone extends Migration
     public function up()
     {
         Schema::table('freelancer_jobs_done', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->foreignId('job_id');
             $table->foreign('job_id')->references('id')->on('jobs')
                 ->onDelete('restrict')->onUpdate('cascade');

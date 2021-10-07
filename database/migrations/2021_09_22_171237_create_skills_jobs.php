@@ -14,16 +14,16 @@ class CreateSkillsJobs extends Migration
     public function up()
     {
         Schema::create('skills_jobs', function (Blueprint $table) {
+            Schema::disableForeignKeyConstraints();
             $table->id();
             $table->string('skills')->nullable();
 	
 	        $table->foreignId('job_id');
-			$table->foreign('job_id')->references('id')->on('jobs')
-				->onUpdate('cascade');
+			$table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
 	
 	        $table->foreignId('employer_id');
 	        $table->foreign('employer_id')->references('id')->on('companies')
-		        ->onUpdate('cascade');
+		        ->onDelete('cascade');
         });
     }
 

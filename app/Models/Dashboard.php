@@ -10,6 +10,7 @@
     use Illuminate\Filesystem\Filesystem;
     use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
+    use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Hash;
@@ -401,5 +402,45 @@
                     'job_id'      => $jobId,
                     'employer_id' => $request->employerId ?? Auth::id()
                 ]);
+        }
+    
+        /**
+         * @param int $companyId
+         */
+        public static function getActiveJobs (int $companyId)
+        {
+            $jobs = DB::table('jobs as jo')
+                ->select([
+                    'jo.id',
+                    'jo.title',
+                    'jo.slug',
+                    'jo.salary_low',
+                    'jo.salary_high',
+                    'jo.type',
+                    'jo.created_at',
+                ])
+                ->where('jo.company_id', '=', $companyId)
+                ->get();
+            
+            // Get amount of candidates for each job
+            return self::getJobCandidates($jobs);
+        }
+    
+        /**
+         * @param Collection $jobs
+         *
+         * @return Collection
+         */
+        private static function getJobCandidates (Collection $jobs) : Collection
+        {
+            foreach($jobs as $job) {
+                $job->candidates = DB::table('candidates')
+                    ->select(DB::raw('COUNT(id) as count'))
+                    ->where('job_id', '=', $job->id)
+                    ->first()
+                    ->count;
+            }
+            
+            return $jobs;
         }
     }

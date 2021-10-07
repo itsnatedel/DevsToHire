@@ -14,7 +14,7 @@ class UpdateJobsTable extends Migration
     public function up()
     {
         Schema::table('jobs', function (Blueprint $table) {
-			
+            Schema::disableForeignKeyConstraints();
 			
             $table->foreignId('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
