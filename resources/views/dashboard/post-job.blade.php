@@ -36,6 +36,15 @@
                                 <div class="headline">
                                     <h3><i class="icon-feather-folder-plus"></i>Job Submission Form</h3>
                                 </div>
+                                @if(count($errors) > 0)
+                                    <div style="color:red">
+                                        @foreach ($errors->all() as $message)
+                                            <ul>
+                                                <li>{{$message}}</li>
+                                            </ul>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <form action="{{ route('dashboard.job.store') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="employerId" value="{{ Auth::user()->company_id }}">

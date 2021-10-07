@@ -19,7 +19,7 @@ class LocationsTableSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 
         $arrayCountries = array(
-            "AF" => array('alpha2' => 'AF', "name" => "Afghanistan",),
+            "AF" => array('alpha2' => 'AF', 'name' => "Afghanistan",),
             "AL" => array('alpha2' => 'AL', "name" => "Albania"),
             "DZ" => array('alpha2' => 'DZ', "name" => "Algeria"),
             "AS" => array('alpha2' => 'AS', "name" => "American Samoa"),
@@ -36,7 +36,7 @@ class LocationsTableSeeder extends Seeder
             "BH" => array('alpha2' => 'BH', "name" => "Bahrain"),
             "BD" => array('alpha2' => 'BD', "name" => "Bangladesh"),
             "BY" => array('alpha2' => 'BY', "name" => "Belarus"),
-            "BE" => array('alpha2' => 'BE', "name" => "Belgium"),
+            "BE" => array('alpha2' => 'BE', 'name' => 'Belgium'),
             "BZ" => array('alpha2' => 'BZ', "name" => "Belize"),
             "BJ" => array('alpha2' => 'BJ', "name" => "Benin"),
             "BT" => array('alpha2' => 'BT', "name" => "Bhutan"),

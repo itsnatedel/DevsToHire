@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PopUp;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\MakeOfferRequest;
+use App\Models\PopUp;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class PopUpController extends Controller
@@ -36,11 +36,11 @@ class PopUpController extends Controller
 	
 	/**
 	 * @method makeOffer
-	 * @param \App\Http\Requests\MakeOfferRequest $request
-	 * @param int                                 $freelancerId
-	 * @param int                                 $userId
+	 * @param MakeOfferRequest $request
+	 * @param int              $freelancerId
+	 * @param int              $userId
 	 *
-	 * @return \Illuminate\Http\RedirectResponse
+	 * @return RedirectResponse
 	 */
 	public function makeOffer(MakeOfferRequest $request, int $freelancerId, int $userId): RedirectResponse
 	{

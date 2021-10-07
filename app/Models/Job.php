@@ -10,7 +10,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\DB;
-
+    
     /**
      * Class Job
      *
@@ -48,7 +48,6 @@
                     'co.location_id',
                     'co.name',
                     'co.slug as company_slug',
-                    'co.description',
                     'co.verified',
                     'co.pic_url',
                     'lo.country_name',

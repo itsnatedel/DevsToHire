@@ -145,6 +145,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
     /* Settings */
     Route::get('/settings', [DashboardController::class, 'edit'])->name('dashboard.settings');
     Route::post('/settings/update', [DashboardController::class, 'update'])->name('dashboard.settings.update');
+    Route::post('settings/remove/attachments', [DashboardController::class, 'removeAttachments'])->name('dashboard.remove.attachments');
 
     /* Messages */
     Route::get('/messages', [DashboardController::class, 'messages'])->name('dashboard.messages');

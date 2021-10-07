@@ -230,9 +230,16 @@
                                 </ul>
                                 <div class="centered-button margin-top-35">
                                     @auth
-                                        <a href="#small-dialog" class="popup-with-zoom-anim button button-sliding-icon">
-                                            Leave a Review <i class="icon-material-outline-arrow-right-alt"></i>
-                                        </a>
+                                        @if(Auth::user()->role_id === 3 && Auth::id() === $company->user_id)
+                                            <a href="#" class="button">
+                                                Cannot rate yourself !
+                                            </a>
+                                        @else
+                                            <a href="#small-dialog" class="popup-with-zoom-anim button button-sliding-icon">
+                                                Leave a Review <i class="icon-material-outline-arrow-right-alt"></i>
+                                            </a>
+                                        @endif
+
                                     @endauth
                                     @guest
                                             <a href="{{ route('login') }}" class="button button-sliding-icon">

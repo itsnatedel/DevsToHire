@@ -2,7 +2,6 @@
 @section('content')
     <!-- Wrapper -->
     <div id="wrapper">
-
         <!-- Titlebar
         ================================================== -->
         <div class="single-page-header" data-background-image="{{ asset('images/job/single-job.jpg') }}">
@@ -66,10 +65,8 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-
                 <!-- Content -->
                 <div class="col-xl-8 col-lg-8 content-right-offset">
-
                     <div class="single-page-section">
                         <h3 class="margin-bottom-25">Job Description</h3>
                         <p>
@@ -140,8 +137,14 @@
 
                         @auth
                             @if(!$alreadyApplied)
-                                <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
-                                            class="icon-material-outline-arrow-right-alt"></i></a>
+                                @if(Auth::user()->role_id === 2)
+                                    <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim">Apply Now <i
+                                                class="icon-material-outline-arrow-right-alt"></i>
+                                    </a>
+                                @else
+                                        <a href="#" class="apply-now-button ">Only freelancers can apply to job offers.
+                                        </a>
+                                @endif
                             @else
                                 <div>
                                     <form action="{{ route('cancel.job.apply') }}" method="post">

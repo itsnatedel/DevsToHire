@@ -27,7 +27,7 @@ class CompaniesTableSeeder extends Seeder
         $faker = Faker::create();
         $faker->addProvider(new Company($faker));
 
-        for ($i = 0; $i < 400; $i++) {
+        for ($i = 0; $i < 800; $i++) {
             $company_name = $faker->company;
             $companies[$i] = [
                 'name'          => $company_name,

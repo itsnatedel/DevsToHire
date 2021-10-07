@@ -24,7 +24,7 @@ class JobsTableSeeder extends Seeder
         $jobs = [];
         $faker = Faker::create();
         $company = new Company($faker);
-
+        
         for ($i = 0; $i < 400; $i++) {
             $title = $company->catchPhrase();
             $jobs[$i] = [
@@ -39,7 +39,7 @@ class JobsTableSeeder extends Seeder
                 'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
                 'category_id'   => $faker->numberBetween(1, 8),
                 'featured'      => $faker->boolean(40),
-                'only_locally'      => $faker->boolean(40),
+                'only_locally'  => $faker->boolean(40),
             ];
         }
 

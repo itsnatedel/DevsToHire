@@ -26,10 +26,10 @@ class TasksTableSeeder extends Seeder
         $faker = Faker::create();
         $text = new Text($faker);
         $company = new Company($faker);
-
-        for ($i = 0; $i < 500; $i++) {
+        
+        for ($i = 0; $i < 400; $i++) {
             $name = $company->bs();
-            $tasks[] = [
+            $tasks[$i] = [
                 'name'          => $name,
                 'slug'          => Str::slug($name),
                 'description'   => $text->realText(255),
@@ -43,7 +43,7 @@ class TasksTableSeeder extends Seeder
             ];
         }
 
-        for($i = 0; $i < 500; $i++) {
+        for($i = 0; $i < 400; $i++) {
             if ($tasks[$i]['type'] === 'Fixed') {
                 $tasks[$i]['budget_max'] = $faker->numberBetween(500, 2500);
             } else {

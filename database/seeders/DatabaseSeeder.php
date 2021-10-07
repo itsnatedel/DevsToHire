@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
             SkillsTableSeeder::class,
             SkillsTasksTableSeeder::class,
             SkillsFreelancersTable::class,
-            FreelancerJobsDoneTableSeeder::class
+            FreelancerJobsDoneTableSeeder::class,
+            DemoSeeder::class
         ]);
     }
 }

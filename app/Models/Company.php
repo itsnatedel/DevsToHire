@@ -101,8 +101,7 @@ class Company extends Model
             ->select('co.*', 'lo.country_name', 'lo.country_code')
             ->where('co.id', '=', $company_id)
             ->first();
-
-
+        
         $company->rating = self::getCompanyRating($company_id);
 
         return $company;

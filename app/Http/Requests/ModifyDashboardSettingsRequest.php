@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 
 class ModifyDashboardSettingsRequest extends FormRequest
@@ -14,7 +15,7 @@ class ModifyDashboardSettingsRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -41,6 +42,20 @@ class ModifyDashboardSettingsRequest extends FormRequest
                 'sometimes',
                 'nullable',
                 'email'
+            ],
+            'companyName' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'min:5',
+                'max:90'
+            ],
+            'speciality' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'min:5',
+                'max:90'
             ],
             'sliderHourlyRate' => [
                 'sometimes',
@@ -81,7 +96,7 @@ class ModifyDashboardSettingsRequest extends FormRequest
             ],
             'attachmentUpload' => [
                 'sometimes',
-                'mimes:pdf,docx',
+                'mimes:pdf',
                 'max:20000'
             ]
         ];

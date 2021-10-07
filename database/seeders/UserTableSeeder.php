@@ -22,13 +22,13 @@ class UserTableSeeder extends Seeder
         $faker = Faker::create();
         $users = [];
 
-        for ($i = 0; $i < 85; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $randomInt = $faker->numberBetween(1, 30);
 
             if ($randomInt < 10) {
                 $randomInt = '0' . $randomInt;
             }
-
+            
             $users[] = [
                 'firstname' => $faker->name(),
                 'lastname' => $faker->lastName,
