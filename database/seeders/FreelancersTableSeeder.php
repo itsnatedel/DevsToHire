@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Faker\Factory;
+use Faker\Provider\en_US\Text as Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Provider\en_US\Text as Text;
 
 class FreelancersTableSeeder extends Seeder
 {
@@ -40,6 +40,7 @@ class FreelancersTableSeeder extends Seeder
                 'verified'      => $faker->boolean(70),
                 'location_id'   => $faker->numberBetween(1, 208),
                 'category_id'   => $faker->numberBetween(1, 8),
+                'user_id'       => $faker->numberBetween(1, 1000),
                 'joined_at'     => $faker->dateTimeBetween('-2 years', '-1 day')
             ];
         }

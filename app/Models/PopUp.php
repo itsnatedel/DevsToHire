@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Ramsey\Uuid\Uuid;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use App\Http\Requests\MakeOfferRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 class PopUp extends Model
 {
@@ -23,12 +23,23 @@ class PopUp extends Model
 	 */
 	public static function getEmployerId($jobId)
 	{
-		return DB::table('jobs as jo')
-			->join('companies as co', 'co.id', '=', 'jo.company_id')
-			->select('co.user_id as id')
-			->where('jo.id', '=', $jobId)
-			->first()
-			->id;
+        $companyId = DB::table('jobs as jo')
+            ->join('companies as co', 'co.id', '=', 'jo.company_id')
+            ->select('co.id')
+            ->where('jo.id', '=', $jobId)
+            ->first()
+            ->id;
+        
+        if (is_null($companyId)) {
+            return DB::table('jobs as jo')
+                ->join('companies as co', 'co.id', '=', 'jo.company_id')
+                ->select('co.user_id as id')
+                ->where('jo.id', '=', $jobId)
+                ->first()
+                ->id;
+        }
+        
+        return $companyId;
 	}
 	
 	/**
@@ -51,9 +62,9 @@ class PopUp extends Model
 	
 	/**
 	 * @method storeOffer
-	 * @param \App\Http\Requests\MakeOfferRequest $request
-	 * @param int                                 $freelancerId
-	 * @param int                                 $userId
+	 * @param MakeOfferRequest $request
+	 * @param int              $freelancerId
+	 * @param int              $userId
 	 *
 	 * @return bool
 	 */
@@ -77,7 +88,7 @@ class PopUp extends Model
 	 * @method getFileUrl
 	 * Generates an UUID for the filename
 	 *
-	 * @param \App\Http\Requests\MakeOfferRequest $request
+	 * @param MakeOfferRequest $request
 	 *
 	 * @return string
 	 */
@@ -87,9 +98,9 @@ class PopUp extends Model
 	}
 	
 	/**
-	 * @param \App\Http\Requests\MakeOfferRequest $request
-	 * @param string                              $fileName
-	 * @param string                              $userDir
+	 * @param MakeOfferRequest $request
+	 * @param string           $fileName
+	 * @param string           $userDir
 	 *
 	 * @return bool
 	 */

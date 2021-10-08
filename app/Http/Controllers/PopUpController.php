@@ -26,7 +26,7 @@ class PopUpController extends Controller
 		]);
 		
 		$employerId = PopUp::getEmployerId($jobId);
-		
+
 		if (PopUp::addCandidate($jobId, $employerId, $request->candidateId)) {
 			return back()->with('success', 'The employer has been notified you\'re interested in this job !');
 		} else {

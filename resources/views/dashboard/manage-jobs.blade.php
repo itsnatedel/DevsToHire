@@ -64,7 +64,7 @@
 
                                                 <!-- Buttons -->
                                                 <div class="buttons-to-right always-visible">
-                                                    <form action="{{ route('dashboard.candidates', $job->id) }}" method="get">
+                                                    <form action="{{ route('dashboard.candidates') }}" method="get">
                                                         <input type="hidden" name="jobId" value="{{ $job->id }}">
                                                         <button class="button ripple-effect">
                                                             Manage
@@ -76,6 +76,11 @@
                                                     <a href="#small-dialog" id="{{ $job->id }}" class="button red popup-with-zoom-anim deleteButtons">
                                                         Delete
                                                     </a>
+                                                        @if(Session::has('fail'))
+                                                            <div>
+                                                                <p><b><mark>{{ Session::get('fail') }}</mark></b></p>
+                                                            </div>
+                                                        @endif
                                                 </div>
                                             </li>
 

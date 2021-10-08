@@ -21,8 +21,7 @@
                         <li><a href="{{ route('dashboard.index') }}"><i class="icon-material-outline-dashboard"></i>
                                 Dashboard</a></li>
                         <li><a href="{{ route('dashboard.messages') }}"><i
-                                    class="icon-material-outline-question-answer"></i> Messages <span
-                                    class="nav-tag">2</span></a></li>
+                                    class="icon-material-outline-question-answer"></i> Messages</a></li>
                         <li><a href="{{ route('dashboard.bookmarks') }}"><i
                                     class="icon-material-outline-star-border"></i> Bookmarks</a></li>
                         <li><a href="{{ route('dashboard.reviews') }}"><i
@@ -32,8 +31,7 @@
                     <ul data-submenu-title="Organize and Manage">
                         <li><a href="#"><i class="icon-material-outline-business-center"></i> Jobs</a>
                             <ul>
-                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs <span
-                                            class="nav-tag">3</span></a></li>
+                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Jobs</a></li>
                                 @if(Auth::check() && Auth::user()->role_id === 3)
                                 <li><a href="{{ route('dashboard.candidates') }}">Manage Candidates</a></li>
 
@@ -43,12 +41,10 @@
                         </li>
                         <li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
                             <ul>
-                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks <span
-                                            class="nav-tag">2</span></a></li>
+                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks</a></li>
                                 <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
 
-                                <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids <span
-                                            class="nav-tag">4</span></a></li>
+                                <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
                                 <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
                             </ul>
                         </li>
@@ -66,4 +62,3 @@
     </div>
 </div>
 <!-- Dashboard Sidebar / End -->
-

@@ -12,7 +12,8 @@
     use Illuminate\Http\Response;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
-    
+    use Illuminate\Validation\ValidationException;
+
     class JobController extends Controller
     {
         /**
@@ -127,10 +128,10 @@
          * @method cancelJobApplication
          * Cancels the job's application
          *
-         * @param \Illuminate\Http\Request $request
+         * @param Request $request
          *
          * @return RedirectResponse
-         * @throws \Illuminate\Validation\ValidationException
+         * @throws ValidationException
          */
         public function cancelJobApplication (Request $request) : RedirectResponse
         {

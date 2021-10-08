@@ -388,10 +388,9 @@
             
             if (!is_null($application)) {
                 // Cancel if exist
-                return DB::table('candidates as ca')
+                return DB::table('candidates')
                     ->where([
-                        'ca.job_id'  => $jobId,
-                        'ca.user_id' => $freelancerId
+                        'id' => $application->id
                     ])->delete();
             }
             

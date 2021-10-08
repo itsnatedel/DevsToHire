@@ -12,6 +12,7 @@
     use Illuminate\Contracts\View\Factory;
     use Illuminate\Contracts\View\View;
     use Illuminate\Http\RedirectResponse;
+    use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Str;
@@ -163,16 +164,66 @@
             return view('dashboard.bookmarks');
             
         }
-        
+    
         /**
          * Remove the specified resource from storage.
          *
-         * @param int $id
+         * @param Request $request
          *
-         * @return Application|Factory|View
+         * @return Application|Factory|View|RedirectResponse
          */
-        public function candidates ()
+        public function candidates (Request $request)
         {
-            return view('dashboard.manage-candidates');
+            
+            if (Auth::user()->role_id === 3) {
+                if (!isset($request->jobId)) {
+                    // Get all candidates if no jobId
+                    $jobs = Dashboard::getAllJobsCandidates(Auth::user()->company_id);
+                } else {
+                    // Get specific job's candidates
+                    $jobs = Dashboard::getSingleJobCandidates(Auth::user()->company_id, $request->jobId);
+
+                    // Requested job not found
+                    if (is_null($jobs->job_id) || !$jobs) {
+                        return redirect()->route('error-404')->with('message', 'The requested job offer couldn\'t be found !');
+                    }
+                }
+                
+                // Company's active jobs
+                return view('dashboard.manage-candidates', compact([
+                    'jobs'
+                ]));
+            }
+    
+           return redirect()->route('error-404')->with('message', 'You are not authorized to access this page !');
+        }
+    
+        public function downloadCV ($file, $userId)
+        {
+            if (!Auth::check() || Auth::user()->role_id !== 3) {
+                return redirect()->route('error-404')->with('message', 'You are not authorized to access this page !');
+            }
+            
+            $dir_url = DB::table('users as u')
+                ->select('u.dir_url')
+                ->where('u.id', '=', $userId)
+                ->first()
+                ->dir_url;
+            
+            return response()->download(public_path('images/user/' . $dir_url . '/files/' . $file));
+        }
+    
+        /**
+         * @param Request $request
+         *
+         * @return RedirectResponse
+         */
+        public function deleteCandidate (Request $request) : RedirectResponse
+        {
+            DB::table('candidates')
+                ->where('user_id', '=', $request->candidateId)
+                ->delete();
+            
+            return redirect()->back()->with('success', 'Candidate has been removed !');
         }
     }

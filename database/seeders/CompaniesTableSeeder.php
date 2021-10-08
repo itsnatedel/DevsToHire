@@ -36,7 +36,7 @@ class CompaniesTableSeeder extends Seeder
                 'description'   => $faker->paragraph(3, true),
                 'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
                 'verified'      => $faker->boolean(40),
-                'user_id'       => $faker->numberBetween(2, 5),
+                'user_id'       => $faker->numberBetween(1001, 1800),
                 'location_id'   => $faker->numberBetween(1, 208)
             ];
         }

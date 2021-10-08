@@ -169,8 +169,8 @@
                                 <div>
                                     <mark class="color">{{ $error }}</mark>
                                 </div>
-                        @endforeach
-                    @endif
+                            @endforeach
+                        @endif
                     <!-- Sidebar Widget -->
                         <div class="sidebar-widget">
                             <div class="job-overview">

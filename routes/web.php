@@ -79,7 +79,7 @@ Route::group(['prefix' => 'freelancers'], function () {
     Route::get('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
     Route::get('/{id}/{cv}', [FreelancerController::class, 'downloadCV'])
         ->where('id', '[0-9]+')
-        ->where('cv', '[a-z0-9-.]+')
+        ->where('cv', '[a-z0-9-A-Z.]+')
         ->name('freelancer.cv.download');
 });
 
@@ -152,6 +152,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
 
     /* Candidates */
     Route::get('/candidates', [DashboardController::class, 'candidates'])->name('dashboard.candidates');
+    Route::post('/candidates/delete', [DashboardController::class, 'deleteCandidate'])
+        ->name('dashboard.candidate.delete');
+    Route::get('/download/cv/{filename}/{freelancerId}', [DashboardController::class, 'downloadCV'])
+        ->name('dashboard.candidates.download.cv');
 
     /* Task */
     Route::get('/manage/task', [TaskController::class, 'manage'])->name('dashboard.task.manage');
