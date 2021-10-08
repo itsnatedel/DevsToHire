@@ -18,27 +18,28 @@ class DemoSeeder extends Seeder
         $faker = Faker::create();
         $users = [];
         
-        $users[] = [ //150
-            'firstname' => 'Jane',
-            'lastname' => 'Doe',
-            'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
-            'email' => 'company@gmail.com',
-            'can_be_rated' => $faker->boolean(),
-            'pic_url' => 'user-avatar-big-12.jpg',
-            'role_id' => 3,
-            'location_id' => 18
+        $users[] = [ //1801
+            'firstname'     => 'Jane',
+            'lastname'      => 'Doe',
+            'password'      => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
+            'email'         => 'company@gmail.com',
+            'can_be_rated'  => $faker->boolean(),
+            'pic_url'       => 'user-avatar-big-12.jpg',
+            'dir_url'       => null,
+            'role_id'       => 3,
+            'location_id'   => 18
         ];
-
         
-        $users[] = [
-            'firstname' => 'Nate',
-            'lastname' => 'Doe',
-            'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
-            'email' => 'freelancer@gmail.com',
-            'can_be_rated' => $faker->boolean(),
-            'pic_url' => 'user-avatar-big-17.jpg',
-            'role_id' => 2,
-            'location_id' => 18
+        $users[] = [ //1802
+            'firstname'     => 'Nate',
+            'lastname'      => 'Doe',
+            'password'      => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
+            'email'         => 'freelancer@gmail.com',
+            'can_be_rated'  => $faker->boolean(),
+            'pic_url'       => 'user-avatar-big-17.jpg',
+            'role_id'       => 2,
+            'location_id'   => 18,
+            'dir_url'      => '123demo',
         ];
     
         $job = [ //800
@@ -64,7 +65,7 @@ class DemoSeeder extends Seeder
             'type'          => $faker->randomElement(['Fixed', 'Hourly']),
             'created_at'    => $faker->dateTimeBetween('-30 days', '-1 day'),
             'due_date'      => $faker->dateTimeBetween('+5 days', '+12 weeks'),
-            'employer_id'   => 401,
+            'employer_id'   => 801,
             'category_id'   => $faker->numberBetween(1, 8),
             'location_id'   => 18,
         ];
@@ -76,7 +77,7 @@ class DemoSeeder extends Seeder
             'description'   => $faker->paragraph(3, true),
             'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
             'verified'      => $faker->boolean(40),
-            'user_id'       => 151,
+            'user_id'       => 1801,
             'location_id'   => 18
         ];
     
@@ -84,13 +85,14 @@ class DemoSeeder extends Seeder
             'firstname'     => 'Nate',
             'lastname'      => 'Doe',
             'description'   => 'I am an inspiring web development student who wants to get his first experiences in the work life of being a WebDev freelance !',
-            'pic_url'       => 'user-avatar-big-' . 03 . '.jpg',
+            'pic_url'       => 'user-avatar-big-17.jpg',
             'hourly_rate'   => $faker->numberBetween(8, 40),
             'verified'      => $faker->boolean(60),
             'location_id'   => 18,
+            'CV_url'        => 'TFE_trello.pdf',
             'category_id'   => $faker->numberBetween(1, 8),
             'joined_at'     => $faker->dateTimeBetween('-2 years', '-1 day'),
-            'user_id'       => 152
+            'user_id'       => 1802
         ];
     
         $arr = [];
@@ -116,6 +118,19 @@ class DemoSeeder extends Seeder
             'task_id' => 401,
         ];
     
+        for ($i = 0; $i < 3; $i++) {
+            $candidates[] = [
+                'user_id'       => $faker->numberBetween(1, 1000),
+                'employer_id'   => 801,
+                'job_id'        => 401
+            ];
+        }
+        
+        $candidates[] = [
+            'user_id'       => 1802,
+            'employer_id'   => 801,
+            'job_id'        => 401
+        ];
         
         DB::table('users')->insert($users);
         DB::table('companies')->insert($company);
@@ -131,7 +146,7 @@ class DemoSeeder extends Seeder
         
         DB::table('jobs')->insert($job);
         DB::table('tasks')->insert($task);
-        
+        DB::table('candidates')->insert($candidates);
         DB::table('skills_freelancers')->insert($skillsFreelancer);
         DB::table('skills_jobs')->insert($skillsJob);
         DB::table('skills_tasks')->insert($skillsTask);

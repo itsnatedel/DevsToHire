@@ -83,6 +83,7 @@ class FreelancerController extends Controller
     public function downloadCV($freelancerId, $CV_id): BinaryFileResponse
     {
         $freelancer = Freelancer::where('id', $freelancerId)->first();
+        
         $freelancer->dir_url = DB::table('users as u')
             ->select('u.dir_url')
             ->where('u.freelancer_id', '=', $freelancerId)

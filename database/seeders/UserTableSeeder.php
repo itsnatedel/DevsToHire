@@ -22,21 +22,23 @@ class UserTableSeeder extends Seeder
         $faker = Faker::create();
         $users = [];
 
-        for ($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 1800; $i++) {
             $randomInt = $faker->numberBetween(1, 30);
 
             if ($randomInt < 10) {
                 $randomInt = '0' . $randomInt;
             }
             
-            $users[] = [
+            $role = $faker->numberBetween(2, 3);
+            
+            $users[$i] = [
                 'firstname' => $faker->name(),
                 'lastname' => $faker->lastName,
                 'password' => '$2y$10$O8TR5s3ouefCXXR9lAyetuT0i2cpuG3z0uxSk1e3rAIWnLnJJIVf2', // 12345678
-                'email' => $faker->email,
+                'email' => $faker->numberBetween(1,3000) . $faker->email,
                 'can_be_rated' => $faker->boolean(),
                 'pic_url' => 'user-avatar-big-' . $randomInt . '.jpg',
-                'role_id' => $faker->numberBetween(2, 3),
+                'role_id' => $role,
                 'location_id' => $faker->numberBetween(1, 208),
             ];
         }

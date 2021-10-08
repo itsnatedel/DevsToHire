@@ -34,6 +34,7 @@ class Controller extends BaseController
      */
     public static function curateSkills(string $skillsSet): array
     {
+
         $skills = explode(',', $skillsSet);
 
         $curatedArrSkills = [];

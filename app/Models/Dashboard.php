@@ -2,6 +2,7 @@
     
     namespace App\Models;
     
+    use App\Http\Controllers\Controller;
     use App\Http\Requests\StoreJobRequest;
     use Carbon\Carbon;
     use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +19,7 @@
     use Intervention\Image\Facades\Image;
     use Ramsey\Uuid\Uuid;
     use RuntimeException;
-
+    
     class Dashboard extends Model
     {
         use HasFactory;
@@ -115,7 +116,7 @@
                         $fs->cleanDirectory($avatarDir);
                         
                         $filename = time() . '.' . app('request')->file('profilePic')->extension();
-                        $resizedImage = Image::make(app('request')->file('profilePic'))->resize(42,42);
+                        $resizedImage = Image::make(app('request')->file('profilePic'))->resize(42, 42);
                         
                         if ($resizedImage
                             ->save(public_path('images/user/' . $user->dir_url . '/avatar/') . $filename)
@@ -165,7 +166,8 @@
             ) {
                 if (Hash::check($request['currentPassword'], $user->password)) {
                     $baseQuery->update(['password' => $request['newPassword']]);
-                } else {
+                }
+                else {
                     return false;
                 }
             }
@@ -389,6 +391,8 @@
         
         /**
          * @method setJobSkills
+         * Sets the skills requested for a job offer
+         *
          * @param StoreJobRequest $request
          * @param int             $jobId
          *
@@ -403,11 +407,16 @@
                     'employer_id' => $request->employerId ?? Auth::id()
                 ]);
         }
-    
+        
         /**
+         * @method getActiveJobs
+         * Fetches all active job offers
+         *
          * @param int $companyId
+         *
+         * @return Collection
          */
-        public static function getActiveJobs (int $companyId)
+        public static function getActiveJobs (int $companyId) : Collection
         {
             $jobs = DB::table('jobs as jo')
                 ->select([
@@ -422,18 +431,20 @@
                 ->where('jo.company_id', '=', $companyId)
                 ->get();
             
-            // Get amount of candidates for each job
-            return self::getJobCandidates($jobs);
+            return self::getAmountCandidates($jobs);
         }
-    
+        
         /**
+         * @method getAmountCandidates
+         * Counts the amount of candidates for each job
+         *
          * @param Collection $jobs
          *
          * @return Collection
          */
-        private static function getJobCandidates (Collection $jobs) : Collection
+        private static function getAmountCandidates (Collection $jobs) : Collection
         {
-            foreach($jobs as $job) {
+            foreach ($jobs as $job) {
                 $job->candidates = DB::table('candidates')
                     ->select(DB::raw('COUNT(id) as count'))
                     ->where('job_id', '=', $job->id)
@@ -442,5 +453,137 @@
             }
             
             return $jobs;
+        }
+        
+        /**
+         * @method getAllJobsCandidates
+         * Retrieves all active jobs offers and their candidates
+         *
+         * @param int $company_id
+         *
+         * @return Collection
+         */
+        public static function getAllJobsCandidates (int $company_id) : Collection
+        {
+            $jobs = DB::table('candidates as ca')
+                ->join('jobs as jo', 'jo.id', '=', 'ca.job_id')
+                ->select([
+                    'ca.job_id',
+                    DB::raw('COUNT(ca.id) as nb_candidates'),
+                    'jo.title',
+                    'jo.slug'
+                ])
+                ->where('ca.employer_id', $company_id)
+                ->groupBy('ca.job_id')
+                ->get();
+            
+            foreach ($jobs as $job) {
+                $job->candidates = DB::table('candidates as ca')
+                    ->select([
+                        'ca.user_id'
+                    ])
+                    ->where('ca.job_id', $job->job_id)
+                    ->where('ca.employer_id', $company_id)
+                    ->get();
+                
+                self::getCandidatesInfos($job->candidates);
+            }
+            
+            return $jobs;
+        }
+        
+        
+        /**
+         * @method getSingleJobCandidates
+         * Retrieves a single job info + its candidates
+         *
+         * @param int $companyId
+         * @param int $jobId
+         *
+         * @return false|Model|Builder|object
+         */
+        public static function getSingleJobCandidates (int $companyId, int $jobId)
+        {
+            $job = DB::table('candidates as ca')
+                ->join('jobs as jo', 'jo.id', '=', 'ca.job_id')
+                ->select([
+                    'ca.job_id',
+                    DB::raw('COUNT(ca.id) as nb_candidates'),
+                    'jo.title',
+                    'jo.slug'
+                ])
+                ->where('ca.employer_id', $companyId)
+                ->where('ca.job_id', $jobId)
+                ->first();
+            
+            // No job found
+            if (is_null($job)) {
+                return false;
+            }
+            
+            // Get candidate's ID
+            $job->candidates = DB::table('candidates as ca')
+                ->select([
+                    'ca.user_id'
+                ])
+                ->where('ca.job_id', $job->job_id)
+                ->where('ca.employer_id', $companyId)
+                ->get();
+            
+            self::getCandidatesInfos($job->candidates);
+            
+            return $job;
+        }
+        
+        /**
+         * @method getCandidatesInfos
+         * Fetches the information for each candidate
+         *
+         * @param Collection $candidates
+         *
+         * @return Collection
+         */
+        private static function getCandidatesInfos (Collection $candidates) : Collection
+        {
+            
+            foreach ($candidates as $candidate) {
+                $freelancerId = DB::table('users as u')
+                    ->select('u.freelancer_id')
+                    ->where('u.id', '=', $candidate->user_id)
+                    ->first()
+                    ->freelancer_id;
+                
+                $candidate->frId = $freelancerId ?? $candidate->user_id;
+                
+                $candidate->info = DB::table('users as u')
+                    ->join('locations as lo', 'lo.id', '=', 'u.location_id')
+                    ->join('freelancers as fr', 'fr.user_id', '=', 'u.id')
+                    ->join('ratings_freelancers as rafr', 'rafr.freelancer_id', '=', 'fr.id')
+                    ->join('skills_freelancers as skfr', 'skfr.id', '=', 'fr.id')
+                    ->select([
+                        'fr.firstname',
+                        'fr.lastname',
+                        'fr.verified',
+                        'fr.CV_url',
+                        'u.dir_url',
+                        'u.email',
+                        'u.pic_url',
+                        'lo.country_name',
+                        'lo.country_code',
+                        DB::raw('ROUND(SUM(rafr.note)/COUNT(rafr.id)) as rating'),
+                        'skfr.skills'
+                    ])
+                    ->where('fr.id', '=', $candidate->frId)
+                    ->first();
+                
+                // Get skills into an array for output
+                $skills = $candidate->info->skills;
+                
+                if (!is_null($skills)) {
+                    $candidate->info->skills = Controller::curateSkills($skills);
+                }
+            }
+            
+            return $candidates;
         }
     }
