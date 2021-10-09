@@ -325,6 +325,7 @@
         {
             $bids = DB::table('bids as b')
                 ->join('users as u', 'u.freelancer_id', '=', 'b.bidder_id')
+                ->join('freelancers as fr', 'fr.user_id', '=', 'u.id')
                 ->join('locations as lo', 'lo.id', '=', 'u.location_id')
                 ->select(
                     'b.id',
@@ -334,6 +335,7 @@
                     'b.time_period',
                     'u.firstname',
                     'u.lastname',
+                    'fr.verified',
                     'u.dir_url',
                     'u.pic_url',
                     'lo.country_name',

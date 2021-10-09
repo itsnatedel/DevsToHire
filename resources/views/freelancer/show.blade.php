@@ -28,7 +28,7 @@
                                             <div class="star-rating" data-rating="{{ round($freelancer->info->stats->rating) }}"></div>
                                         </li>
                                         @else
-                                            <li><mark>Hasn't been rated yet</mark></li>
+                                            <li><span class="company-not-rated">Hasn't been rated yet</span></li>
                                         @endif
                                         <li><img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($freelancer->info->country_code) . '.svg') }}" alt="Country Flag">
@@ -41,8 +41,6 @@
                                         @endif
                                     </ul>
                                 </div>
-
-                                <!-- TODO: social links for freelancers -->
                                 <!-- Breadcrumbs -->
                                 <nav id="breadcrumbs" class="dark right-side">
                                     <ul>
@@ -103,7 +101,7 @@
                                 <div class="boxed-list-item" style="margin-top: 20px">
                                     <div class="item-content">
                                         <h4>No work history so far
-                                        <span>This freelancer hasn't completed any job or task on this platform</span>
+                                            <span>This freelancer hasn't completed any job or task on this platform</span>
                                         </h4>
                                     </div>
                                 </div>
@@ -133,10 +131,16 @@
 
                         <!-- Button -->
                         @auth
-                            <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">
-                                Make an Offer
-                                <i class="icon-material-outline-arrow-right-alt"></i>
-                            </a>
+                            @if(Auth::id() !== $freelancer->user_id)
+                                <a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">
+                                    Make an Offer
+                                    <i class="icon-material-outline-arrow-right-alt"></i>
+                                </a>
+                            @else
+                                <a href="#" class="apply-now-button margin-bottom-50">
+                                    Can't offer yourself an offer...
+                                </a>
+                            @endif
 
                             @if($errors->any())
                                 @foreach ($errors->all() as $error)
@@ -184,21 +188,7 @@
                         </div>
 
                         <!-- Widget -->
-                        <div class="sidebar-widget">
-                            <h3>Social Profiles</h3>
-                            <div class="freelancer-socials margin-top-25">
-                                <ul>
-                                    <li><a href="#" title="Dribbble" data-tippy-placement="top"><i
-                                                class="icon-brand-dribbble"></i></a></li>
-                                    <li><a href="#" title="Twitter" data-tippy-placement="top"><i
-                                                class="icon-brand-twitter"></i></a></li>
-                                    <li><a href="#" title="Behance" data-tippy-placement="top"><i
-                                                class="icon-brand-behance"></i></a></li>
-                                    <li><a href="#" title="GitHub" data-tippy-placement="top"><i
-                                                class="icon-brand-github"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        @include('layouts.sidebar.socialIcons')
                         <!-- Widget -->
                         <div class="sidebar-widget">
                             <h3>Skills</h3>
@@ -226,7 +216,6 @@
                                     </span>
                                     <i>PDF</i>
                                 </a>
-                                <a href="#" class="attachment-box ripple-effect"><span>Contract</span><i>DOCX</i></a>
                             </div>
                         </div>
                         @endauth
@@ -243,7 +232,7 @@
                             <div class="copy-url">
                                 <input id="copy-url" type="text" value="" class="with-border">
                                 <button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url"
-                                        title="Copy to Clipboard" data-tippy-placement="top"><i
+                                        title="Copy Freelancer's profile to clipboard !" data-tippy-placement="top"><i
                                         class="icon-material-outline-file-copy"></i></button>
                             </div>
                             <!-- Share Buttons -->
@@ -252,14 +241,11 @@
                                 <div class="share-buttons-content">
                                     <span>Interesting? <strong>Share It!</strong></span>
                                     <ul class="share-buttons-icons">
-                                        <li><a href="#" data-button-color="#3b5998" title="Share on Facebook"
+                                        <li><a href="https://www.facebook.com/" data-button-color="#3b5998" title="Share on Facebook"
                                                data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
-                                        <li><a href="#" data-button-color="#1da1f2" title="Share on Twitter"
+                                        <li><a href="https://twitter.com/" data-button-color="#1da1f2" title="Share on Twitter"
                                                data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
-                                        <li><a href="#" data-button-color="#dd4b39" title="Share on Google Plus"
-                                               data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a>
-                                        </li>
-                                        <li><a href="#" data-button-color="#0077b5" title="Share on LinkedIn"
+                                        <li><a href="https://www.linkedin.com/" data-button-color="#0077b5" title="Share on LinkedIn"
                                                data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a>
                                         </li>
                                     </ul>
@@ -274,7 +260,7 @@
         <div class="margin-top-15"></div>
         <!-- Spacer / End-->
         @auth
-        @include('layouts.popups.makeOffer')
+            @include('layouts.popups.makeOffer')
         @endauth
     </div>
     <!-- Wrapper / End -->

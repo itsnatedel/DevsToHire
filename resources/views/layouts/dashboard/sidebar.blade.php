@@ -41,23 +41,22 @@
                         </li>
                         <li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
                             <ul>
-                                <li><a href="{{ route('dashboard.job.manage') }}">Manage Tasks</a></li>
-                                <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
-
-                                <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
+                                <li><a href="{{ route('dashboard.task.manage') }}">Manage Tasks</a></li>
+                                @if(Auth::check() && Auth::user()->role_id === 2)
+                                    <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
+                                @endif
                                 <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
                             </ul>
                         </li>
                     </ul>
 
                     <ul data-submenu-title="Account">
-                        <li class="active"><a href="{{ route('dashboard.settings') }}"><i
+                        <li><a href="{{ route('dashboard.settings') }}"><i
                                     class="icon-material-outline-settings"></i> Settings</a></li>
                     </ul>
                 </div>
             </div>
             <!-- Navigation / End -->
-
         </div>
     </div>
 </div>

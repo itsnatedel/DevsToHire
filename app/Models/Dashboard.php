@@ -19,7 +19,7 @@
     use Intervention\Image\Facades\Image;
     use Ramsey\Uuid\Uuid;
     use RuntimeException;
-    
+
     class Dashboard extends Model
     {
         use HasFactory;
@@ -585,5 +585,246 @@
             }
             
             return $candidates;
+        }
+        
+        /**
+         * @method getAppliedJobs
+         * Gets the jobs the freelancer applied for
+         *
+         * @param int $freelancerId
+         *
+         * @return Collection
+         */
+        public static function getAppliedJobs (int $freelancerId) : Collection
+        {
+            return DB::table('candidates as ca')
+                ->join('jobs as jo', 'jo.id', '=', 'ca.job_id')
+                ->join('freelancers as fr', 'fr.user_id', '=', 'ca.user_id')
+                ->select([
+                    'ca.job_id as id',
+                    'jo.slug',
+                    'jo.title',
+                    'jo.created_at',
+                    'fr.user_id as freelancerId'
+                ])
+                ->where('ca.user_id', '=', $freelancerId)
+                ->get();
+        }
+        
+        /**
+         * @param $bidderId
+         *
+         * @return Collection
+         */
+        public static function getActiveBids ($bidderId) : Collection
+        {
+            return DB::table('bids as bi')
+                ->join('tasks as ta', 'ta.id', '=', 'bi.task_id')
+                ->select([
+                    'bi.id',
+                    'bi.task_id',
+                    'bi.minimal_rate',
+                    'bi.delivery_time',
+                    'bi.time_period',
+                    'ta.name',
+                    'ta.due_date',
+                    'ta.slug',
+                    'ta.type',
+                    'ta.budget_min',
+                    'ta.budget_max'
+                ])
+                ->where('bi.bidder_id', '=', $bidderId)
+                ->get();
+        }
+        
+        /**
+         * @param bool     $isFreelancer
+         * @param int|null $id user freelancer/company id
+         *
+         * @return RedirectResponse|Collection
+         */
+        public static function getActiveTasks (bool $isFreelancer, int $id = null)
+        {
+            if (is_null($id)) {
+                return redirect()->route('error-404')->with('message', 'Freelancer/Company ID not set.');
+            }
+            
+            $baseQuery = DB::table('tasks as ta')
+                ->select([
+                    'ta.id',
+                    'ta.name',
+                    'ta.slug',
+                    'ta.budget_min',
+                    'ta.budget_max',
+                    'ta.type',
+                    'ta.due_date',
+                ]);
+            
+            if ($isFreelancer) {
+                $tasks = $baseQuery
+                    ->where('ta.freelancer_id', '=', $id)
+                    ->get();
+                
+            }
+            else {
+                $tasks = $baseQuery
+                    ->where('ta.employer_id', '=', $id)
+                    ->get();
+            }
+            
+            $tasks = self::getBidsInfo($tasks);
+            
+            return self::isExpiring($tasks);
+        }
+        
+        /**
+         * @param Collection $tasks
+         *
+         * @return Collection
+         */
+        private static function getBidsInfo (Collection $tasks) : Collection
+        {
+            foreach ($tasks as $task) {
+                $task->bids = DB::table('bids as bi')
+                    ->select([
+                        DB::raw('COUNT(bi.id) as amount_bidders'),
+                        DB::raw('ROUND(SUM(bi.minimal_rate)/COUNT(bi.id)) as average_bid')
+                    ])
+                    ->where('bi.task_id', '=', $task->id)
+                    ->first();
+            }
+            
+            return $tasks;
+        }
+        
+        /**
+         * @param Collection $tasks
+         *
+         * @return Collection
+         */
+        private static function isExpiring (Collection $tasks) : Collection
+        {
+            foreach ($tasks as $task) {
+                $dueDate = $task->due_date;
+                $timeDiff = Carbon::create($dueDate)->diffForHumans();
+                
+                // nbDays | weeks/months/years | from | now/ago
+                $timeSplit = explode(' ', $timeDiff);
+                
+                // Expiring === due_date < 1 week
+                $task->expiring = ($timeSplit[1] === 'days' && $timeSplit[0] < 7);
+                $task->hasExpired = $timeSplit[3] === 'ago';
+                
+                // Diff for humans
+                $task->due_date = $timeDiff;
+            }
+            
+            return $tasks;
+        }
+        
+        /**
+         * @method getTaskBidders
+         * Retrieves all bidders of a specific task
+         *
+         * @param int    $taskId
+         * @param string $sortBy
+         *
+         * @return Collection
+         */
+        public static function getTaskBidders (int $taskId, string $sortBy = null) : Collection
+        {
+            
+            
+            $bidders = DB::table('bids as bi')
+                ->join('tasks as ta', 'ta.id', '=', 'bi.task_id')
+                ->join('freelancers as fr', 'fr.id', '=', 'bi.bidder_id')
+                ->join('users as u', 'u.id', '=', 'fr.user_id')
+                ->join('locations as lo', 'lo.id', '=', 'u.location_id')
+                ->select([
+                    'bi.id',
+                    'bi.bidder_id',
+                    'bi.time_period',
+                    'bi.delivery_time',
+                    'bi.minimal_rate',
+                    'fr.firstname',
+                    'fr.lastname',
+                    'fr.verified',
+                    'u.email',
+                    'u.dir_url',
+                    'u.pic_url',
+                    'lo.country_code',
+                    'lo.country_name',
+                    'ta.type',
+                    'bi.created_at'
+                ])
+                ->where('bi.task_id', '=', $taskId)
+                ->groupBy('bi.id');
+            
+            if (!is_null($sortBy)) {
+                $bidders = self::sortBidders($bidders, $sortBy);
+            }
+            
+            $bidders = $bidders->get();
+            
+            return self::getBiddersRatings($bidders);
+        }
+        
+        /**
+         * @method getBiddersRatings
+         * Sets each bidder's rating
+         *
+         * @param Collection $bidders
+         *
+         * @return Collection
+         */
+        private static function getBiddersRatings (Collection $bidders) : Collection
+        {
+            foreach ($bidders as $bidder) {
+                $bidder->rating = DB::table('ratings_freelancers as rafr')
+                    ->select(DB::raw('SUM(rafr.note)/COUNT(rafr.id) as rating'))
+                    ->where('rafr.freelancer_id', '=', $bidder->bidder_id)
+                    ->first()
+                    ->rating;
+            }
+            
+            return $bidders;
+        }
+        
+        /**
+         * @sortBidders
+         * Sorts the bidders if requested
+         *
+         * @param Builder $bidders
+         * @param string  $sortBy
+         *
+         * @return Builder
+         */
+        private static function sortBidders (Builder $bidders, string $sortBy) : Builder
+        {
+            switch ($sortBy) {
+                case 'priceLoHi':
+                    $bidders->orderBy('bi.minimal_rate', 'ASC');
+                    break;
+                case 'priceHiLo':
+                    $bidders->orderBy('bi.minimal_rate', 'DESC');
+                    break;
+                case 'oldest':
+                    $bidders->orderBy('bi.created_at', 'ASC');
+                    break;
+                case 'newest':
+                    $bidders->orderBy('bi.created_at', 'DESC');
+                    break;
+                case 'bidderAZ':
+                    $bidders->orderBy('fr.firstname', 'ASC');
+                    break;
+                case 'bidderZA':
+                    $bidders->orderBy('fr.firstname', 'DESC');
+                    break;
+                case 'reset':
+                default:
+                    return $bidders;
+            }
+            
+            return $bidders;
         }
     }

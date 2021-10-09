@@ -70,17 +70,12 @@
                                     <li><a href="{{ route('dashboard.task.manage') }}">Tasks</a>
                                         <ul class="dropdown-nav">
                                             <li><a href="{{ route('dashboard.task.manage') }}">Manage Tasks</a></li>
-                                            <!-- If user === employer -->
-                                            @if(Auth::check() && Auth::user()->role_id === 3)
-                                                <li><a href="{{ route('dashboard.bid.manage') }}">Manage Bidders</a></li>
-                                            @endif
-
                                             <!-- If user === freelancer -->
                                             @if(Auth::check() && Auth::user()->role_id === 2)
                                                 <li><a href="{{ route('dashboard.bid.active') }}">My Active Bids</a></li>
                                             @endif
 
-                                            @if(Auth::check() && Auth::user()->role_id === 3)
+                                            @if(Auth::check())
                                                 <li><a href="{{ route('dashboard.task.create') }}">Post a Task</a></li>
                                             @endif
                                         </ul>

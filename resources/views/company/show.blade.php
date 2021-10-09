@@ -21,7 +21,7 @@
                                         </li>
                                         @else
                                             <li>
-                                                <mark>This company hasn't been rated yet.</mark>
+                                                <span class="company-not-rated">This company hasn't been rated yet</span>
                                             </li>
                                         @endif
                                         <li><img class="flag"
@@ -34,12 +34,11 @@
                                             </li>
                                         @endif
                                     </ul>
-                                    @include('layouts.sidebar.socialIcons')
                                 </div>
                             </div>
                             <div class="right-side">
                                 <!-- Breadcrumbs -->
-                                <nav id="breadcrumbs" class="white">
+                                <nav id="breadcrumbs" class="dark">
                                     <ul>
                                         <li><a href="{{ route('homepage') }}">Home</a></li>
                                         <li><a href="{{ route('company.index') }}">Browse Companies</a></li>
@@ -59,7 +58,7 @@
                 <div class="col-xl-8 col-lg-8 content-right-offset">
 
                     <div class="single-page-section">
-                        <h3 class="margin-bottom-25">About Company</h3>
+                        <h3 class="margin-bottom-25">About <b>{{ $company->name }}</b></h3>
                         <p>{{ $company->description }}</p>
                     </div>
 
@@ -101,7 +100,7 @@
                                     </a>
                                 @endforeach
                             @else
-                                <p style="margin-top: 10px; padding: 10px">This employer doesn't currently have any
+                                <p style="padding: 30px">This employer doesn't currently have any
                                     opened position available.</p>
                             @endif
                         </div>
@@ -144,7 +143,7 @@
                                     </div>
                                 </a>
                             @empty
-                                <p style="margin-top: 10px; padding: 10px">This employer currently doesn't have any
+                                <p style="padding: 30px">This employer currently doesn't have any
                                     opened task available.</p>
                             @endforelse
                         </div>
@@ -176,11 +175,7 @@
                                 @endforeach
                             @endif
                             <!-- Bookmark Button -->
-                            <button class="bookmark-button margin-bottom-15">
-                                <span class="bookmark-icon"></span>
-                                <span class="bookmark-text">Bookmark this company</span>
-                                <span class="bookmarked-text">Bookmarked</span>
-                            </button>
+                            @include('layouts.sidebar.socialIcons')
 
                             <div class="boxed-list margin-top-10">
 
@@ -225,7 +220,7 @@
                                             </div>
                                         </li>
                                     @empty
-                                        <p>This employer hasn't been rated yet.</p>
+                                        <span style="transform: translate(60px,10px)" class="company-not-rated">This employer hasn't been rated yet</span>
                                     @endforelse
                                 </ul>
                                 <div class="centered-button margin-top-35">
@@ -242,10 +237,10 @@
 
                                     @endauth
                                     @guest
-                                            <a href="{{ route('login') }}" class="button button-sliding-icon">
-                                                Login to leave a review
-                                                <i class="icon-material-outline-arrow-right-alt"></i>
-                                            </a>
+                                        <a href="{{ route('login') }}" class="button button-sliding-icon">
+                                            Login to leave a review
+                                            <i class="icon-material-outline-arrow-right-alt"></i>
+                                        </a>
                                     @endguest
                                 </div>
                             </div>

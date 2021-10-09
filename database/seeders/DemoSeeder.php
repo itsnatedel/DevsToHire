@@ -51,13 +51,13 @@ class DemoSeeder extends Seeder
             'salary_high'   => $faker->numberBetween(31000, 60000),
             'company_id'    => 801,
             'remote'        => $faker->randomElement(['Work At Home', 'Temporarily', 'No']),
-            'type'          => $faker->randomElement(['Full Time', 'Freelance', 'Part Time', 'Internship', 'Temporary']),
-            'category_id'   => $faker->numberBetween(1, 8),
+            'type'          => 'Full Time',
+            'category_id'   => 1,
             'featured'      => $faker->boolean(40),
             'only_locally'  => $faker->boolean(),
         ];
-    
-        $task = [ //800
+        
+        $tasks = [ //800
             'name'          => 'Need help maintaining a WordPress page !',
             'slug'          => 'need-help-maintaining-a-wordpress-page',
             'description'   => 'We are in dire need of a developer who is able to maintain a shopping mall\'s website...',
@@ -70,11 +70,13 @@ class DemoSeeder extends Seeder
             'location_id'   => 18,
         ];
     
+        
+    
         $company = [
-            'name'          => 'EPFC Corp. Ltd.',
-            'speciality'    => 'Teaching new talents and put them in the WebDev spotlight !',
-            'slug'          => 'teaching-new-talents-and-putting-them-in-the-webdev-spotlight',
-            'description'   => $faker->paragraph(3, true),
+            'name'          => 'EPFC Ltd.',
+            'speciality'    => 'Teaching new Webdev talents',
+            'slug'          => 'teaching-new-webdev-talents',
+            'description'   => $faker->realText('500', 4),
             'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
             'verified'      => $faker->boolean(40),
             'user_id'       => 1801,
@@ -145,7 +147,23 @@ class DemoSeeder extends Seeder
                 'freelancer_id' => 1001]);
         
         DB::table('jobs')->insert($job);
-        DB::table('tasks')->insert($task);
+        DB::table('tasks')->insert($tasks);
+    
+        $tasks = [
+             'name'            => 'Need help maintaining a Laravel project !',
+             'slug'            => 'need-help-maintaining-a-laravel-project',
+             'description'     => 'We are in dire need of a developer who is able to maintain our small business page.',
+             'budget_min'      => $faker->numberBetween(10, 90),
+             'type'            => $faker->randomElement(['Fixed', 'Hourly']),
+             'created_at'      => $faker->dateTimeBetween('-30 days', '-1 day'),
+             'due_date'        => $faker->dateTimeBetween('+5 days', '+1 week'),
+             'freelancer_id'   => 1001,
+             'category_id'     => $faker->numberBetween(1, 8),
+             'location_id'     => 18,
+        ];
+    
+        DB::table('tasks')->insert($tasks);
+        
         DB::table('candidates')->insert($candidates);
         DB::table('skills_freelancers')->insert($skillsFreelancer);
         DB::table('skills_jobs')->insert($skillsJob);

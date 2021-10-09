@@ -38,7 +38,7 @@
                         @if($errors->any())
                             @foreach ($errors->all() as $error)
                                 <div>
-                                    <mark class="color">{{ $error }}</mark>
+                                    <mark>{{ $error }}</mark>
                                 </div>
                             @endforeach
                         @endif

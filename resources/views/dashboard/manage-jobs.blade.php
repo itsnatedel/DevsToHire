@@ -64,28 +64,45 @@
 
                                                 <!-- Buttons -->
                                                 <div class="buttons-to-right always-visible">
-                                                    <form action="{{ route('dashboard.candidates') }}" method="get">
-                                                        <input type="hidden" name="jobId" value="{{ $job->id }}">
-                                                        <button class="button ripple-effect">
-                                                            Manage
-                                                            Candidates <span class="button-info">{{ $job->candidates }}</span>
-                                                        </button>
-                                                    </form>
-                                                    <div class="margin-top-15">
+                                                    @if(Auth::user()->role_id === 3)
+                                                        <form action="{{ route('dashboard.candidates') }}" method="get">
+                                                            <input type="hidden" name="jobId" value="{{ $job->id }}">
+                                                            <button class="button ripple-effect">
+                                                                Manage
+                                                                Candidates <span class="button-info">{{ $job->candidates }}</span>
+                                                            </button>
+                                                        </form>
+
+                                                        <div class="margin-top-15">
+
                                                     <!-- Make sure no candidates before deleting -->
                                                     <a href="#small-dialog" id="{{ $job->id }}" class="button red popup-with-zoom-anim deleteButtons">
                                                         Delete
                                                     </a>
+                                                    @else
+                                                        <form action="{{ route('cancel.job.apply') }}" method="post">
+                                                            @csrf
+                                                            <input type="hidden" name="jobId" value="{{ $job->id }}">
+                                                            <input type="hidden" name="freelancerId" value="{{ $job->freelancerId }}">
+                                                            <button class="button ripple-effect">
+                                                                Cancel Application
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                         @if(Session::has('fail'))
                                                             <div>
                                                                 <p><b><mark>{{ Session::get('fail') }}</mark></b></p>
                                                             </div>
                                                         @endif
-                                                </div>
-                                            </li>
+                                                    </div>
 
+                                            </li>
                                         @empty
-                                            <p class="padding-top-30 padding-left-30 padding-bottom-30" >You have no active job offer !</p>
+                                            @if(Auth::user()->role_id === 3)
+                                                <p class="padding-top-30 padding-left-30 padding-bottom-30" >You have no active job offer !</p>
+                                            @else
+                                                <p class="padding-top-30 padding-left-30 padding-bottom-30" >You have not applied to any job offer !</p>
+                                            @endif
                                         @endforelse
                                     </ul>
                                 </div>

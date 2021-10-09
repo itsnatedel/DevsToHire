@@ -19,8 +19,9 @@
                 <form id="terms">
                     <div class="radio">
                         <input id="radio-1" name="radio" type="radio" required>
-                        <label for="radio-1"><span class="radio-label"></span> I have read and agree to the Terms and
-                            Conditions</label>
+                        <label for="radio-1"><span class="radio-label"></span> I have read and agree to the <a
+                                    href="{{ route('terms') }}">Terms and
+                                Conditions</a></label>
                     </div>
                 </form>
                 <!-- Button -->

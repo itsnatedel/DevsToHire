@@ -31,7 +31,7 @@
                                             </li>
                                         @else
                                             <li>
-                                                <mark>This company hasn't been rated yet.</mark>
+                                                <span class="company-not-rated">This company hasn't been rated yet</span>
                                             </li>
                                         @endif
                                         <li>
@@ -250,12 +250,4 @@
     </div>
     <!-- Wrapper / End -->
     @include('layouts.popups.applyJob')
-    <script>
-        // Snackbar for copy to clipboard button
-        $('.copy-url-button').click(function () {
-            Snackbar.show({
-                text: 'Copied to clipboard!',
-            });
-        });
-    </script>
 @endsection

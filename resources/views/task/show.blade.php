@@ -38,9 +38,15 @@
                                                     {{ $task->company_name }}</a>
                                             @endif
                                         </li>
+                                        @if(!is_null($company_rating) && $company_rating > 0)
                                         <li>
                                             <div class="star-rating" data-rating="{{ $company_rating }}"></div>
                                         </li>
+                                        @else
+                                            <li>
+                                                <mark>This company hasn't been rated yet</mark>
+                                            </li>
+                                        @endif
                                         <li>
                                             <img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($location->country_code) . '.svg') }}"
@@ -59,8 +65,7 @@
                             <div class="right-side">
                                 <div class="salary-box">
                                     <div class="salary-type">Project Budget</div>
-                                    <div
-                                            class="salary-amount">{{ 'Up to ' . $task->budget_max . ' €' }}</div>
+                                    <div class="salary-amount">{{ 'Up to ' . $task->budget_max . ' €' }}</div>
                                 </div>
                             </div>
                         </div>
@@ -80,8 +85,6 @@
                         <h3 class="margin-bottom-25">Project Description</h3>
                         <p>{{ $task->description }}</p>
                     </div>
-
-                    <!-- TODO: Task Attachments -->
                     <div class="single-page-section">
                         <h3>Attachments</h3>
                         <div class="attachments-container">
@@ -126,7 +129,7 @@
                                     <!-- Avatar -->
                                     <div class="bids-avatar">
                                         <div class="freelancer-avatar">
-                                            <div class="verified-badge"></div>
+                                            @if($bid->verified)<div class="verified-badge"></div>@endif
                                             <a href="{{ route('freelancer.show', [$bid->bidder_id, Str::slug($bid->firstname . ' ' . $bid->lastname)]) }}">
                                                 <img src="{{ asset('images/user/' . $bid->dir_url . '/avatar/' . $bid->pic_url) }}" alt="User avatar">
                                             </a>
@@ -148,11 +151,13 @@
                                                     >
                                                 </a>
                                             </h4>
+                                            <div class="freelancer-rating">
                                             @if(!is_null($bid->rating))
                                                 <div class="star-rating" data-rating="{{ round($bid->rating) }}"></div>
                                             @else
-                                                <div><p>Not rated yet</p></div>
+                                                <span class="company-not-rated">Freelancer hasn't been rated yet</span>
                                             @endif
+                                            </div>
                                         </div>
                                     </div>
 
@@ -166,7 +171,7 @@
                                 </div>
                             </li>
                             @empty
-                                <p class="margin-top-15">No one has put a bid on this task so far, be the first !</p>
+                                <p style="padding: 30px">No one has put a bid on this task, be the first !</p>
                             @endforelse
                         </ul>
                     </div>
