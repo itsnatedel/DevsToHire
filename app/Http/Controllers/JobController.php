@@ -188,7 +188,7 @@
          *
          * @return RedirectResponse
          */
-        public function delete (Request $request) : RedirectResponse
+        public function deleteJob (Request $request) : RedirectResponse
         {
             // Make sure no candidates applied for the job
             $hasCandidates = DB::table('candidates')

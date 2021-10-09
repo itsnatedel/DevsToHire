@@ -25,10 +25,11 @@ class BidsTableSeeder extends Seeder
         for($i = 0; $i < 50; $i++) {
             $bids[] = [
                 'minimal_rate'  => $faker->numberBetween(600, 4000),
-                'delivery_time'      => $faker->numberBetween(1, 30),
+                'delivery_time' => $faker->numberBetween(1, 30),
                 'time_period'   => $faker->randomElement(['Days', 'Hours']),
                 'bidder_id'     => $faker->numberBetween(1, 15),
-                'task_id'       => $faker->numberBetween(1, 40)
+                'task_id'       => $faker->numberBetween(1, 40),
+                'created_at'    => $faker->dateTimeBetween('-4 weeks', '-1 day'),
             ];
         }
 

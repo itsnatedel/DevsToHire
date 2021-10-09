@@ -109,7 +109,7 @@ Route::group(['prefix' => 'order'], function () {
 Route::group(['prefix' => 'checkout', 'middleware' => 'auth'], function() {
     Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/payment', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('/order-success', [CheckoutController::class, 'suceeded'])->name('checkout.success');
+    Route::get('/order-success', [CheckoutController::class, 'succeeded'])->name('checkout.success');
 });
 
 /* Premium Routes */
@@ -158,19 +158,28 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
         ->name('dashboard.candidates.download.cv');
 
     /* Task */
-    Route::get('/manage/task', [TaskController::class, 'manage'])->name('dashboard.task.manage');
-    Route::get('/manage/bidders', [TaskController::class, 'manage'])->name('dashboard.bidders.manage');
+    Route::get('/manage/task', [DashboardController::class, 'manageTasks'])->name('dashboard.task.manage');
     Route::get('/task/create', [DashboardController::class, 'createTask'])->name('dashboard.task.create');
+    Route::post('/task/delete/{taskId}', [TaskController::class, 'deleteTask'])
+        ->where('taskId', '[0-9]+')
+        ->name('dashboard.task.delete');
 
     /* Bids */
-    Route::get('/manage/bidders', [BidController::class, 'manage'])->name('dashboard.bid.manage');
-    Route::get('/my-active-bids', [BidController::class, 'activeBids'])->name('dashboard.bid.active');
+    Route::get('/manage/bidders/{taskId}/{slug}', [DashboardController::class, 'manageTaskBidders'])
+        ->where('taskId', '[0-9]+')
+        ->where('slug', '[a-z-]+')
+        ->name('dashboard.bidders.manage');
+    Route::get('/my-active-bids', [DashboardController::class, 'getActiveBids'])->name('dashboard.bid.active');
+    Route::post('/bid/edit', [DashboardController::class, 'editBid'])->name('dashboard.bid.edit');
+    Route::post('/delete/bid/{bidId}', [DashboardController::class, 'deleteBid'])
+        ->where('bidId', '[0-9]+')
+        ->name('dashboard.bid.delete');
 
     /* Job */
     Route::get('/manage/job', [DashboardController::class, 'manageJobs'])->name('dashboard.job.manage');
     Route::get('/job/create', [DashboardController::class, 'createJob'])->name('dashboard.job.create');
     Route::post('/job/store', [DashboardController::class, 'storeJob'])->name('dashboard.job.store');
-    Route::post('/job/delete', [JobController::class, 'delete'])->name('dashboard.job.delete');
+    Route::post('/job/delete', [JobController::class, 'deleteJob'])->name('dashboard.job.delete');
 });
 
 /** PopUps routes */

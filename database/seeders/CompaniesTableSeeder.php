@@ -33,7 +33,7 @@ class CompaniesTableSeeder extends Seeder
                 'name'          => $company_name,
                 'speciality'    => $faker->bs(),
                 'slug'          => Str::slug($company_name),
-                'description'   => $faker->paragraph(3, true),
+                'description'   => $faker->realText(500, 3),
                 'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
                 'verified'      => $faker->boolean(40),
                 'user_id'       => $faker->numberBetween(1001, 1800),

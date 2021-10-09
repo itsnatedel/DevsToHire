@@ -5,26 +5,14 @@
         © 2021 <strong>DevsToHire</strong>. All Rights Reserved.
     </div>
     <ul class="footer-social-links">
-        <li>
-            <a href="#" title="Facebook" data-tippy-placement="top">
-                <i class="icon-brand-facebook-f"></i>
-            </a>
-        </li>
-        <li>
-            <a href="#" title="Twitter" data-tippy-placement="top">
-                <i class="icon-brand-twitter"></i>
-            </a>
-        </li>
-        <li>
-            <a href="#" title="Google Plus" data-tippy-placement="top">
-                <i class="icon-brand-google-plus-g"></i>
-            </a>
-        </li>
-        <li>
-            <a href="#" title="LinkedIn" data-tippy-placement="top">
-                <i class="icon-brand-linkedin-in"></i>
-            </a>
-        </li>
+        <li><a href="https://dribbble.com/DevsToHire" title="Dribble" data-tippy-placement="bottom"><i
+                        class="icon-brand-dribbble"></i></a></li>
+        <li><a href="https://twitter.com/DevsToHire" title="Twitter" data-tippy-placement="bottom"><i
+                        class="icon-brand-twitter"></i></a></li>
+        <li><a href="https://www.behance.net/DevsToHire" title="Behance" data-tippy-placement="bottom"><i
+                        class="icon-brand-behance"></i></a></li>
+        <li><a href="https://github.com/mvker/DevsToHire" title="GitHub" data-tippy-placement="bottom"><i
+                        class="icon-brand-github"></i></a></li>
     </ul>
     <div class="clearfix"></div>
 </div>

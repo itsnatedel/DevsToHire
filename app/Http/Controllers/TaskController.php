@@ -17,8 +17,9 @@
     use Illuminate\Http\Response;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
+    use Illuminate\Validation\ValidationException;
     use Symfony\Component\HttpFoundation\BinaryFileResponse;
-    
+
     class TaskController extends Controller
     {
         /**
@@ -189,24 +190,41 @@
         {
             //
         }
-        
+    
         /**
          * Remove the specified resource from storage.
          *
-         * @param int $id
+         * @param         $taskId
+         * @param Request $request
          *
-         * @return Response
+         * @return RedirectResponse
+         * @throws ValidationException
          */
-        public function destroy ($id)
+        public function deleteTask ($taskId, Request $request) : RedirectResponse
         {
-            //
-        }
-        
-        /**
-         * Dashboard task manage
-         */
-        public function manage ()
-        {
-            return view('dashboard.manage-tasks');
+            $this->validate($request, [
+                'freelancer_id' => 'sometimes|string',
+                'employer_id'   => 'sometimes|string',
+            ]);
+            
+            // Check if task exists
+            $taskExists = !is_null(DB::table('tasks as ta')
+                ->select('freelancer_id', 'employer_id')
+                ->where('ta.id', '=', $taskId)
+                ->first());
+            
+            if ($taskExists) {
+                $taskDeleted = DB::table('tasks')
+                    ->where('id', '=', $taskId)
+                    ->delete();
+                
+                if ($taskDeleted) {
+                    return redirect()->back()->with('success', 'Your task has been deleted !');
+                }
+    
+                return redirect()->back()->with('fail', 'There was a problem when deleting your task, try again...');
+            }
+    
+            return redirect()->route('error-404')->with('message', 'No matching task could be found.');
         }
     }
