@@ -597,7 +597,7 @@
          */
         public static function getAppliedJobs (int $freelancerId) : Collection
         {
-            return DB::table('candidates as ca')
+            $jobs = DB::table('candidates as ca')
                 ->join('jobs as jo', 'jo.id', '=', 'ca.job_id')
                 ->join('freelancers as fr', 'fr.user_id', '=', 'ca.user_id')
                 ->select([
@@ -609,6 +609,15 @@
                 ])
                 ->where('ca.user_id', '=', $freelancerId)
                 ->get();
+            
+            foreach ($jobs as $job) {
+                $job->created_at = Carbon::create($job->created_at)->diffForHumans([
+                    'parts' => 2,
+                    'join' => ', '
+                ]);
+            }
+            
+            return $jobs;
         }
         
         /**
@@ -713,7 +722,7 @@
                 
                 // Expiring === due_date < 1 week
                 $task->expiring = ($timeSplit[1] === 'days' && $timeSplit[0] < 7);
-                $task->hasExpired = $timeSplit[3] === 'ago';
+                $task->hasExpired = $timeSplit[2] === 'ago';
                 
                 // Diff for humans
                 $task->due_date = $timeDiff;
@@ -721,20 +730,18 @@
             
             return $tasks;
         }
-        
+    
         /**
          * @method getTaskBidders
          * Retrieves all bidders of a specific task
          *
-         * @param int    $taskId
-         * @param string $sortBy
+         * @param int         $taskId
+         * @param string|null $sortBy
          *
          * @return Collection
          */
         public static function getTaskBidders (int $taskId, string $sortBy = null) : Collection
         {
-            
-            
             $bidders = DB::table('bids as bi')
                 ->join('tasks as ta', 'ta.id', '=', 'bi.task_id')
                 ->join('freelancers as fr', 'fr.id', '=', 'bi.bidder_id')

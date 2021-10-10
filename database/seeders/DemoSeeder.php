@@ -75,7 +75,7 @@ class DemoSeeder extends Seeder
         $company = [
             'name'          => 'EPFC Ltd.',
             'speciality'    => 'Teaching new Webdev talents',
-            'slug'          => 'teaching-new-webdev-talents',
+            'slug'          => 'epfc-ltd',
             'description'   => $faker->realText('500', 4),
             'pic_url'       => 'company-logo-0' . $faker->numberBetween(1, 6) . '.png',
             'verified'      => $faker->boolean(40),

@@ -121,6 +121,7 @@
             let minPrice = element.getAttribute('data-min-price');
             let maxPrice = element.getAttribute('data-max-price');
             let amountDays = element.getAttribute('data-amount-days');
+            let timePeriod = element.getAttribute('data-time-period');
             let rate = element.getAttribute('data-rate');
 
             let id = document.getElementById('bidId');
@@ -129,13 +130,16 @@
             let price = document.getElementById('price');
             price.setAttribute('min', minPrice);
             price.setAttribute('max', maxPrice);
-            price.setAttribute('placeholder', 'Desired rate (max ' + maxPrice + '€)');
+            price.setAttribute('value', rate);
 
             let biddingVal = document.getElementById('biddingVal');
             biddingVal.innerHTML = rate;
 
             let daysPicker = document.getElementById('amountDays');
             daysPicker.setAttribute('value', amountDays)
+
+            let previousDelivery = document.getElementById('oldDelivery');
+            previousDelivery.innerHTML = amountDays + ' ' + timePeriod.toLowerCase();
         }
     </script>
 @endsection

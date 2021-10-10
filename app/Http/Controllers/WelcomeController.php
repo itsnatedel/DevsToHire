@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Job;
 use App\Models\Welcome;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -44,7 +44,7 @@ class WelcomeController extends Controller
     /**
      * @param Request $request
      *
-     * @return Application|Factory|View|void
+     * @return Application|Factory|View|RedirectResponse
      */
     public function search(Request $request)
     {
@@ -55,12 +55,29 @@ class WelcomeController extends Controller
         $taskOrJob = Welcome::isTaskOrJob($request);
 
         if (!is_bool($taskOrJob)) {
+    
+            if (!is_null($request->searchCountry)) {
+                $locationId = Welcome::checkIfLocationExists($request->searchCountry);
+        
+                if (!is_null($locationId)) {
+                    if ($taskOrJob === 'task') {
+                        $request->request->add(['task_country' => $locationId]);
+                    }
+            
+                    $request->request->add(['country' => $locationId]);
+                } else {
+                    return redirect()->route('homepage')
+                        ->with('fail', 'Make sure you entered an existing country !');
+                }
+            }
+            
             if ($taskOrJob === 'job') {
                 $jobs       = Welcome::searchJobsOrTasks($request, $taskOrJob);
                 
                 // Populate select inputs in sidebar
                 $countries  = Job::getCountries();
-                $categories = Category::all();
+                $categories = DB::table('categories')
+                    ->select('id', 'name')->get();
 
                 return view('job.index', [
                     'jobs'          => $jobs,

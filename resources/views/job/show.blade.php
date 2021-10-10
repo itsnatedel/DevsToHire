@@ -142,8 +142,15 @@
                                                 class="icon-material-outline-arrow-right-alt"></i>
                                     </a>
                                 @else
-                                        <a href="#" class="apply-now-button ">Only freelancers can apply to job offers.
-                                        </a>
+
+                                    @if(Auth::user()->company_id === $job->companyId)
+                                            <a href="{{ route('dashboard.job.manage') }}" class="apply-now-button button-sliding-icon">Manage your job offer
+                                                <i class="icon-material-outline-arrow-right-alt"></i>
+                                            </a>
+                                    @else
+                                            <a href="#" class="apply-now-button ">Only freelancers can apply to job offers.
+                                            </a>
+                                    @endif
                                 @endif
                             @else
                                 <div>

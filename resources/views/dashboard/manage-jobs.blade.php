@@ -53,7 +53,7 @@
                                                             <!-- Job Listing Footer -->
                                                             <div class="job-listing-footer">
                                                                 <ul>
-                                                                    <li><i class="icon-material-outline-date-range"></i>
+                                                                    <li title="Job Created" data-tippy-placement="right"><i class="icon-material-outline-date-range"></i>
                                                                         {{ $job->created_at }}
                                                                     </li>
                                                                 </ul>

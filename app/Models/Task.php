@@ -3,6 +3,7 @@
     namespace App\Models;
     
     use App\Http\Controllers\Controller;
+    use Carbon\Carbon;
     use Illuminate\Contracts\Pagination\LengthAwarePaginator;
     use Illuminate\Database\Eloquent\Factories\HasFactory;
     use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Str;
     use Ramsey\Uuid\Uuid;
     use RuntimeException;
 
@@ -231,7 +233,6 @@
             $task = DB::table('tasks as ta')
                 ->select(
                     'ta.*',
-                    DB::raw('DATEDIFF(ta.due_date, NOW()) as end_date'),
                     'ta.location_id'
                 );
             
@@ -256,9 +257,16 @@
             }
             
             $task = $task->where('ta.id', '=', $id)->first();
+            $endDate = Carbon::create($task->due_date)->diffForHumans();
+            
+            $task->end_date = $endDate;
+            
+            $time = explode(' ', $endDate);
+            
+            $task->expired = $time[2] === 'ago';
             
             if (is_null($task->employer_id)) {
-                $task->company_slug = \Illuminate\Support\Str::slug($task->company_name);
+                $task->company_slug = Str::slug($task->company_name);
             }
             
             return $task;

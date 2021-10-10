@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class CheckoutController extends Controller
 {
@@ -32,7 +33,7 @@ class CheckoutController extends Controller
 
     public function suceeded()
     {
-        return view('checkout.ordersuccess');
+        return view('checkout.order.success');
     }
 
     /**
@@ -55,15 +56,27 @@ class CheckoutController extends Controller
             ->where('pr.monthly_identifier', '=', $request->plan)
             ->orWhere('pr.yearly_identifier', '=', $request->plan)
             ->first();
-
+        
+        $request->user()->stripe_id = NULL;
+        
         if ($request->subType === 'monthly') {
-            $request->user()->newSubscription('default', $plan->stripe_monthly_id)->create($request->token);
+            try {
+                $request->user()->newSubscription('default', $plan->stripe_monthly_id)->create($request->token);
+            } catch (IncompletePayment $e) {
+                return redirect()
+                    ->route('order.error');
+            }
         }
 
         if ($request->subType === 'yearly') {
-            $request->user()->newSubscription('default', $plan->stripe_yearly_id)->create($request->token);
+            try {
+                $request->user()->newSubscription('default', $plan->stripe_yearly_id)->create($request->token);
+            } catch (IncompletePayment $e) {
+                return redirect()
+                    ->route('order.error');
+            }
         }
-
+    
         return redirect()
             ->route('order.success');
     }
