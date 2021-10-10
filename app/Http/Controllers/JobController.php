@@ -47,7 +47,7 @@
             if (isset($request->sortBy) && in_array($request->sortBy, ['newest', 'oldest', 'random'])) {
                 $jobs = Job::getAllJobsAndCompanyInfo($request, true, false);
             }
-            else if (isset($request->title)) {
+            elseif (isset($request->title)) {
                 $jobs = Job::getAllJobsAndCompanyInfo($request, false, false);
             }
             else {
@@ -105,14 +105,15 @@
             $jobExists = Controller::resourceExists('job', $id, $slug);
             
             if (!$jobExists) {
-                return redirect()->route('error-404')->with('message', 'No job matches the given query parameters.');
+                return redirect()->route('error-404')
+                    ->with('message', 'No job matches the given query parameters.');
             }
             
-            $job = Job::getAllDataOfJob($id, $slug);
-            $relatedJobs = Job::getRelatedJobs($job);
-            $category = Job::getCategoryName($job->category_id);
+            $job            = Job::getAllDataOfJob($id, $slug);
+            $relatedJobs    = Job::getRelatedJobs($job);
+            $category       = Job::getCategoryName($job->category_id);
             $alreadyApplied = Job::checkUserApplied($id, Auth::id());
-            $companyRating = Job::getCompanyRating($id);
+            $companyRating  = Job::getCompanyRating($id);
             
             return view('job.show', compact([
                 'job',
@@ -206,7 +207,7 @@
                 if ($isDeleted) {
                     return redirect()->back()->with('success', 'The offer has been removed !');
                 }
-    
+                
                 return redirect()->back()->with('success', 'There was a problem when deleting your offer, please try again...');
             }
             

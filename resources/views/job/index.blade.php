@@ -98,7 +98,7 @@
 
                             </div>
 
-                            <button class="button ripple-effect button-sliding-icon" type="submit" style="float:right; width: 100px">
+                            <button class="button ripple-effect button-sliding-icon" type="submit" style="float:right; width: 150px">
                                 Search
                                 <i class="icon-material-outline-search"></i>
                             </button>
@@ -107,7 +107,8 @@
                 </div>
                 <div class="col-xl-9 col-lg-8 content-left-offset">
 
-                    <h3 class="page-title">Search Results - {{ $jobs->total() }} jobs found.</h3>
+                    <h3 class="page-title">Search Results - {{ $jobs->total() }}
+                        @if($jobs->total() <= 1)job @else jobs @endif    found.</h3>
 
                     <div class="notify-box margin-top-15">
                         <a href="{{ route('job.index') }}" class="button gray ripple-effect button-sliding-icon" style="margin: -10px 0; padding: 5px; transform: translateY(3px)">
@@ -161,25 +162,31 @@
                                             </p>
                                         </div>
                                         <!-- Bookmark -->
-                                        <span class="bookmark-icon"></span>
+                                        @auth <span class="bookmark-icon"></span> @endauth
                                     </div>
                                     <!-- Job Listing Footer -->
                                     <div class="job-listing-footer">
                                         <ul>
-                                            <li>
+                                            <li title="Employer's Location" data-tippy-placement="bottom">
                                                 <i class="icon-material-outline-location-on"></i>
                                                 {{ $job->country_name }}
                                             </li>
-                                            <li>
+                                            <li title="Employment Type" data-tippy-placement="bottom">
                                                 <i class="icon-material-outline-business-center"></i>
                                                 {{ $job->type }}
                                             </li>
-                                            <li title="Estimated Salary"
+
+                                            <li title="Field" data-tippy-placement="bottom">
+                                                <i class="icon-feather-award"></i>
+                                                {{ $job->category_name }}
+                                            </li>
+
+                                            <li title="Yearly Salary Estimate"
                                                 data-tippy-placement="bottom">
                                                 <i class="icon-material-outline-account-balance-wallet"></i>
                                                 {{ $job->salary_low . '-' . $job->salary_high . '€' }}
                                             </li>
-                                            <li>
+                                            <li title="Date posted" data-tippy-placement="bottom">
                                                 <i class="icon-material-outline-access-time"></i>
                                                 {{ $job->date_posted }} days ago
                                             </li>

@@ -17,7 +17,7 @@
                                     <ul>
                                         @if($company->rating !== 0)
                                         <li>
-                                            <div class="star-rating" data-rating="{{ $company->rating }}"></div>
+                                            <div class="star-rating" data-rating="{{ round($company->rating) }}"></div>
                                         </li>
                                         @else
                                             <li>

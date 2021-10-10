@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace App\Models;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -70,8 +69,12 @@ class Welcome extends Model
     public static function getFeaturedFreelancers(): Collection
     {
         return DB::table('users as u')
+            ->join('freelancers as fr', 'fr.user_id', '=', 'u.id')
+            ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
+            ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
+            ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->select(DB::raw('fr.id'),
-                'fr.pic_url',
+                'u.pic_url',
                 'fr.verified',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as fullName"),
                 'lo.country_code',
@@ -80,10 +83,6 @@ class Welcome extends Model
                 'fr.hourly_rate',
                 DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) *100 as success'),
                 'u.dir_url')
-            ->join('freelancers as fr', 'fr.id', '=', 'u.id')
-            ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
-            ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
-            ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
             ->groupBy('fr.id')
             ->inRandomOrder()
             ->limit(8)
@@ -153,22 +152,9 @@ class Welcome extends Model
      * @param Request $request
      * @param string  $jobOrTask
      *
-     * @return LengthAwarePaginator
      */
-    public static function searchJobsOrTasks(Request $request, string $jobOrTask): LengthAwarePaginator
+    public static function searchJobsOrTasks(Request $request, string $jobOrTask)
     {
-        if (!is_null($request->searchCountry)) {
-            $locationId = self::checkIfLocationExists($request->searchCountry);
-
-            if (!is_null($locationId)) {
-                if ($jobOrTask === 'task') {
-                    $request->request->add(['task_country' => $locationId]);
-                }
-
-                $request->request->add(['country' => $locationId]);
-            }
-        }
-
         if ($jobOrTask === 'task') {
             $request->request->add(['task_category' => $request->category]);
         }
@@ -192,15 +178,15 @@ class Welcome extends Model
      *
      * @return mixed|void
      */
-    private static function checkIfLocationExists(string $location)
+    public static function checkIfLocationExists(string $location)
     {
-        $location = DB::table('locations as lo')
+        $locationId = DB::table('locations as lo')
             ->select('id')
             ->where('country_name', 'LIKE', '%' . $location . '%')
             ->first();
 
-        if (!is_null($location)) {
-            return $location->id;
+        if (!is_null($locationId)) {
+            return $locationId->id;
         }
     }
 
@@ -240,16 +226,10 @@ class Welcome extends Model
 
         $searchIsJob = in_array($request->type, $jobTypes, true);
         $searchIsTask = in_array($request->type, $taskTypes, true);
-
-        if ($searchIsJob) {
-            return 'job';
-        }
-
-        if ($searchIsTask) {
-            return 'task';
-        }
-
-        return false;
+        
+        return $searchIsJob
+            ? 'job'
+            : 'task';
     }
 
     /**

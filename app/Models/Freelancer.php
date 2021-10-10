@@ -242,7 +242,7 @@ class Freelancer extends Model
                 DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) as success'),
                 DB::raw('COUNT(frjb.id) as total'),
                 DB::raw('SUM(rfr.note) / COUNT(rfr.id) as rating'))
-            ->where('frjb.freelancer_id', '=', $id)
+            ->where('rfr.freelancer_id', '=', $id)
             ->first();
 
         // Get percentages of fetched values

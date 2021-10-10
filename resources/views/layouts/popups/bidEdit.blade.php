@@ -12,17 +12,16 @@
                 <!-- Bidding -->
                 <div class="bidding-widget">
                     <!-- Headline -->
-                    <span class="bidding-detail">Set your <strong>minimal payment rate</strong></span>
+                    <span class="bidding-detail">Set your <strong>minimal payment rate in €</strong> (Previous : <b><span id="biddingVal"></span> €)</b></span>
                     <!-- Price Slider -->
                     <form action="{{ route('dashboard.bid.edit') }}" method="post">
                         @csrf
                         <input type="hidden" name="bidId" id="bidId">
                         <div class="bidding-value">
-                            <input type="number" min="" max="" name="price" id="price">
-                            <p><b>Previous rate: <span id="biddingVal"></span> €</b></p>
+                            <input type="number" min="" max="" name="price" value="" id="price">
                         </div>
                         <!-- Headline -->
-                        <span class="bidding-detail margin-top-30">Set your <strong>delivery time</strong></span>
+                        <span class="bidding-detail margin-top-30">Set your <strong>delivery time</strong> (Previous : <b><span id="oldDelivery"></span></b>)</span>
                         <!-- Fields -->
                         <div class="bidding-fields">
                             <div class="bidding-field">
@@ -38,6 +37,9 @@
                                     <option value="days">Days</option>
                                     <option value="hours">Hours</option>
                                 </select>
+                            </div>
+                            <div class="bidding-field">
+
                             </div>
                         </div>
 

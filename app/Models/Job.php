@@ -10,7 +10,7 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\DB;
-    
+
     /**
      * Class Job
      *
@@ -45,6 +45,7 @@
                 ->join('locations as lo', 'lo.id', '=', 'co.location_id')
                 ->select('jo.*',
                     DB::raw('DATEDIFF(jo.created_at, NOW()) as date_posted'),
+                    'co.id as companyId',
                     'co.location_id',
                     'co.name',
                     'co.slug as company_slug',
@@ -117,16 +118,27 @@
         {
             $query = DB::table('jobs as jo')
                 ->join('companies as co', 'co.id', '=', 'jo.company_id')
+                ->join('categories as ca', 'ca.id', '=', 'jo.category_id')
                 ->join('locations as lo', 'lo.id', '=', 'co.location_id')
-                ->select('jo.*',
+                ->select([
+                    'jo.id',
+                    'jo.title',
+                    'jo.salary_low',
+                    'jo.salary_high',
+                    'jo.type',
+                    'jo.company_id',
+                    'jo.slug',
+                    'jo.description',
                     DB::raw('DATEDIFF(jo.created_at, NOW()) as date_posted'),
+                    'ca.name as category_name',
                     'co.location_id',
                     'co.name',
                     'co.slug as company_slug',
                     'co.description',
                     'co.verified',
                     'co.pic_url',
-                    'lo.country_name');
+                    'lo.country_name'
+                ]);
             
             if (is_int($request)) {
                 $query = self::getJobsByCategoryId($query, $request);
@@ -142,7 +154,7 @@
                 $query = self::getJobsWithTitle($query, $request);
             }
             
-            // If user searches for different criterias
+            // User searches for different criterias
             if ($refined) {
                 $query = self::refinedSearch($query, $request);
             }
@@ -280,11 +292,6 @@
         {
             return DB::table('locations')->select('id', 'country_name as name')->get();
         }
-        
-        /**
-         * TODO: When a user searches for jobs in jobs@index, keep the results & make it able to be sorted (newest, oldest,...)
-         * This shouldn't reset the search and sort all jobs, only the search's results.
-         */
         
         /**
          * Fetches the category for a job listing.

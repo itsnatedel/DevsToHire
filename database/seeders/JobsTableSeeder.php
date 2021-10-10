@@ -31,7 +31,7 @@ class JobsTableSeeder extends Seeder
                 'title'         => $title,
                 'slug'          => Str::slug($title),
                 'created_at'    => $faker->dateTimeBetween('-4 weeks', '-1 day'),
-                'description'   => $faker->text(800),
+                'description'   => $faker->realText(800, 5),
                 'salary_low'    => $faker->numberBetween(15000, 30000),
                 'salary_high'   => $faker->numberBetween(31000, 60000),
                 'company_id'    => $faker->numberBetween(1, 50),

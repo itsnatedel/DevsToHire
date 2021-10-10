@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Location;
 use App\Models\Freelancer;
+use App\Models\Location;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Contracts\View\View;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FreelancerController extends Controller
@@ -102,13 +102,19 @@ class FreelancerController extends Controller
      */
     public function show(int $id)
     {
-	    $freelancer         = DB::table('freelancers')->where('id', $id)->first();
+	    $freelancer         = DB::table('freelancers as fr')
+            ->join('users as u', 'u.id', '=', 'fr.user_id')
+            ->select('fr.*', 'u.pic_url as picUrl')
+            ->where('fr.id', '=', $id)->first();
         $freelancer->skills = Freelancer::getFreelancerSkills($id);
         $freelancer->info   = Freelancer::getSingleFreelancerInfos($id);
         $freelancer->jobs   = Freelancer::getSingleFreelancerJobs($id);
-		
-        $user = DB::table('users')->select('dir_url', 'can_be_rated')->where('id', $id)->first();
-		
+        $freelancerId = DB::table('freelancers')
+            ->select('user_id')
+            ->where('id', '=', $id)->first()->user_id;
+        
+        $user = DB::table('users')->select('dir_url', 'can_be_rated')->where('id', $freelancerId)->first();
+
         if (!is_null($user)) {
             $freelancer->dir_url    = $user->dir_url;
             $freelancer->canBeRated = $user->can_be_rated;

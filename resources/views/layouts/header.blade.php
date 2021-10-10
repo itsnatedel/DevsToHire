@@ -153,7 +153,7 @@
                                     <li>
                                         @if(!is_null(Auth::user()->freelancer_id))
                                         <a href="{{ route('freelancer.show', [Auth::user()->freelancer_id, Str::slug(Auth::user()->firstname . ' ' . Auth::user()->lastname)]) }}">
-                                            <i class="icon-material-outline-dashboard"></i>
+                                            <i class="icon-material-outline-person-pin"></i>
                                             My Profile
                                         </a>
                                             @endif

@@ -10,13 +10,14 @@
                         <div class="single-page-header-inner">
                             <div class="left-side">
                                 <div class="header-image freelancer-avatar">
-                                    @if(isset($freelancer->dir_url) && !is_null($freelancer->dir_url) && !is_null($freelancer->pic_url))
+                                    @if(isset($freelancer->dir_url) && !is_null($freelancer->dir_url) && !is_null($freelancer->picUrl))
                                     <img
-                                        src="{{ asset('images/user/' . $freelancer->dir_url . '/avatar/' . $freelancer->pic_url) }}"
+                                        src="{{ asset('images/user/' . $freelancer->dir_url . '/avatar/' . $freelancer->picUrl) }}"
                                         alt="Freelancer's pic">
                                     @else
+
                                         <img
-                                            src="{{ asset('images/user/' . $freelancer->pic_url) }}"
+                                            src="{{ asset('images/user/' . $freelancer->picUrl) }}"
                                             alt="Freelancer's pic">
                                     @endif
                                 </div>
@@ -78,16 +79,16 @@
                                     <!-- Content -->
                                     <div class="item-content">
                                         <h4>{{ ucFirst($job->title) }}
-                                            <span>
-                                                <mark class="color">Rated by :</mark>
+                                            <span style="margin-top: 10px">
+                                                <mark class="color">Rated by</mark>
                                                 <a href="{{ route('company.show', [ $job->company_id, Str::slug($job->name)]) }}">
                                                     {{ $job->name }}
                                                 </a>
                                             </span>
                                         </h4>
-                                        <div class="item-details margin-top-10">
+                                        <div class="item-details" style="margin-top: 10px">
                                             <div class="star-rating" data-rating="{{ $job->rating }}"></div>
-                                            <div class="detail-item"><i class="icon-material-outline-date-range"></i>
+                                            <div class="detail-item" title="Job Finished" data-tippy-placement="right"><i class="icon-material-outline-date-range"></i>
                                                 {{ $job->done_at }}
                                             </div>
                                         </div>
@@ -98,7 +99,7 @@
                                 </div>
                             </li>
                             @empty
-                                <div class="boxed-list-item" style="margin-top: 20px">
+                                <div class="boxed-list-item" style="padding: 30px">
                                     <div class="item-content">
                                         <h4>No work history so far
                                             <span>This freelancer hasn't completed any job or task on this platform</span>
@@ -137,8 +138,8 @@
                                     <i class="icon-material-outline-arrow-right-alt"></i>
                                 </a>
                             @else
-                                <a href="#" class="apply-now-button margin-bottom-50">
-                                    Can't offer yourself an offer...
+                                <a href="{{ route('dashboard.index') }}" class="apply-now-button margin-bottom-50">
+                                    Go to my Dashboard
                                 </a>
                             @endif
 

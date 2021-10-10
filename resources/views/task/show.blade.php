@@ -180,8 +180,8 @@
                 <!-- Sidebar -->
                 <div class="col-xl-4 col-lg-4">
                     <div class="sidebar-container">
-                        @if($task->end_date > 1)
-                            <div class="countdown green margin-bottom-35">{{ $task->end_date }} days left</div>
+                        @if(!$task->expired)
+                            <div class="countdown green margin-bottom-35">Still available for {{ $task->end_date }}</div>
                             @if(Session::has('fail'))
                                 <div class="notification error closeable">
                                     <p>{{ Session::get('fail') }}</p>
@@ -192,7 +192,7 @@
                                 <div class="bidding-widget">
                                     <div class="bidding-headline"><h3>Bid on this job!</h3></div>
                                     @if(Session::has('success'))
-                                        <div class="notification success closeable">
+                                        <div class="notification success closeable margin-top-10">
                                             <p>{{ Session::get('success') }}</p>
                                             <a class="close"></a>
                                         </div>
@@ -212,7 +212,7 @@
                                                    data-slider-handle="custom"
                                                    data-slider-currency="€" data-slider-min="{{ $task->budget_min }}"
                                                    data-slider-max="{{ $task->budget_max }}"
-                                                   data-slider-value="auto" data-slider-step="1"
+                                                   data-slider-value="100" data-slider-step="10"
                                                    data-slider-tooltip="hide"/>
 
                                             <!-- Headline -->
