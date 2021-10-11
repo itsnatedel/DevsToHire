@@ -45,10 +45,18 @@ class StoreJobRequest extends FormRequest
 		        'string'
 	        ],
 	        'salary_min' => [
-		        'required'
+		        'required',
+                'integer',
+                'min:1',
+                'max:99999',
+                'lt:salary_max'
 	        ],
 	        'salary_max' => [
-		        'required'
+		        'required',
+                'integer',
+                'min:1',
+                'max:99999',
+                'gt:salary_min'
 	        ],
 	        'remote' => [
 		        'required',

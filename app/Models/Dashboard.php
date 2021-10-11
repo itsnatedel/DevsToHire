@@ -507,7 +507,7 @@
             $job = DB::table('candidates as ca')
                 ->join('jobs as jo', 'jo.id', '=', 'ca.job_id')
                 ->select([
-                    'ca.job_id',
+                    'jo.id as job_id',
                     DB::raw('COUNT(ca.id) as nb_candidates'),
                     'jo.title',
                     'jo.slug'
@@ -558,7 +558,7 @@
                 $candidate->info = DB::table('users as u')
                     ->join('locations as lo', 'lo.id', '=', 'u.location_id')
                     ->join('freelancers as fr', 'fr.user_id', '=', 'u.id')
-                    ->join('ratings_freelancers as rafr', 'rafr.freelancer_id', '=', 'fr.id')
+                    ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
                     ->join('skills_freelancers as skfr', 'skfr.id', '=', 'fr.id')
                     ->select([
                         'fr.firstname',
@@ -570,7 +570,7 @@
                         'u.pic_url',
                         'lo.country_name',
                         'lo.country_code',
-                        DB::raw('ROUND(SUM(rafr.note)/COUNT(rafr.id)) as rating'),
+                        DB::raw('ROUND(SUM(frjb.rating)/COUNT(frjb.id)) as rating'),
                         'skfr.skills'
                     ])
                     ->where('fr.id', '=', $candidate->frId)
@@ -787,9 +787,9 @@
         private static function getBiddersRatings (Collection $bidders) : Collection
         {
             foreach ($bidders as $bidder) {
-                $bidder->rating = DB::table('ratings_freelancers as rafr')
-                    ->select(DB::raw('SUM(rafr.note)/COUNT(rafr.id) as rating'))
-                    ->where('rafr.freelancer_id', '=', $bidder->bidder_id)
+                $bidder->rating = DB::table('freelancer_jobs_done as frjb')
+                    ->select(DB::raw('SUM(frjb.rating)/COUNT(frjb.id) as rating'))
+                    ->where('frjb.freelancer_id', '=', $bidder->bidder_id)
                     ->first()
                     ->rating;
             }

@@ -120,14 +120,16 @@
                                                     <div class="row">
                                                         <div class="col-xl-6">
                                                             <div class="input-with-icon">
-                                                                <input name="salary_min" class="with-border" type="text"
+                                                                <input name="salary_min" class="with-border" type="number"
+                                                                       min="1" max="99999"
                                                                        value="{{ old('salary_min') }}" placeholder="Min">
                                                                 <i class="currency">EUR</i>
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-6">
                                                             <div class="input-with-icon">
-                                                                <input name="salary_max" class="with-border" type="text"
+                                                                <input name="salary_max" class="with-border" type="number"
+                                                                       min="1" max="99999"
                                                                        value="{{ old('salary_max') }}" placeholder="Max">
                                                                 <i class="currency">EUR</i>
                                                             </div>

@@ -77,9 +77,9 @@ Route::group(['prefix' => 'freelancers'], function () {
         ->where('fullname', '[a-z-]+')
         ->name('freelancer.show');
     Route::get('/search', [FreelancerController::class, 'search'])->name('freelancer.search');
-    Route::get('/{id}/{cv}', [FreelancerController::class, 'downloadCV'])
+    Route::get('download-cv/{id}/{cv}', [FreelancerController::class, 'downloadCV'])
         ->where('id', '[0-9]+')
-        ->where('cv', '[a-z0-9-A-Z.]+')
+        ->where('cv', '[a-z0-9-A-Z._]+')
         ->name('freelancer.cv.download');
 });
 
@@ -185,3 +185,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], static function 
 /** PopUps routes */
 Route::post('apply/job/{jobId}', [PopUpController::class, 'applyJob'])->name('apply.job');
 Route::post('/make-offer/{freelancerId}/{userId}', [PopUpController::class, 'makeOffer'])->name('make.offer');
+
+
+/** Unknown routes given in URL */
+Route::fallback(function() {
+    return redirect()->route('error-404')->with('message', 'The page you\'re trying to access doesn\'t exist...');
+});

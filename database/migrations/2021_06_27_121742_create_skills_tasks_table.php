@@ -19,7 +19,7 @@ class CreateSkillsTasksTable extends Migration
 
             $table->foreignId('task_id');
             $table->foreign('task_id')->references('id')->on('tasks')
-                ->onDelete('restrict')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->string('skills', 255)->nullable();
         });

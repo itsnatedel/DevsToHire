@@ -71,7 +71,7 @@
                                                                     {{ $task->name }}
                                                                 </a>
                                                                 @if($task->expiring)
-                                                                    <span class="dashboard-status-button green">Expiring</span>
+                                                                    <span class="dashboard-status-button yellow">Expiring</span>
                                                                 @elseif($task->hasExpired)
                                                                     <span class="dashboard-status-button red">Expired</span>
                                                                 @endif

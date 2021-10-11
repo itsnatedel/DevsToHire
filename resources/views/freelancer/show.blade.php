@@ -22,16 +22,16 @@
                                     @endif
                                 </div>
                                 <div class="header-details">
-                                    <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span>{{ $freelancer->info->speciality }}</span></h3>
+                                    <h3>{{ ucfirst($freelancer->firstname) . ' ' . ucfirst($freelancer->lastname) }} <span data-tippy-placement="bottom" title="Specialization">{{ $freelancer->info->speciality }}</span></h3>
                                     <ul>
                                         @if(round($freelancer->info->stats->rating) > 0)
-                                        <li>
+                                        <li data-tippy-placement="bottom" title="Rating">
                                             <div class="star-rating" data-rating="{{ round($freelancer->info->stats->rating) }}"></div>
                                         </li>
                                         @else
                                             <li><span class="company-not-rated">Hasn't been rated yet</span></li>
                                         @endif
-                                        <li><img class="flag"
+                                        <li data-tippy-placement="bottom" title="Location"><img class="flag"
                                                  src="{{ asset('images/flags/' . strtolower($freelancer->info->country_code) . '.svg') }}" alt="Country Flag">
                                             {{ $freelancer->info->country_name }}
                                         </li>
@@ -79,7 +79,7 @@
                                     <!-- Content -->
                                     <div class="item-content">
                                         <h4>{{ ucFirst($job->title) }}
-                                            <span style="margin-top: 10px">
+                                            <span style="margin-top: 10px" data-tippy-placement="left" title="Employer">
                                                 <mark class="color">Rated by</mark>
                                                 <a href="{{ route('company.show', [ $job->company_id, Str::slug($job->name)]) }}">
                                                     {{ $job->name }}
@@ -87,7 +87,7 @@
                                             </span>
                                         </h4>
                                         <div class="item-details" style="margin-top: 10px">
-                                            <div class="star-rating" data-rating="{{ $job->rating }}"></div>
+                                            <div class="star-rating" data-tippy-placement="left" title="Rating" data-rating="{{ $job->rating }}"></div>
                                             <div class="detail-item" title="Job Finished" data-tippy-placement="right"><i class="icon-material-outline-date-range"></i>
                                                 {{ $job->done_at }}
                                             </div>
@@ -189,11 +189,13 @@
                         </div>
 
                         <!-- Widget -->
+                        <div data-tippy-placement="left" title="Social accounts">
                         @include('layouts.sidebar.socialIcons')
+                        </div>
                         <!-- Widget -->
                         <div class="sidebar-widget">
                             <h3>Skills</h3>
-                            <div class="task-tags">
+                            <div class="task-tags" data-tippy-placement="left" title="Competent with these technologies">
                                 @forelse($freelancer->skills as $skill)
                                 <span>{{ $skill }}</span>
                                 @empty
@@ -209,7 +211,9 @@
                                 <a href="{{ !is_null($freelancer->CV_url)
                                     ? route('freelancer.cv.download', [$freelancer->id, substr($freelancer->CV_url, 0, -4)])
                                     : '' }}"
-                                   class="attachment-box ripple-effect">
+                                   class="attachment-box ripple-effect"
+                                    title="Download CV"
+                                    data-tippy-placement="bottom">
                                     <span>Curriculum Vitae
                                         @if(is_null($freelancer->CV_url))
                                             - None submitted

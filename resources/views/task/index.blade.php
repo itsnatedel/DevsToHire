@@ -16,7 +16,7 @@
                             <div class="sidebar-widget">
 
                                 <h3>Location</h3>
-                                <div class="bootstrap-select" style="margin-bottom: 15px; max-height: 15px">
+                                <div class="bootstrap-select" style="margin-bottom: 15px;">
                                     <select class="form-control selectpicker with-border" id="select-country"
                                             data-live-search="true" title="Search for a country" name="task_country"
                                             aria-expanded="false">
@@ -83,7 +83,6 @@
                                        data-slider-value="[{{ $hourlyRates->min_rate }}, {{ $hourlyRates->max_rate }}]"
                                 />
                             </div>
-
                             <button class="button ripple-effect button-sliding-icon" type="submit"
                                     style="float:right; margin-bottom: 20px">
                                 Search

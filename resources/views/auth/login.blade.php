@@ -13,7 +13,7 @@
                     <!-- Breadcrumbs -->
                     <nav id="breadcrumbs" class="dark">
                         <ul>
-                            <li><a href="#">Home</a></li>
+                            <li><a href="{{ route('homepage') }}">Home</a></li>
                             <li>Log In</li>
                         </ul>
                     </nav>
@@ -30,7 +30,7 @@
                     <!-- Welcome Text -->
                     <div class="welcome-text">
                         <h3>We're glad to see you again!</h3>
-                        <span>Don't have an account? <a href="{{ route('register') }}">Sign Up!</a></span>
+                        <span>Don't have an account? <a href="{{ route('register') }}">Sign Up</a> !</span>
                     </div>
 
                     @if(count($errors) > 0)
@@ -57,10 +57,10 @@
                         </div>
 
                         <!-- Button -->
-                        <button class="button full-width button-sliding-icon ripple-effect margin-top-10" type="submit" form="login-main-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
+                        <button class="button full-width button-sliding-icon ripple-effect margin-top-10 margin-bottom-10" type="submit" form="login-main-form">Log In <i class="icon-material-outline-arrow-right-alt"></i></button>
                     </form>
 
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <a href="#" class="forgot-password" style="margin-top: 20px">Forgot Password?</a>
 
                     <!-- Social Login -->
                     <div class="social-login-separator"><span>or</span></div>

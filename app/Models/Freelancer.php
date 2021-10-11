@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Freelancer extends Model
 {
@@ -31,21 +31,20 @@ class Freelancer extends Model
 
     /**
      * getFreelancersInfos method.
-     * Retrieves the informations needed for the Freelancer@index view.
-     * TODO: Number of freelancer =\= total freelancers in Freelancer@index && Homepage ?
+     * Retrieves the information needed for the Freelancer@index view.
      */
     public static function getFreelancersInfos(Request $request = null, $sort = null): LengthAwarePaginator
     {
         $freelancers = DB::table('freelancers as fr')
+            ->join('users as u', 'u.id', '=', 'fr.user_id')
             ->join('locations as lo', 'lo.id', '=', 'fr.location_id')
-            ->join('ratings_freelancers as rfr', 'rfr.freelancer_id', '=', 'fr.id')
             ->join('categories as cat', 'cat.id', '=', 'fr.category_id')
             ->join('freelancer_jobs_done as frjb', 'frjb.freelancer_id', '=', 'fr.id')
             ->select(
                 'fr.id',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) as full_name"),
-                DB::raw('SUM(rfr.note) / COUNT(rfr.id) as rating'),
-                'fr.pic_url',
+                DB::raw('SUM(frjb.rating) / COUNT(frjb.id) as rating'),
+                'u.pic_url',
                 'cat.name as specialization',
                 'fr.verified',
                 'fr.hourly_rate',
@@ -65,13 +64,13 @@ class Freelancer extends Model
             $freelancers->inRandomOrder();
         }
 
-        return $freelancers->paginate(8);
+        return $freelancers->paginate(9);
     }
 
     /**
      * refinedSearch method.
      *
-     * Searches for freelancers that meet the search criterias.
+     * Searches for freelancers that meet the search criteria.
      *
      * @param Request $request
      * @param Builder $freelancers
@@ -90,18 +89,16 @@ class Freelancer extends Model
 
         if (!is_null($request->skill)) {
             $freelancers->join('skills_freelancers as skfr', 'skfr.freelancer_id', '=', 'fr.id')
-                ->where('skfr.skills', 'like', '%' . $request->skill . '%');
+                ->where('skfr.skills', 'LIKE', '%' . $request->skill . '%');
         }
 
         // Sliders search
         if (!is_null($request->hourlyRates)
-            && !is_null($request->successRates)
             && !is_null($request->rated)) {
             $hourlyRates = explode(',', $request->hourlyRates);
             $freelancers->whereBetween('fr.hourly_rate', $hourlyRates);
-
-            $freelancers->where('fr.success_rate', '>=', $request->successRates);
-            $freelancers->having(DB::raw('SUM(rfr.note) / COUNT(rfr.id)'), '>=', $request->rated);
+            
+            $freelancers->having(DB::raw('SUM(frjb.rating) / COUNT(frjb.id)'), '>=', $request->rated);
         }
 
         return $freelancers;
@@ -119,14 +116,6 @@ class Freelancer extends Model
      */
     private static function sortFreelancers(string $sortOption, Builder $freelancers): Builder
     {
-        if ($sortOption === 'jobHiLo') {
-            $freelancers->orderByDesc('success_rate');
-        }
-
-        if ($sortOption === 'jobLoHi') {
-            $freelancers->orderBy('success_rate');
-        }
-
         if ($sortOption === 'ratingHiLo') {
             $freelancers->orderByDesc('rating');
         }
@@ -161,19 +150,7 @@ class Freelancer extends Model
             ->selectRaw('MIN(fr.hourly_rate) as min_rate')
             ->first();
     }
-
-    /**
-     * getSuccessRateLimits method.
-     * Gets the min & max value of the freelancers' success rates.
-     */
-    public static function getSuccessRateLimits()
-    {
-        return DB::table('freelancers as fr')
-            ->selectRaw('MAX(fr.success_rate) as max_rate')
-            ->selectRaw('MIN(fr.success_rate) as min_rate')
-            ->first();
-    }
-
+    
     /**
      * getFreelancerSkills method.
      *
@@ -233,24 +210,29 @@ class Freelancer extends Model
      */
     private static function getFreelancerStats(int $id): object
     {
+        $total = DB::table('freelancer_jobs_done as frjb')
+            ->select(DB::raw('COUNT(frjb.id) as total'))
+            ->where('frjb.freelancer_id', '=', $id)
+            ->first()
+            ->total;
+        
         $stats = DB::table('freelancer_jobs_done as frjb')
-            ->join('ratings_freelancers as rfr', 'rfr.freelancer_id', '=', 'frjb.freelancer_id')
             ->select(
-                DB::raw('SUM(IF(frjb.on_time = 1, 1, 0)) / COUNT(frjb.id) as on_time'),
-                DB::raw('SUM(IF(frjb.on_budget = 1, 1, 0)) / COUNT(frjb.id) as on_budget'),
-                DB::raw('SUM(IF(frjb.recommended = 1, 1, 0)) / COUNT(frjb.id) as recommended'),
-                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) as success'),
-                DB::raw('COUNT(frjb.id) as total'),
-                DB::raw('SUM(rfr.note) / COUNT(rfr.id) as rating'))
-            ->where('rfr.freelancer_id', '=', $id)
+                DB::raw('SUM(IF(frjb.on_time = 1, 1, 0)) / ' . $total . ' as on_time'),
+                DB::raw('SUM(IF(frjb.on_budget = 1, 1, 0)) / ' . $total . ' as on_budget'),
+                DB::raw('SUM(IF(frjb.recommended = 1, 1, 0)) / ' . $total . ' as recommended'),
+                DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / ' . $total . ' as success'),
+                DB::raw('SUM(frjb.rating) /' . $total . ' as rating'))
+            ->where('frjb.freelancer_id', '=', $id)
             ->first();
 
         // Get percentages of fetched values
-        $stats->on_time *= 100;
-        $stats->on_budget *= 100;
-        $stats->recommended *= 100;
-        $stats->success *= 100;
-
+        $stats->on_time         *= 100;
+        $stats->on_budget       *= 100;
+        $stats->recommended     *= 100;
+        $stats->success         *= 100;
+        $stats->total           = $total;
+        
         return $stats;
     }
 

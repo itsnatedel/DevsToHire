@@ -48,16 +48,22 @@
                         </div>
                     </div>
                 </div>
-                @if(Session::has('errors'))
-                    <ul>
-                        @foreach($errors as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                @if(Session::has('success'))
-                        <p>{{ Session::get('success') }}</p>
-                @endif
+                <div class="col-xl-8 col-lg-8 offset-xl-2 offset-lg-2">
+                    @if(Session::has('errors'))
+                        <ul>
+                            @foreach($errors as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                    @if(Session::has('success'))
+                        <div class="notification success closeable">
+                            <p>{{ Session::get('success') }}</p>
+                            <a class="close"></a>
+                        </div>
+                    @endif
+                </div>
                 <div class="col-xl-8 col-lg-8 offset-xl-2 offset-lg-2">
                     <section id="contact" class="margin-bottom-60">
                         <h3 class="headline margin-top-15 margin-bottom-35">Any questions ? Feel free to contact us !</h3>

@@ -17,6 +17,7 @@
     use Illuminate\Http\Response;
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Str;
     use Illuminate\Validation\ValidationException;
     use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -91,6 +92,7 @@
             $taskId = DB::table('tasks')
                 ->insertGetId([
                     'name'        => $request['taskTitle'],
+                    'slug'        => Str::slug($request['taskTitle']),
                     'description' => $request['description'],
                     'budget_min'  => (int)$request['budget_min'],
                     'budget_max'  => (int)$request['budget_max'],
@@ -115,7 +117,7 @@
             if (Auth::user()->role_id === 3) {
                 DB::table('tasks')
                     ->where('id', $taskId)
-                    ->update(['freelancer_id' => Auth::user()->company_id]);
+                    ->update(['employer_id' => Auth::user()->company_id]);
             }
             
             DB::table('skills_tasks')
@@ -124,7 +126,7 @@
                     'skills'  => json_encode([$request['skills']])
                 ]);
             
-            return redirect()->route('dashboard.index');
+            return redirect()->route('dashboard.task.manage');
         }
         
         /**

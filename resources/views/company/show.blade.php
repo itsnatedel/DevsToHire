@@ -101,7 +101,7 @@
                                 @endforeach
                             @else
                                 <p style="padding: 30px">This employer doesn't currently have any
-                                    opened position available.</p>
+                                    opened job offer.</p>
                             @endif
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                                 </a>
                             @empty
                                 <p style="padding: 30px">This employer currently doesn't have any
-                                    opened task available.</p>
+                                    opened task.</p>
                             @endforelse
                         </div>
                     </div>

@@ -8,10 +8,10 @@ use App\Models\Location;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class FreelancerController extends Controller
 {
@@ -24,7 +24,6 @@ class FreelancerController extends Controller
     {
         $freelancers        = Freelancer::getFreelancersInfos();
         $hourlyRateLimits   = Freelancer::getHourlyRateLimits();
-        $successRates       = Freelancer::getSuccessRateLimits();
         $categories         = Category::all('id', 'name');
         $countries          = Location::all('id', 'country_name');
         $sortOption         = $request->sortOption ?? null;
@@ -33,7 +32,6 @@ class FreelancerController extends Controller
         return view('freelancer.index', compact([
             'freelancers',
             'hourlyRateLimits',
-            'successRates',
             'categories',
             'countries',
             'sortOption',
@@ -57,7 +55,6 @@ class FreelancerController extends Controller
         }
 
         $hourlyRateLimits   = Freelancer::getHourlyRateLimits();
-        $successRates       = Freelancer::getSuccessRateLimits();
         $categories         = Category::all('id', 'name');
         $countries          = Location::all('id', 'country_name');
         $sortOption         = $request->sortOption ?? null;
@@ -68,7 +65,6 @@ class FreelancerController extends Controller
         return view('freelancer.index', compact([
             'freelancers',
             'hourlyRateLimits',
-            'successRates',
             'categories',
             'countries',
             'sortOption',
@@ -80,7 +76,7 @@ class FreelancerController extends Controller
      * Show the form for creating a new resource.
      *
      */
-    public function downloadCV($freelancerId, $CV_id): BinaryFileResponse
+    public function downloadCV($freelancerId, $CV_id)
     {
         $freelancer = Freelancer::where('id', $freelancerId)->first();
         
@@ -98,17 +94,24 @@ class FreelancerController extends Controller
      *
      * @param int $id Freelancer id
      *
-     * @return Application|Factory|View
+     * @return Application|Factory|View|RedirectResponse
      */
     public function show(int $id)
     {
+        // Check if Freelancer exists w/ query params
+        if (!Controller::resourceExists('freelancer', $id, app('request')->route()->parameter('fullname'))) {
+            return redirect()->route('error-404')->with('message', 'No freelancer found with these parameters.');
+        }
+        
 	    $freelancer         = DB::table('freelancers as fr')
             ->join('users as u', 'u.id', '=', 'fr.user_id')
             ->select('fr.*', 'u.pic_url as picUrl')
             ->where('fr.id', '=', $id)->first();
+        
         $freelancer->skills = Freelancer::getFreelancerSkills($id);
         $freelancer->info   = Freelancer::getSingleFreelancerInfos($id);
         $freelancer->jobs   = Freelancer::getSingleFreelancerJobs($id);
+        
         $freelancerId = DB::table('freelancers')
             ->select('user_id')
             ->where('id', '=', $id)->first()->user_id;

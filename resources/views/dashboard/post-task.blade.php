@@ -88,14 +88,17 @@
                                                     <div class="row">
                                                         <div class="col-xl-6">
                                                             <div class="input-with-icon">
-                                                                <input name="budget_min" class="with-border" type="text"
+                                                                <input name="budget_min" class="with-border"
+                                                                       min="0"
+                                                                       type="number"
                                                                        placeholder="Minimum">
                                                                 <i class="currency">EUR</i>
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-6">
                                                             <div class="input-with-icon">
-                                                                <input name="budget_max" class="with-border" type="text"
+                                                                <input name="budget_max" class="with-border" type="number"
+                                                                       max="99999"
                                                                        placeholder="Maximum">
                                                                 <i class="currency">EUR</i>
                                                             </div>
@@ -148,7 +151,7 @@
                                                                 <!-- Quantity Buttons -->
                                                                 <div class="qtyButtons">
                                                                     <div class="qtyDec"></div>
-                                                                    <input type="text" name="qtyInput" value="1">
+                                                                    <input type="number" name="qtyInput" min="1" value="1">
                                                                     <div class="qtyInc"></div>
                                                                 </div>
                                                             </div>
