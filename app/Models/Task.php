@@ -2,6 +2,7 @@
     
     namespace App\Models;
     
+    use App\Http\Controllers\Auth\RegisterController;
     use App\Http\Controllers\Controller;
     use Carbon\Carbon;
     use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -11,6 +12,7 @@
     use Illuminate\Database\Query\Builder;
     use Illuminate\Http\Request;
     use Illuminate\Support\Collection;
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Str;
     use Ramsey\Uuid\Uuid;
@@ -295,15 +297,27 @@
                 ? ['None']
                 : Controller::curateSkills($skills->skills);
         }
-        
+    
         /**
-         * @param int    $taskId
-         * @param string $dir_url
+         * @param int         $taskId
+         * @param string|null $dir_url
          *
          * @return bool
          */
-        public static function uploadFile (int $taskId, string $dir_url) : bool
+        public static function uploadFile (int $taskId, ?string $dir_url) : bool
         {
+            if (is_null($dir_url)) {
+                $dir_url = Str::slug(time() . date('Y-m-d H:i:s'));
+                
+                if (RegisterController::createPictureDirectories($dir_url)) {
+                    DB::table('users')
+                        ->where('id', '=', Auth::id())
+                        ->update([
+                            'dir_url' => $dir_url
+                        ]);
+                }
+            }
+            
             $filesDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dir_url . '/files/';
             
             if (!is_dir($filesDirPath)) {
@@ -319,7 +333,7 @@
             DB::table('tasks')
                 ->where('id', $taskId)
                 ->update(['file_url' => $filename]);
-            
+
             return true;
         }
         
@@ -366,9 +380,9 @@
          */
         private static function getBidderRating ($bid)
         {
-            $rating = DB::table('ratings_freelancers as rafr')
-                ->select(DB::raw('SUM(rafr.note) / COUNT(rafr.id) as rating'))
-                ->where('rafr.freelancer_id', '=', $bid->bidder_id)
+            $rating = DB::table('freelancer_jobs_done as frjb')
+                ->select(DB::raw('SUM(frjb.rating) / COUNT(frjb.id) as rating'))
+                ->where('frjb.freelancer_id', '=', $bid->bidder_id)
                 ->first();
             
             return is_null($rating)

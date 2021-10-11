@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
-use RuntimeException;
+use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Freelancer;
-use Illuminate\Support\Str;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Intervention\Image\Facades\Image;
+use RuntimeException;
 
 class RegisterController extends Controller
 {
@@ -283,7 +283,7 @@ class RegisterController extends Controller
      * @return bool true if directories' creation was sucessful
      * @throws RuntimeException if any of the two directories weren't created
      */
-    protected function createPictureDirectories(string $dirIdentifier): bool
+    public static function createPictureDirectories(string $dirIdentifier): bool
     {
         $userDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dirIdentifier;
         $avatarDirPath = $_SERVER['DOCUMENT_ROOT'] . '/images/user/' . $dirIdentifier . '/avatar/';

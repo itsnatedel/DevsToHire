@@ -69,17 +69,6 @@
                         </div>
 
                         <div class="clearfix"></div>
-                        <!-- Success Rate-->
-                        <div class="sidebar-widget">
-                            <h3>Success Rate</h3>
-                            <!-- Range Slider -->
-                            <div class="slider slider-horizontal" title="Success rate of at least " data-tippy-placement="bottom">
-
-                                <input class="range-slider-single" name="successRates" type="text" data-slider-min="0"
-                                       data-slider-max="100" data-slider-step="1"
-                                       data-slider-value="{{ $form->successRates ?? 75 }}" data-value="0" value="">
-                            </div>
-                        </div>
                         <div class="sidebar-widget">
                             <h3>Rating</h3>
 
@@ -124,10 +113,6 @@
                                 @csrf
                                 <select class="selectpicker hide-tick" name="sortOption" onchange="this.form.submit()">
                                     <option @if(is_null($sortOption)) selected @endif disabled>Method</option>
-                                    <option value="jobHiLo" @if($sortOption === 'jobHiLo') selected @endif>Job Success - High to Low
-                                    </option>
-                                    <option value="jobLoHi" @if($sortOption === 'jobLoHi') selected @endif>Job Success - Low to High
-                                    </option>
                                     <option value="ratingHiLo" @if($sortOption === 'ratingHiLo') selected @endif>Rating - High to Low
                                     </option>
                                     <option value="ratingLoHi" @if($sortOption === 'ratingLoHi') selected @endif>Rating - Low to High
@@ -184,16 +169,26 @@
 
                                 <!-- Details -->
                                 <div class="freelancer-details">
-                                    <div class="freelancer-details-list">
+                                    <div class="freelancer-details-list col-xl-12 offset-xl-1">
                                         <ul>
                                             <li>Recommended
                                                 <strong>
-                                                    <i class="icon-material-outline-location-on"></i>
+                                                    <i class="icon-material-outline-thumb-up"></i>
                                                     {{ round($freelancer->recommended * 100) }}%
                                                 </strong>
                                             </li>
-                                            <li>Rate <strong>{{ $freelancer->hourly_rate }}€/hr</strong></li>
-                                            <li>Job Success <strong>{{ round($freelancer->success_rate * 100) }}%</strong></li>
+                                            <li>Rate
+                                                <strong>
+                                                    <i class="icon-line-awesome-money"></i>
+                                                    {{ $freelancer->hourly_rate }}€/hr
+                                                </strong>
+                                            </li>
+                                            <li>Job Success
+                                                <strong>
+                                                    <i class="icon-feather-check-square"></i>
+                                                    {{ round($freelancer->success_rate * 100) }}%
+                                                </strong>
+                                            </li>
                                         </ul>
                                     </div>
                                     <a href="{{ route('freelancer.show', [$freelancer->id, Str::slug($freelancer->full_name)]) }}"

@@ -220,5 +220,4 @@
         <!-- Dashboard Container / End -->
     </div>
     <!-- Wrapper / End -->
-    @include('layouts.popups.applyJob')
 @endsection

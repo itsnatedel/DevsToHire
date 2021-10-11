@@ -17,15 +17,15 @@ class UpdateFreelancerJobsDone extends Migration
             Schema::disableForeignKeyConstraints();
             $table->foreignId('job_id');
             $table->foreign('job_id')->references('id')->on('jobs')
-                ->onDelete('restrict')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreignId('freelancer_id');
             $table->foreign('freelancer_id')->references('id')->on('freelancers')
-                ->onDelete('restrict')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreignId('employer_id');
             $table->foreign('employer_id')->references('id')->on('companies')
-                ->onDelete('restrict')->onUpdate('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

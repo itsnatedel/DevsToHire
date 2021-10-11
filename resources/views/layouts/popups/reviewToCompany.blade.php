@@ -21,15 +21,15 @@
                         <div class="clearfix"></div>
                         <div class="leave-rating-container">
                             <div class="leave-rating margin-bottom-5">
-                                <input type="radio" name="rating" id="rating-1" value="1" required>
+                                <input type="radio" name="rating" id="rating-1" value="5" required>
                                 <label for="rating-1" class="icon-material-outline-star"></label>
-                                <input type="radio" name="rating" id="rating-2" value="2" required>
+                                <input type="radio" name="rating" id="rating-2" value="4" required>
                                 <label for="rating-2" class="icon-material-outline-star"></label>
                                 <input type="radio" name="rating" id="rating-3" value="3" required>
                                 <label for="rating-3" class="icon-material-outline-star"></label>
-                                <input type="radio" name="rating" id="rating-4" value="4" required>
+                                <input type="radio" name="rating" id="rating-4" value="2" required>
                                 <label for="rating-4" class="icon-material-outline-star"></label>
-                                <input type="radio" name="rating" id="rating-5" value="5" required>
+                                <input type="radio" name="rating" id="rating-5" value="1" required>
                                 <label for="rating-5" class="icon-material-outline-star"></label>
                             </div>
                         </div>
@@ -44,7 +44,6 @@
                                            name="name" id="name"
                                            value="{{ old('name') ?? Auth::user()->firstname . ' ' . Auth::user()->lastname }}"
                                            placeholder="First and Last Name"
-
                                     />
                                 </div>
                             </div>

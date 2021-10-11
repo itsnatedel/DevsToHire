@@ -53,7 +53,6 @@
                                             {{ $job->nb_candidates }} Candidates for "<a href="{{ route('job.show', [$job->job_id, $job->slug]) }}">{{ $job->title }}</a>" offer.
                                         </h3>
                                     </div>
-
                                     <div class="content">
                                         <!-- For each jobs -->
                                         <ul class="dashboard-box-list">
@@ -68,7 +67,7 @@
                                                                 @if($candidate->info->verified)
                                                                     <div class="verified-badge" title="Verified" data-tippy-placement="bottom"></div>
                                                                 @endif
-                                                                <a href="{{ route('freelancer.show', [$candidate->user_id, Str::slug($candidate->info->firstname . ' ' . $candidate->info->lastname)]) }}">
+                                                                <a href="{{ route('freelancer.show', [$candidate->frId, Str::slug($candidate->info->firstname . ' ' . $candidate->info->lastname)]) }}">
                                                                     @if(!is_null($candidate->info->dir_url))
                                                                         <img src="{{ asset('images/user/' . $candidate->info->dir_url . '/avatar/' . $candidate->info->pic_url) }}" alt="Candidate Avatar">
                                                                     @else
@@ -80,7 +79,7 @@
                                                             <!-- Name -->
                                                             <div class="freelancer-name">
                                                                 <h4>
-                                                                    <a href="{{ route('freelancer.show', [$candidate->id, Str::slug($candidate->info->firstname . ' ' . $candidate->info->lastname)]) }}">
+                                                                    <a href="{{ route('freelancer.show', [$candidate->frId, Str::slug($candidate->info->firstname . ' ' . $candidate->info->lastname)]) }}">
                                                                         {{ ucfirst($candidate->info->firstname) . ' ' . ucfirst($candidate->info->lastname) }}
                                                                         <img class="flag"
                                                                           src="{{ asset('images/flags/' . strtolower($candidate->info->country_code) . '.svg') }}"
@@ -144,7 +143,7 @@
                                                 </li>
                                             @empty
                                                 <li>
-                                                    <p style="padding: 30px">No candidate applied for this job.</p>
+                                                    <p style="padding: 15px">No candidate applied for this job.</p>
                                                 </li>
                                             @endforelse
                                         </ul>
@@ -152,7 +151,7 @@
                                 </div>
                             </div>
                             @empty
-                                <p style="padding: 50px">You have currently no active job offer.</p>
+                                <p style="padding: 15px">You have currently no active job offer.</p>
                             @endforelse
                         @else
                             <!-- Dashboard Box -->
@@ -256,7 +255,7 @@
                                                     </li>
                                                 @empty
                                                     <li>
-                                                        <p style="padding: 30px">No candidate applied for this job.</p>
+                                                        <p style="padding: 15px">No candidate applied for this job.</p>
                                                     </li>
                                                 @endforelse
                                             </ul>

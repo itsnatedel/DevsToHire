@@ -120,7 +120,7 @@
                             </div>
                             <div class="form-group" id="description-field">
                                 <label for="description">Description</label>
-                                <textarea name="description" class="form-control"
+                                <textarea name="description" class="form-control with-border"
                                           id="description" rows="5" placeholder="Write something about yourself..."></textarea>
                             </div>
 

@@ -77,12 +77,15 @@
                 ->select('type')
                 ->distinct()
                 ->get();
+            
             $categories = DB::table('categories')
                 ->select('id', 'name')
                 ->get();
+            
             $countries = DB::table('locations')
                 ->select('id', 'country_name')
                 ->get();
+            
             $remotes = DB::table('jobs')
                 ->select('remote')
                 ->distinct()
@@ -122,7 +125,10 @@
                 'locations'
             ]));
         }
-        
+    
+        /**
+         * @return Application|Factory|View|RedirectResponse
+         */
         public function manageJobs ()
         {
             if (!in_array(Auth::user()->role_id, [2, 3])) {
@@ -376,6 +382,7 @@
                     
                     // Requested job not found
                     if (is_null($jobs->job_id) || !$jobs) {
+                        dd($jobs);
                         return redirect()->route('error-404')->with('message', 'The requested job offer couldn\'t be found !');
                     }
                 }

@@ -42,10 +42,16 @@ class SaveTaskRequest extends FormRequest
                 'string'
             ],
             'budget_min' => [
-                'required'
+                'required',
+                'integer',
+                'min:0',
+                'lt:budget_max'
             ],
             'budget_max' => [
-                'required'
+                'required',
+                'integer',
+                'max:99999',
+                'gt:budget_min'
             ],
             'radio' => [
                 'required',

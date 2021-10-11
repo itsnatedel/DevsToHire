@@ -157,6 +157,9 @@
          */
         public function category (int $id)
         {
+            if (!Controller::resourceExists('category', $id, 'noslug')) {
+                return redirect()->route('error-404')->with('message', 'No category found with these parameters.');
+            }
             $jobs = Job::getAllJobsAndCompanyInfo($id);
             
             // To populate select inputs in sidebar
