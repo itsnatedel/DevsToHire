@@ -53,7 +53,7 @@ class Welcome extends Model
     public static function removeDashesFromDates(Collection $featuredJobs): Collection
     {
         foreach ($featuredJobs as $job) {
-            $job->date_posted = str_replace('-', '', $job->date_posted);
+            $job->date_posted = str_replace('-', '', (string)$job->date_posted);
         }
 
         return $featuredJobs;
@@ -62,7 +62,6 @@ class Welcome extends Model
     /**
      * getFeaturedFreelancers method.
      * Retrieves a random set of featured freelancers.
-     * Featured = A freelancer who paid for a premium plan
      *
      * @return Collection
      */
@@ -84,6 +83,7 @@ class Welcome extends Model
                 DB::raw('SUM(IF(frjb.success = 1, 1, 0)) / COUNT(frjb.id) *100 as success'),
                 'u.dir_url')
             ->groupBy('fr.id')
+            ->where('fr.verified', '=', 1)
             ->inRandomOrder()
             ->limit(8)
             ->get();

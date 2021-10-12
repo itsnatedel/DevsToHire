@@ -96,6 +96,11 @@
                     ->where('co.location_id', '=', $request->task_country);
             }
             
+            if (!is_null($request->searchCountry)) {
+                $query->join('locations as lo', 'lo.id', '=', 'ta.location_id')
+                    ->where('lo.country_name', '=', ucfirst($request->searchCountry));
+            }
+            
             if (!is_null($request->task_category)) {
                 $query->where('ta.category_id', '=', $request->task_category);
             }
@@ -297,7 +302,7 @@
                 ? ['None']
                 : Controller::curateSkills($skills->skills);
         }
-    
+        
         /**
          * @param int         $taskId
          * @param string|null $dir_url
@@ -333,7 +338,7 @@
             DB::table('tasks')
                 ->where('id', $taskId)
                 ->update(['file_url' => $filename]);
-
+            
             return true;
         }
         

@@ -19,7 +19,6 @@
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Str;
     use Illuminate\Validation\ValidationException;
-    use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
     class TaskController extends Controller
     {
@@ -173,11 +172,17 @@
          * Downloads the project brief file uploaded by the task's owner
          *
          */
-        public function downloadBrief ($taskId, $fileUrl) : BinaryFileResponse
+        public function downloadBrief ($taskId, $fileUrl)
         {
             $task = Task::where('id', $taskId)->first();
             
-            return response()->download(public_path('images/user/' . $task->dir_url . '/files/' . $fileUrl));
+            if (!is_null($task)) {
+                return file_exists(public_path('images/user/' . $task->dir_url . '/files/' . $fileUrl))
+                    ? response()->download(public_path('images/user/' . $task->dir_url . '/files/' . $fileUrl))
+                    : redirect()->route('error-404')->with('message', 'The file you\'re trying to download doesn\'t exist.');
+            }
+            
+            redirect()->route('error-404')->with('message', 'The project you\'re trying to access doesn\'t exist.');
         }
         
         /**
@@ -192,7 +197,7 @@
         {
             //
         }
-    
+        
         /**
          * Remove the specified resource from storage.
          *
@@ -223,10 +228,10 @@
                 if ($taskDeleted) {
                     return redirect()->back()->with('success', 'Your task has been deleted !');
                 }
-    
+                
                 return redirect()->back()->with('fail', 'There was a problem when deleting your task, try again...');
             }
-    
+            
             return redirect()->route('error-404')->with('message', 'No matching task could be found.');
         }
     }

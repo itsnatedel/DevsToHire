@@ -382,7 +382,7 @@
                     
                     // Requested job not found
                     if (is_null($jobs->job_id) || !$jobs) {
-                        dd($jobs);
+
                         return redirect()->route('error-404')->with('message', 'The requested job offer couldn\'t be found !');
                     }
                 }
@@ -404,7 +404,7 @@
          *
          * @return RedirectResponse|BinaryFileResponse
          */
-        public function downloadCV ($file, $userId)
+        public function downloadCV ($userId, $file)
         {
             if (!Auth::check() || Auth::user()->role_id !== 3) {
                 return redirect()->route('error-404')->with('message', 'You are not authorized to access this page !');
@@ -416,7 +416,9 @@
                 ->first()
                 ->dir_url;
             
-            return response()->download(public_path('images/user/' . $dir_url . '/files/' . $file));
+            return file_exists(public_path('images/user/' . $dir_url . '/files/' . $file))
+                ? response()->download(public_path('images/user/' . $dir_url . '/files/' . $file))
+                : redirect()->route('error-404')->with('message', 'The file you\'re trying to download doesn\'t exist.');
         }
         
         /**

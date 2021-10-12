@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 
 class Freelancer extends Model
 {
-    // TODO: Make Offer in freelancer@view
     use HasFactory;
 
     protected $table = 'freelancers';
