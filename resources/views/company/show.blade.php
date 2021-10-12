@@ -206,7 +206,7 @@
                                             <div class="boxed-list-item">
                                                 <!-- Content -->
                                                 <div class="item-content">
-                                                    <h4>{{ Str::limit($rating->comment, 70) }}
+                                                    <h4>{{ Str::limit($rating->reviewTitle, 70) }}
                                                         <span>{{ $rating->full_name }}</span></h4>
                                                     <div class="item-details margin-top-10">
                                                         <div class="star-rating"

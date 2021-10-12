@@ -124,7 +124,7 @@
                                                                 <div
                                                                     class="buttons-to-right always-visible margin-top-25 margin-bottom-5">
                                                                     @if (!is_null($candidate->info->CV_url))
-                                                                    <a href="{{ route('dashboard.candidates.download.cv', [$candidate->info->CV_url, $candidate->user_id]) }}" class="button ripple-effect"><i
+                                                                    <a href="{{ route('dashboard.candidates.download.cv', [$candidate->user_id, $candidate->info->CV_url]) }}" class="button ripple-effect"><i
                                                                             class="icon-feather-file-text"></i> Download CV
                                                                     </a>
                                                                     @else
@@ -229,13 +229,11 @@
                                                                             <p>No skills submitted.</p>
                                                                         @endif
                                                                     </div>
-
-
                                                                     <!-- Buttons -->
                                                                     <div
                                                                             class="buttons-to-right always-visible margin-top-25 margin-bottom-5">
                                                                         @if (!is_null($candidate->info->CV_url))
-                                                                            <a href="{{ route('dashboard.candidates.download.cv', [$candidate->info->CV_url, $candidate->user_id]) }}" class="button ripple-effect"><i
+                                                                            <a href="{{ route('dashboard.candidates.download.cv', [$candidate->user_id, $candidate->info->CV_url ]) }}" class="button ripple-effect"><i
                                                                                         class="icon-feather-file-text"></i> Download CV
                                                                             </a>
                                                                         @else

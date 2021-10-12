@@ -25,12 +25,12 @@ class FreelancerJobsDoneTableSeeder extends Seeder
         $faker = Factory::create();
         $faker->addProvider(new Company($faker));
 
-        for ($i = 0; $i < 5500; $i++) {
+        for ($i = 0; $i < 1900; $i++) {
             $jobsDone[] = [
                 'on_time'       => $faker->boolean(),
                 'recommended'   => $faker->boolean(),
                 'on_budget'     => $faker->boolean(),
-                'rating'        => $faker->numberBetween(0, 5),
+                'rating'        => $faker->numberBetween(1, 5),
                 'comment'       => $faker->realText(400, 3),
                 'done_at'       => $faker->dateTimeBetween('-2 months'),
                 'title'         => $faker->bs(),

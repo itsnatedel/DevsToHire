@@ -55,7 +55,6 @@ class WelcomeController extends Controller
         $taskOrJob = Welcome::isTaskOrJob($request);
 
         if (!is_bool($taskOrJob)) {
-    
             if (!is_null($request->searchCountry)) {
                 $locationId = Welcome::checkIfLocationExists($request->searchCountry);
         

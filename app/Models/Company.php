@@ -61,6 +61,7 @@ class Company extends Model
         if ($total === 0) {
             return 0;
         }
+        
         return round($total / count($ratings), 1);
     }
 
@@ -215,7 +216,7 @@ class Company extends Model
         $ratings = DB::table('ratings_companies as rc')
             ->join('freelancers as fr', 'fr.id', '=', 'rc.freelancer_id')
             ->select('rc.note',
-                'rc.comment',
+                'rc.reviewTitle',
                 DB::raw("CONCAT(fr.firstname, ' ', fr.lastname) AS full_name"),
                 DB::raw('DATEDIFF(rc.when, NOW()) as rating_when'))
             ->where('rc.company_id', '=', $company_id)
@@ -272,7 +273,6 @@ class Company extends Model
      */
     private static function removeDashesFromRatings(Collection $ratings): Collection
     {
-
         if (!is_countable($ratings)) {
 
             $ratings->rating_when = str_replace('-', '', $ratings->rating_when);

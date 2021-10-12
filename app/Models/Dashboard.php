@@ -613,7 +613,7 @@
             foreach ($jobs as $job) {
                 $job->created_at = Carbon::create($job->created_at)->diffForHumans([
                     'parts' => 2,
-                    'join' => ', '
+                    'join'  => ', '
                 ]);
             }
             
@@ -730,7 +730,7 @@
             
             return $tasks;
         }
-    
+        
         /**
          * @method getTaskBidders
          * Retrieves all bidders of a specific task

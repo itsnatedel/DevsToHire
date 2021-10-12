@@ -17,18 +17,14 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/colors/blue.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/colors/blue.min.css') }}">
 
 </head>
 <body>
 <div id="app">
     <main class="py-4">
         @include('layouts.header')
-
-        @if(Route::currentRouteName() === 'contact-us')
-            <link rel = "stylesheet" href = "https://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-        @endif
 
         @yield('content')
 
@@ -83,12 +79,12 @@
 <script src="{{ asset('js/simplebar.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-slider.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
-<script src="{{ asset('js/snackbar.js') }}"></script>
+<script src="{{ asset('js/snackbar.min.js') }}"></script>
 <script src="{{ asset('js/clipboard.min.js') }}"></script>
 <script src="{{ asset('js/counterup.min.js') }}"></script>
 <script src="{{ asset('js/magnific-popup.min.js') }}"></script>
 <script src="{{ asset('js/slick.min.js') }}"></script>
-<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/custom.min.js') }}"></script>
 <script>
     // Snackbar for user status switcher
     $('#snackbar-user-status label').click(function () {
