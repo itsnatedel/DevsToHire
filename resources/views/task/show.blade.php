@@ -115,8 +115,6 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-
-                    <!-- TODO: Freelancers Bidding -->
                     <div class="boxed-list margin-bottom-60">
                         <div class="boxed-list-headline">
                             <h3><i class="icon-material-outline-group"></i> Freelancers Bidding</h3>

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
     <!-- Wrapper -->
-    <!-- TODO: Fix pagination number hover being blanks -->
     <div id="wrapper">
         <!-- Page Content -->
         <div class="full-page-container">
@@ -99,7 +98,6 @@
                     <h3 class="page-title">Search Results - {{ $freelancers->total() }} profiles found.</h3>
                     @if(count($freelancers) > 0)
                     <div class="notify-box margin-top-15">
-                        <!-- TODO: Hide Reset search if route !== search -> to other reset searches el. too -->
                         @if(!is_null($form) || !is_null($sortOption))
                         <a href="{{ route('freelancer.index') }}" class="button gray ripple-effect button-sliding-icon"
                            style="margin: -10px 0; padding: 5px; transform: translateY(3px)">
@@ -204,7 +202,6 @@
                     <!-- Freelancers Container / End -->
 
                     <!-- Pagination -->
-                    <!-- TODO: Fix pagination design. create CSS class to unify all paginations ? -->
                     <div class="clearfix"></div>
                     <div class="pagination-container margin-top-20 margin-bottom-20">
                         <nav class="pagination">
